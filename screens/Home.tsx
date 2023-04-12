@@ -8,7 +8,8 @@ export default function Home() {
   const navigation = useNavigation();
 
   return (
-      className="bg- [##E0E0E0] relative min-h-screen">
+    <SafeAreaView
+      className="relative">
       <HomeTopBar />
       <RecipesBar />
       <RecipeTabs />
