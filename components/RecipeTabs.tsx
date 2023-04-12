@@ -7,30 +7,8 @@ import MyMealsCard from "./MyMealsCard";
 const RecipeTabs = () => {
   const [tabSwitch, setTabSwitch] = useState<boolean>(false);
 
-  const getBorderColour = () => {
-    switch (tabSwitch) {
-      case true:
-        return "border-[#F4F4F4]";
-      case false:
-        return "border-[#F4F4F4]";
-      default:
-        return "border-[#F4F4F4]";
-    }
-  };
-
-  const getTextColor = () => {
-    switch (tabSwitch) {
-      case true:
-        return "text-[#F4F4F4]";
-      case false:
-        return "text-[#F4F4F4]";
-      default:
-        return "text-[#F4F4F4]";
-    }
-  };
-
   return (
-    <View className="px-8">
+    <View className=" px-5">
       <View className="flex-row items-center justify-center  pb-5">
         <TouchableOpacity
           onPress={() => setTabSwitch(false)}

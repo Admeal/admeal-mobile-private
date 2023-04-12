@@ -7,7 +7,7 @@ const HomeTopBar = () => {
   const [coins2, setCoins2] = useState<Float>(0.0);
 
   return (
-    <SafeAreaView className="flex-row items-center justify-between w-full px-8 pt-16 pb-8 bg-white z-1">
+    <SafeAreaView className="z-1 w-full flex-row items-center justify-between bg-white px-5 pb-6 pt-[52px]">
       <TouchableOpacity className="">
         <Image source={require("../assets/png/sidemenu.png")} />
       </TouchableOpacity>
