@@ -1,60 +1,56 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-  SectionList,
-  SafeAreaView
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
-import { useState } from "react";
 import PopularCard from "./PopularCard";
 import TopEarningsCard from "./TopEarningsCard";
 import MyMealsCard from "./MyMealsCard";
 
-const RecipeTabs = () => {
-  const [tabSwitch, setTabSwitch] = useState<boolean>(false);
+type RecipeTabsProps = {
+  navigation: any;
+  routeName: string;
+};
 
+const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   return (
-    <View className=" px-5">
-      <View className="flex-row items-center justify-center  pb-5">
+    <View className="px-5 ">
+      <View className="flex-row items-center justify-center pb-5">
         <TouchableOpacity
-          onPress={() => setTabSwitch(false)}
+          onPress={() => {
+            navigation.navigate("Recipes");
+          }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
-            !tabSwitch ? "border-[#FF1E00]" : "border-[#919EAB]"
+            routeName === "Recipes" ? "border-[#FF1E00]" : "border-[#919EAB]"
           }`}>
           <Text
             className={` font-semibold ${
-              !tabSwitch ? "text-[#FF1E00]" : "text-[#637381]"
+              routeName === "Recipes" ? "text-[#FF1E00]" : "text-[#637381]"
             }`}>
             Discover
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setTabSwitch(true)}
+          onPress={() => {
+            navigation.navigate("My Meals");
+          }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
-            tabSwitch ? "border-[#FF1E00]" : "border-[#919EAB]"
+            routeName === "My Meals" ? "border-[#FF1E00]" : "border-[#919EAB]"
           }`}>
           <Text
             className={` font-semibold ${
-              tabSwitch ? "text-[#FF1E00]" : "text-[#637381]"
+              routeName === "My Meals" ? "text-[#FF1E00]" : "text-[#637381]"
             }`}>
             My meals
           </Text>
         </TouchableOpacity>
       </View>
       <View>
-        {!tabSwitch ? (
-          <ScrollView
-            // horizontal={false}
-            className="h-screen pb-40">
+        {routeName === "Recipes" ? (
+          <ScrollView className="h-screen pb-40">
             <View>
               <Text className="text-lg font-bold">Popular Recipes</Text>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                className="flex-row  py-4">
+                className="flex-row py-4">
                 <PopularCard />
                 <PopularCard recipeName="Fried chicken" />
                 <PopularCard recipeName="mousaka" />
@@ -78,18 +74,17 @@ const RecipeTabs = () => {
             </View>
           </ScrollView>
         ) : (
-          <View className=" ">
+          <View className="">
             <View className="flex-row items-center space-x-2">
               <Text className="text-lg font-bold">Total meals</Text>
               <Text className="rounded-full bg-[#FFCAC2] p-1 text-[#BB1E09]">0</Text>
             </View>
-            <View className="relative  pb-80">
+            <View className="relative">
               <ScrollView
                 nestedScrollEnabled={true}
                 alwaysBounceVertical={true}
                 scrollEnabled={true}
-                className=" h-screen">
-                {/* className="mb-96 h-screen"> */}
+                className="h-screen ">
                 <View onStartShouldSetResponder={() => true} className="pb-[500px]">
                   <MyMealsCard status="Take a photo of the dish" />
                   <MyMealsCard status="Take a photo of ingredients" />

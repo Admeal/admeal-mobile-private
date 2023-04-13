@@ -1,8 +1,7 @@
 import { View, Text, ImageBackground, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
+
 const MyMealsCard = ({
-  imageUri = "../assets/png/popularDishImage.png",
+  imageUri = require(`../assets/png/popularDishImage.png`),
   recipeName = "Pasta arrapiata",
   coinOneWon = 40,
   coinTwoWon = 0,
@@ -27,7 +26,7 @@ const MyMealsCard = ({
         className="h-[121px] w-[84px] flex-col justify-between "
         borderBottomLeftRadius={16}
         borderTopLeftRadius={16}
-        source={require(`../assets/png/popularDishImage.png`)}></ImageBackground>
+        source={imageUri}></ImageBackground>
       <View className="w-[100%] flex-col items-start justify-between">
         <Text className="pt-3 text-sm font-bold text-[#1D1D1D]">{recipeName}</Text>
         <View className="flex-row items-center">
