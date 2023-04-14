@@ -1,4 +1,4 @@
-import { View, Text, Image, ImageBackground } from "react-native";
+import { Text, ImageBackground } from "react-native";
 import React from "react";
 import PriceTag from "./PriceTag";
 

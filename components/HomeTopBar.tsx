@@ -2,13 +2,13 @@ import { View, Text, SafeAreaView, TouchableOpacity, Image } from "react-native"
 import { useState } from "react";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 
-const HomeTopBar = () => {
+const HomeTopBar = ({ navigation }) => {
   const [coins1, setCoins1] = useState<Float>(0.0);
   const [coins2, setCoins2] = useState<Float>(0.0);
 
   return (
     <SafeAreaView className="z-1 w-full flex-row items-center justify-between bg-white px-5 pb-6 pt-[52px]">
-      <TouchableOpacity className="">
+      <TouchableOpacity onPress={() => navigation.openDrawer()} className="">
         <Image source={require("../assets/png/sidemenu.png")} />
       </TouchableOpacity>
       <View className="flex-row space-x-6">
