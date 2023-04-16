@@ -1,5 +1,7 @@
 import { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useFonts } from "expo-font";
@@ -7,7 +9,6 @@ import * as SplashScreen from "expo-splash-screen";
 
 import Home from "./screens/Home";
 import Sidebar from "./screens/Sidebar";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import Wallet from "./screens/Wallet";
 import Meals from "./screens/Meals";
@@ -15,8 +16,25 @@ import Meals from "./screens/Meals";
 import WalletIcon from "./assets/icons/walletIcon";
 import RecipeIcon from "./assets/icons/recipeIcon";
 import MealsIcon from "./assets/icons/mealsIcon";
+import RecipeDetails from "./screens/RecipeDetails";
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+const RecipeStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        headerStyle: {
+          backgroundColor: "transparent"
+        }
+      }}>
+      <Stack.Screen name="Home" options={{ headerShown: false }} component={Home} />
+      <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
+    </Stack.Navigator>
+  );
+};
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -78,7 +96,7 @@ export default function App() {
               )
             }}
             name="Recipes"
-            component={Home}
+            component={RecipeStack}
           />
           <Drawer.Screen
             options={{
