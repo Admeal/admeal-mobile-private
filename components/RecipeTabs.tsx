@@ -51,25 +51,38 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 className="flex-row py-4">
-                <PopularCard />
-                <PopularCard recipeName="Fried chicken" />
-                <PopularCard recipeName="mousaka" />
-                <PopularCard recipeName="Fried chicken" />
-                <PopularCard recipeName="Fried chicken" />
-                <PopularCard />
-                <PopularCard recipeName="mousaka" />
-                <PopularCard recipeName="Fried chicken" />
-                <PopularCard recipeName="Fried chicken" />
-                <PopularCard recipeName="Fried chicken" />
+                <PopularCard navigation={navigation} />
+                <PopularCard navigation={navigation} recipeName="Fried chicken" />
+                <PopularCard navigation={navigation} recipeName="mousaka" />
+                <PopularCard navigation={navigation} recipeName="Fried chicken" />
+                <PopularCard navigation={navigation} recipeName="Fried chicken" />
+                <PopularCard navigation={navigation} />
+                <PopularCard navigation={navigation} recipeName="mousaka" />
+                <PopularCard navigation={navigation} recipeName="Fried chicken" />
+                <PopularCard navigation={navigation} recipeName="Fried chicken" />
+                <PopularCard navigation={navigation} recipeName="Fried chicken" />
               </ScrollView>
             </View>
             <View className="pb-60">
               <Text className="py-4 text-lg font-bold">Top Earnings</Text>
               <View className="h-[100%] flex-row flex-wrap items-center justify-between pt-4">
-                <TopEarningsCard cookedCount={70} recipeName="Fried chicken" />
-                <TopEarningsCard cookedCount={70} recipeName="mousaka" />
-                <TopEarningsCard cookedCount={320} />
-                <TopEarningsCard cookedCount={970} recipeName="tzatziki" time={25} />
+                <TopEarningsCard
+                  navigation={navigation}
+                  cookedCount={70}
+                  recipeName="Fried chicken"
+                />
+                <TopEarningsCard
+                  navigation={navigation}
+                  cookedCount={70}
+                  recipeName="mousaka"
+                />
+                <TopEarningsCard navigation={navigation} cookedCount={320} />
+                <TopEarningsCard
+                  navigation={navigation}
+                  cookedCount={970}
+                  recipeName="tzatziki"
+                  time={25}
+                />
               </View>
             </View>
           </ScrollView>
@@ -86,14 +99,20 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 scrollEnabled={true}
                 className="h-screen ">
                 <View onStartShouldSetResponder={() => true} className="pb-[500px]">
-                  <MyMealsCard status="Take a photo of the dish" />
-                  <MyMealsCard status="Take a photo of ingredients" />
-                  <MyMealsCard status="Finished" />
-                  <MyMealsCard status="Finished" />
-                  <MyMealsCard status="Finished" />
-                  <MyMealsCard status="Finished" />
-                  <MyMealsCard status="Finished" />
-                  <MyMealsCard status="Finished" />
+                  <MyMealsCard
+                    navigation={navigation}
+                    status="Take a photo of the dish"
+                  />
+                  <MyMealsCard
+                    navigation={navigation}
+                    status="Take a photo of ingredients"
+                  />
+                  <MyMealsCard navigation={navigation} status="Finished" />
+                  <MyMealsCard navigation={navigation} status="Finished" />
+                  <MyMealsCard navigation={navigation} status="Finished" />
+                  <MyMealsCard navigation={navigation} status="Finished" />
+                  <MyMealsCard navigation={navigation} status="Finished" />
+                  <MyMealsCard navigation={navigation} status="Finished" />
                 </View>
               </ScrollView>
             </View>
