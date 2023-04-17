@@ -19,6 +19,7 @@ import WalletIcon from "./assets/icons/walletIcon";
 import RecipeIcon from "./assets/icons/recipeIcon";
 import MealsIcon from "./assets/icons/mealsIcon";
 import RecipeDetails from "./screens/RecipeDetails";
+import CheckStatus from "./screens/CheckStatus";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -32,8 +33,9 @@ const RecipeStack = () => {
           backgroundColor: "transparent"
         }
       }}>
-      <Stack.Screen name="Home" options={{ headerShown: false }} component={Home} />
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
+      <Stack.Screen name="CheckStatus" component={CheckStatus} />
     </Stack.Navigator>
   );
 };
