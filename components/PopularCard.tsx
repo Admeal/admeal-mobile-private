@@ -1,5 +1,8 @@
 import { Text, ImageBackground, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
+
+import { useRecoilState } from "recoil";
+import { recipeItemState } from "../atoms/dataAtom";
 import PriceTag from "./PriceTag";
 import { LogBox } from "react-native";
 
@@ -20,17 +23,25 @@ const PopularCard = ({
   price = 40,
   navigation
 }: PopularCardProps) => {
+  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+  const handleItemPress = () => {
+    // () =>
+    //     navigation.navigate("RecipeDetails", {
+    //       imageUri: imageUri,
+    //       recipeName: recipeName,
+    //       price: price,
+    //       navigation: navigation
+    //     })
+    setRecipeItem({
+      imageUri: imageUri,
+      recipeName: recipeName,
+      price: price
+    });
+    navigation.navigate("RecipeDetails");
+  };
+
   return (
-    <TouchableOpacity
-      className="mr-2 shadow-2xl rounded-2xl"
-      onPress={() =>
-        navigation.navigate("RecipeDetails", {
-          imageUri: imageUri,
-          recipeName: recipeName,
-          price: price,
-          navigation: navigation
-        })
-      }>
+    <TouchableOpacity className="mr-2 shadow-2xl rounded-2xl" onPress={handleItemPress}>
       <ImageBackground
         className=" h-[130px] w-[96px] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
         borderRadius={16}
