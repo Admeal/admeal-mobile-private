@@ -12,6 +12,7 @@ import BackIcon from "../assets/icons/backIcon";
 import ClockIcon from "../assets/icons/clockIcon";
 import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
+import GoBackButton from "../components/buttons/GoBackButton";
 
 type RecipeDetailsProps = {
   imageUri?: any;
@@ -39,23 +40,6 @@ const RecipeDetails = ({
   servings = 4,
   recipePrice = 300,
   ingredients = [
-    // ["2 medium", "eggplants, sliced into rounds"],
-    // ["2 medium", "potatoes, sliced into rounds"],
-    // ["1 lb.", "ground beef or lamb"],
-    // ["1", "onions, diced"],
-    // ["2", "cloves garlic, minced"],
-    // ["1 can (14 oz.)", "diced tomatoes"],
-    // ["1/2 cup", "red wine"],
-    // ["1 tbsp.", "tomato paste"],
-    // ["1 tsp.", "dried oregano"],
-    // ["1 tsp.", "ground cinnamon"],
-    // ["", "Salt and pepper"],
-    // ["3 tbsp.", "butter"],
-    // ["3 tbsp.", "all-purpose flour"],
-    // ["2 cups", "milk"],
-    // ["2", "eggs"],
-    // ["1/2 cup", "grated Parmesan cheese"],
-    // ["2 cups", "Olive oil, for frying"]
     {
       quantity: "2 medium",
       ingredient: "eggplants, sliced into rounds"
@@ -133,18 +117,14 @@ const RecipeDetails = ({
   console.log("navigation", navigation);
   return (
     <ImageBackground
-      className="flex-1 flex-col justify-between font-[Poppins-400]"
+      className="flex-col justify-between flex-1"
       // source={{
       //   uri: imageUri
       // }}
       source={imageUri}
       resizeMode="cover">
-      <TouchableOpacity
-        className="flex-row pt-12 space-x-2 px-7"
-        onPress={() => navigation.goBack()}>
-        <BackIcon />
-        <Text className="text-white">Back</Text>
-      </TouchableOpacity>
+      <GoBackButton navigation={navigation} />
+
       <View className="relative h-2/3 flex-col  justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
         <View className="flex-row items-center justify-between">
           <Text className="font-[Poppins-700] text-2xl">{recipeName}</Text>
@@ -238,11 +218,26 @@ const RecipeDetails = ({
                 {/* <FlatList data={ingredients} renderItem={IngredientsItem} /> */}
               </View>
             ) : (
-              <View></View>
+              <View>
+                <Text>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Et perspiciatis
+                  quaerat natus, est laudantium dolorem nam atque autem sed illum,
+                  accusantium commodi, ea aut ex dolores molestiae libero nulla dicta.
+                </Text>
+              </View>
             )}
           </View>
         </ScrollView>
-        <TouchableOpacity className="absolute bottom-8 left-[9%] z-10 h-[60px] w-full flex-col items-center justify-center rounded-full bg-[#FF1E00] shadow-xl shadow-[#FF1E00]">
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("CheckStatus", {
+              imageUri: imageUri,
+              recipeName: recipeName,
+              price: price,
+              navigation: navigation
+            })
+          }
+          className="absolute bottom-8 left-[9%] z-10 h-[60px] w-full flex-col items-center justify-center rounded-full bg-[#FF1E00] shadow-xl shadow-[#FF1E00]">
           <Text className="font-[Poppins-700] text-base text-white">LET'S COOK IT</Text>
         </TouchableOpacity>
       </View>
