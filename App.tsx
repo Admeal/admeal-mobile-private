@@ -4,6 +4,8 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { RecoilRoot } from "recoil";
+
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -60,55 +62,62 @@ export default function App() {
   }
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-      <NavigationContainer>
-        <Drawer.Navigator
-          initialRouteName="Recipes"
-          useLegacyImplementation
-          drawerContent={(props: any) => <Sidebar {...props} />}
-          screenOptions={{
-            headerShown: false,
-            drawerContentContainerStyle: {
-              backgroundColor: "white"
-            },
-            drawerActiveBackgroundColor: "#FF1E00",
-            drawerActiveTintColor: "white",
-            drawerInactiveTintColor: "#6D6D6D",
-            drawerInactiveBackgroundColor: "white",
-            drawerLabelStyle: {
-              fontSize: 16,
-              fontWeight: "bold",
-              marginLeft: -10
-            }
-          }}>
-          <Drawer.Screen
-            options={{
-              drawerIcon: ({ color }) => (
-                <WalletIcon className="mt-2" size={22} stroke={color} strokeWidth={1.6} />
-              )
-            }}
-            name="Wallet"
-            component={Wallet}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: ({ color }) => (
-                <RecipeIcon className="mt-2" size={22} fill={color} />
-              )
-            }}
-            name="Recipes"
-            component={RecipeStack}
-          />
-          <Drawer.Screen
-            options={{
-              drawerIcon: ({ color }) => (
-                <MealsIcon className="mt-2" size={22} color={color} />
-              )
-            }}
-            name="My Meals"
-            component={Meals}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
+      <RecoilRoot>
+        <NavigationContainer>
+          <Drawer.Navigator
+            initialRouteName="Recipes"
+            useLegacyImplementation
+            drawerContent={(props: any) => <Sidebar {...props} />}
+            screenOptions={{
+              headerShown: false,
+              drawerContentContainerStyle: {
+                backgroundColor: "white"
+              },
+              drawerActiveBackgroundColor: "#FF1E00",
+              drawerActiveTintColor: "white",
+              drawerInactiveTintColor: "#6D6D6D",
+              drawerInactiveBackgroundColor: "white",
+              drawerLabelStyle: {
+                fontSize: 16,
+                fontWeight: "bold",
+                marginLeft: -10
+              }
+            }}>
+            <Drawer.Screen
+              options={{
+                drawerIcon: ({ color }) => (
+                  <WalletIcon
+                    className="mt-2"
+                    size={22}
+                    stroke={color}
+                    strokeWidth={1.6}
+                  />
+                )
+              }}
+              name="Wallet"
+              component={Wallet}
+            />
+            <Drawer.Screen
+              options={{
+                drawerIcon: ({ color }) => (
+                  <RecipeIcon className="mt-2" size={22} fill={color} />
+                )
+              }}
+              name="Recipes"
+              component={RecipeStack}
+            />
+            <Drawer.Screen
+              options={{
+                drawerIcon: ({ color }) => (
+                  <MealsIcon className="mt-2" size={22} color={color} />
+                )
+              }}
+              name="My Meals"
+              component={Meals}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </RecoilRoot>
     </SafeAreaProvider>
   );
 }
