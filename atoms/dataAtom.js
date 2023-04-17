@@ -19,3 +19,13 @@ export const isReadyDishState = atom({
   key: 'isReadyDishState',
   default: false,
 });
+
+export const ingredientsImageState = atom({
+  key: 'ingredientsImage',
+  default: '',
+});
+
+export const dishImageState = atom({
+  key: 'dishImage',
+  default: '',
+});

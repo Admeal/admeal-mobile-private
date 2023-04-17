@@ -20,6 +20,7 @@ import RecipeIcon from "./assets/icons/recipeIcon";
 import MealsIcon from "./assets/icons/mealsIcon";
 import RecipeDetails from "./screens/RecipeDetails";
 import CheckStatus from "./screens/CheckStatus";
+import CameraUpload from "./screens/CameraUpload";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -36,6 +37,7 @@ const RecipeStack = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
       <Stack.Screen name="CheckStatus" component={CheckStatus} />
+      <Stack.Screen name="CameraUpload" component={CameraUpload} />
     </Stack.Navigator>
   );
 };
