@@ -1,6 +1,6 @@
 import * as React from "react";
 import Svg, { SvgProps, Path } from "react-native-svg";
-const SvgComponent = ({ size = 24, stroke = "#8491A5", ...props }) => (
+const LogoutIcon = ({ size = 24, stroke = "#8491A5", ...props }) => (
   <Svg width={size} height={size} fill="none" {...props}>
     <Path
       stroke={stroke}
@@ -16,4 +16,4 @@ const SvgComponent = ({ size = 24, stroke = "#8491A5", ...props }) => (
     />
   </Svg>
 );
-export default SvgComponent;
+export default LogoutIcon;
