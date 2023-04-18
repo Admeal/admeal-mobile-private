@@ -7,7 +7,7 @@ import {
   ScrollView,
   FlatList
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BackIcon from "../assets/icons/backIcon";
 import ClockIcon from "../assets/icons/clockIcon";
 import ServingsIcon from "../assets/icons/servingsIcon";
@@ -28,7 +28,7 @@ type RecipeDetailsProps = {
     carbs: number;
   };
   recipePrice: number;
-  ingredients: any[];
+  ingredients: { quantity: string; ingredient: string }[];
 };
 
 const RecipeDetails = ({
@@ -36,6 +36,12 @@ const RecipeDetails = ({
   recipeName = "mousaka",
   price = 40,
   navigation,
+  nutrition = {
+    cal: 300,
+    fat: 10,
+    protein: 10,
+    carbs: 10
+  },
   cookTime = 40,
   servings = 4,
   recipePrice = 300,
@@ -141,7 +147,14 @@ const RecipeDetails = ({
             facere mollitia autem amet iste possimus cupiditate praesentium, voluptatem
             aliquid vero alias!
           </Text>
-          <ScrollView className="pt-4">
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={{
+              flexGrow: 1,
+              flexDirection: "row",
+              alignItems: "center"
+            }}
+            className="pt-4 space-x-2 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
@@ -153,6 +166,43 @@ const RecipeDetails = ({
                 <ServingsIcon />
                 <Text className="font-[Poppins-500] text-xs">{servings}</Text>
                 <Text className="font-[Poppins-500] text-xs">servings</Text>
+              </View>
+            </View>
+            <View className="h-[114px] w-[247px] rounded-xl bg-white px-4 pt-3 ">
+              <Text className="pb-2 font-[Poppins-400] text-xs text-[#6D6D6D]">
+                Nutrition estimate:
+              </Text>
+              <View className="flex-row flex-wrap gap-1.5">
+                <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#FFE9D0] px-4 py-2">
+                  <Text className="font-[Poppins-400] text-xs  text-[#FC7800]">
+                    Cal.:
+                  </Text>
+                  <Text className="font-[Poppins-600] text-xs  text-[#FC7800]">
+                    {nutrition.cal}kcal
+                  </Text>
+                </View>
+                <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DBF7E0] px-4 py-2">
+                  <Text className="font-[Poppins-400] text-xs  text-[#2BD449]">Fat:</Text>
+                  <Text className="font-[Poppins-600] text-xs  text-[#2BD449]">
+                    {nutrition.fat}g
+                  </Text>
+                </View>
+                <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#E4E2F8] px-4 py-2">
+                  <Text className="font-[Poppins-400] text-xs  text-[#7264FB]">
+                    Protein:
+                  </Text>
+                  <Text className="font-[Poppins-600] text-xs  text-[#7264FB]">
+                    {nutrition.protein}g
+                  </Text>
+                </View>
+                <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DDF9F5] px-4 py-2">
+                  <Text className="font-[Poppins-400] text-xs  text-[#23D8BE]">
+                    Carbs:
+                  </Text>
+                  <Text className="font-[Poppins-600] text-xs  text-[#23D8BE]">
+                    {nutrition.carbs}g
+                  </Text>
+                </View>
               </View>
             </View>
           </ScrollView>
