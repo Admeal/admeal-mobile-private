@@ -10,7 +10,7 @@ import {
 import { Camera } from "expo-camera";
 import GoBackButton from "../components/buttons/GoBackButton";
 
-const CameraUpload = ({ navigation }) => {
+const CameraUpload = ({ navigation }: any) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
@@ -26,7 +26,7 @@ const CameraUpload = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(status === "granted");
+      setHasCameraPermission((prevState) => status === "granted");
     })();
   }, []);
 
@@ -38,6 +38,7 @@ const CameraUpload = ({ navigation }) => {
       } else {
         setDishImage(data.uri);
       }
+      navigation.navigate("ImageVerification", { navigation });
     }
   };
 
