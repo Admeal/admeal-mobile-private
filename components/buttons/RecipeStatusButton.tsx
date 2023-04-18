@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 
 import {
@@ -20,15 +20,32 @@ const RecipeStatusButton = ({
   disabled,
   label = "Upload"
 }: RecipeStatusButtonProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
+  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
+  const [dishImage, setDishImage] = useRecoilState(dishImageState);
 
   const handleUpload = () => {
-    disabled ? null : console.log("Upload");
+    disabled ? null : console.log(label);
     if (!disabled) {
-      navigation.navigate("CameraUpload", { navigation });
+      if (!ingredientsImage && !isIngredientsSumbitted) {
+        navigation.navigate("CameraUpload", { navigation });
+      }
+      if (ingredientsImage && isIngredientsSumbitted && !dishImage) {
+        navigation.navigate("CameraUpload", { navigation });
+      }
+
+      if (ingredientsImage && !isIngredientsSumbitted) {
+        setIsIngredientsSumbitted(true);
+        navigation.navigate("CheckStatus", { navigation });
+      }
+      if (dishImage && ingredientsImage && isIngredientsSumbitted) {
+        setIsReadyDish(true);
+        navigation.navigate("CheckStatus", { navigation });
+      }
     }
   };
 
