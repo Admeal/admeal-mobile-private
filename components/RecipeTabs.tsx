@@ -4,12 +4,25 @@ import PopularCard from "./PopularCard";
 import TopEarningsCard from "./TopEarningsCard";
 import MyMealsCard from "./MyMealsCard";
 
+import { recipeListState } from "../atoms/dataAtom";
+import { useRecoilState } from "recoil";
+import getRecipesEndpoint from "../endpoints/getRecipesEndpoint";
+import { useEffect } from "react";
+
 type RecipeTabsProps = {
   navigation: any;
   routeName: string;
 };
 
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
+  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
+
+  getRecipesEndpoint();
+
+  useEffect(() => {
+    // console.log(recipeList);
+  }, [recipeList]);
+
   return (
     <View className="px-5 ">
       <View className="flex-row items-center justify-center pb-5">
@@ -51,16 +64,11 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 className="flex-row py-4">
-                <PopularCard navigation={navigation} />
-                <PopularCard navigation={navigation} recipeName="Fried chicken" />
-                <PopularCard navigation={navigation} recipeName="mousaka" />
-                <PopularCard navigation={navigation} recipeName="Fried chicken" />
-                <PopularCard navigation={navigation} recipeName="Fried chicken" />
-                <PopularCard navigation={navigation} />
-                <PopularCard navigation={navigation} recipeName="mousaka" />
-                <PopularCard navigation={navigation} recipeName="Fried chicken" />
-                <PopularCard navigation={navigation} recipeName="Fried chicken" />
-                <PopularCard navigation={navigation} recipeName="Fried chicken" />
+                {recipeList.map((recipe, index) => {
+                  return (
+                    <PopularCard navigation={navigation} recipe={recipe} key={index} />
+                  );
+                })}
               </ScrollView>
             </View>
             <View className="pb-60">
