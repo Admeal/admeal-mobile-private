@@ -1,5 +1,10 @@
 import { atom } from 'recoil';
 
+export const recipeListState = atom({
+  key: 'recipeListState',
+  default: [],
+});
+
 export const recipeItemState = atom({
   key: 'recipeItemState',
   default: {},
