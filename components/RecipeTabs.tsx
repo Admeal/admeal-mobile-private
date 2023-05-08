@@ -4,9 +4,10 @@ import PopularCard from "./PopularCard";
 import TopEarningsCard from "./TopEarningsCard";
 import MyMealsCard from "./MyMealsCard";
 
-import { recipeListState } from "../atoms/dataAtom";
+import { recipeListState, mealsListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import getRecipesEndpoint from "../endpoints/getRecipesEndpoint";
+import getMyMealsEndpoint from "../endpoints/getMyMealsEndpoint";
 import { useEffect } from "react";
 
 type RecipeTabsProps = {
@@ -16,12 +17,10 @@ type RecipeTabsProps = {
 
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
+  const [mealsList, setMealsList] = useRecoilState(mealsListState);
 
   getRecipesEndpoint();
-
-  useEffect(() => {
-    // console.log(recipeList);
-  }, [recipeList]);
+  getMyMealsEndpoint();
 
   return (
     <View className="px-5 ">
@@ -34,7 +33,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
             routeName === "Recipes" ? "border-[#FF1E00]" : "border-[#919EAB]"
           }`}>
           <Text
-            className={` font-semibold ${
+            className={`font-[Poppins-600] ${
               routeName === "Recipes" ? "text-[#FF1E00]" : "text-[#637381]"
             }`}>
             Discover
@@ -48,7 +47,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
             routeName === "My Meals" ? "border-[#FF1E00]" : "border-[#919EAB]"
           }`}>
           <Text
-            className={` font-semibold ${
+            className={`font-[Poppins-600] ${
               routeName === "My Meals" ? "text-[#FF1E00]" : "text-[#637381]"
             }`}>
             My meals
@@ -59,7 +58,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
         {routeName === "Recipes" ? (
           <ScrollView className="h-screen pb-40">
             <View>
-              <Text className="text-lg font-bold">Popular Recipes</Text>
+              <Text className="font-[Poppins-700] text-lg">Popular recipes</Text>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
@@ -72,33 +71,27 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
               </ScrollView>
             </View>
             <View className="pb-60">
-              <Text className="py-4 text-lg font-bold">Top Earnings</Text>
+              <Text className="py-4 font-[Poppins-700] text-lg">Top Earnings</Text>
               <View className="h-[100%] flex-row flex-wrap items-center justify-between pt-4">
-                <TopEarningsCard
-                  navigation={navigation}
-                  cookedCount={70}
-                  recipeName="Fried chicken"
-                />
-                <TopEarningsCard
-                  navigation={navigation}
-                  cookedCount={70}
-                  recipeName="mousaka"
-                />
-                <TopEarningsCard navigation={navigation} cookedCount={320} />
-                <TopEarningsCard
-                  navigation={navigation}
-                  cookedCount={970}
-                  recipeName="tzatziki"
-                  time={25}
-                />
+                {recipeList.map((recipe, index) => {
+                  return (
+                    <TopEarningsCard
+                      navigation={navigation}
+                      recipe={recipe}
+                      key={index}
+                    />
+                  );
+                })}
               </View>
             </View>
           </ScrollView>
         ) : (
           <View className="">
             <View className="flex-row items-center space-x-2">
-              <Text className="text-lg font-bold">Total meals</Text>
-              <Text className="rounded-full bg-[#FFCAC2] p-1 text-[#BB1E09]">0</Text>
+              <Text className="font-[Poppins-700] text-lg ">Total meals</Text>
+              <Text className="rounded-full bg-[#FFCAC2] px-3 pt-1 font-[Poppins-700] text-[#BB1E09]">
+                {mealsList.length}
+              </Text>
             </View>
             <View className="relative">
               <ScrollView
@@ -107,20 +100,11 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 scrollEnabled={true}
                 className="h-screen ">
                 <View onStartShouldSetResponder={() => true} className="pb-[500px]">
-                  <MyMealsCard
-                    navigation={navigation}
-                    status="Take a photo of the dish"
-                  />
-                  <MyMealsCard
-                    navigation={navigation}
-                    status="Take a photo of ingredients"
-                  />
-                  <MyMealsCard navigation={navigation} status="Finished" />
-                  <MyMealsCard navigation={navigation} status="Finished" />
-                  <MyMealsCard navigation={navigation} status="Finished" />
-                  <MyMealsCard navigation={navigation} status="Finished" />
-                  <MyMealsCard navigation={navigation} status="Finished" />
-                  <MyMealsCard navigation={navigation} status="Finished" />
+                  {mealsList.map((meal, index) => {
+                    return (
+                      <MyMealsCard navigation={navigation} meal={meal} key={index} />
+                    );
+                  })}
                 </View>
               </ScrollView>
             </View>

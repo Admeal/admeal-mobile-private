@@ -4,11 +4,9 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
-  ScrollView,
-  FlatList
+  ScrollView
 } from "react-native";
 import { useEffect, useState } from "react";
-import BackIcon from "../assets/icons/backIcon";
 import ClockIcon from "../assets/icons/clockIcon";
 import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
@@ -16,24 +14,7 @@ import GoBackButton from "../components/buttons/GoBackButton";
 import { recipeItemState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 
-type RecipeDetailsProps = {
-  imageUri?: any;
-  recipeName?: string;
-  price?: number;
-  navigation: any;
-  cookTime: number;
-  servings: number;
-  nutrition: {
-    cal: number;
-    fat: number;
-    protein: number;
-    carbs: number;
-  };
-  recipePrice: number;
-  ingredients: { quantity: string; ingredient: string }[];
-};
-
-const RecipeDetails = ({ navigation }) => {
+const RecipeDetails = ({ navigation }: any) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const { recipeImages, ingredients } = recipeItem;
 
@@ -41,31 +22,27 @@ const RecipeDetails = ({ navigation }) => {
 
   return (
     <ImageBackground
-      className="flex-col justify-between flex-1"
-      // source={{
-      //   uri: imageUri
-      // }}
+      className="flex-1 flex-col justify-between bg-gray-500"
       source={{
-        uri: recipeImages[0]
+        uri: recipeImages
       }}
       resizeMode="cover">
       <GoBackButton navigation={navigation} />
 
       <View className="relative h-2/3 flex-col  justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
-        <View className="flex-row items-center justify-between">
-          <Text className="font-[Poppins-700] text-2xl">{recipeItem.recipeName}</Text>
+        <View className="flex-row items-end justify-between">
+          <Text className="w-[50%] font-[Poppins-700] text-2xl">
+            {recipeItem.recipeName}
+          </Text>
           <View className="flex-row items-center space-x-2">
             <Text className="mt-1 font-[Poppins-400] text-xs">Total:</Text>
             <Text className="font-[Poppins-700] text-2xl">{recipeItem.price}</Text>
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
-        <ScrollView className="flex-1 pt-3 pb-5">
+        <ScrollView className="flex-1 pb-5 pt-3">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio id
-            voluptatibus asperiores recusandae inventore, magnam quas earum repellendus
-            facere mollitia autem amet iste possimus cupiditate praesentium, voluptatem
-            aliquid vero alias!
+            {recipeItem.description}
           </Text>
           <ScrollView
             horizontal={true}
@@ -74,7 +51,7 @@ const RecipeDetails = ({ navigation }) => {
               flexDirection: "row",
               alignItems: "center"
             }}
-            className="pt-4 space-x-2 ">
+            className="space-x-2 pt-4 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
@@ -163,31 +140,22 @@ const RecipeDetails = ({ navigation }) => {
                 Instructions
               </Text>
             </TouchableOpacity>
+          </View>
+          <ScrollView className="pb-32">
             {!toggle ? (
-              <View className="z-20">
-                {/* {ingredients.map((ingredient, index) => (
-                  <View
-                    key={index}
-                    className="h-12 w-full flex-row items-center justify-between border-b border-[#E0E0E0] bg-red-300 pt-4">
-                    <Text className="bg-red-400 font-[Poppins-400] text-xs text-[#6D6D6D]">
-                      {ingredient.measurement_value}
-                    </Text>
-                    <Text className="font-[Poppins-500] text-xs text-[#6D6D6D]">
-                      {ingredient.measurement_units}
-                    </Text>
-                  </View>
-                ))} */}
+              <View className="">
+                {ingredients.map((ingredient, index) => (
+                  <IngredientsItem key={index} ingredient={ingredient} />
+                ))}
               </View>
             ) : (
-              <View>
-                <Text>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Et perspiciatis
-                  quaerat natus, est laudantium dolorem nam atque autem sed illum,
-                  accusantium commodi, ea aut ex dolores molestiae libero nulla dicta.
+              <View className="pt-2">
+                <Text className="font-[Poppins-400] text-xs leading-6  text-[#637381]">
+                  {recipeItem.cookingInstructions}
                 </Text>
               </View>
             )}
-          </View>
+          </ScrollView>
         </ScrollView>
         <TouchableOpacity
           onPress={() =>

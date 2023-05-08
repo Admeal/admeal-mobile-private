@@ -21,7 +21,8 @@ const PopularCard = ({ recipe, navigation }: RecipeProps) => {
     difficulty,
     description,
     cooking_instructions,
-    cook_time_in_mins
+    cook_time_in_mins,
+    cook_count
   } = recipe;
 
   const handleItemPress = () => {
@@ -36,7 +37,8 @@ const PopularCard = ({ recipe, navigation }: RecipeProps) => {
       difficulty: difficulty,
       description: description,
       cookingInstructions: cooking_instructions,
-      cookTimeInMins: cook_time_in_mins
+      cookTimeInMins: cook_time_in_mins,
+      cookCount: cook_count
     });
     navigation.navigate("RecipeDetails");
   };
@@ -54,7 +56,9 @@ const PopularCard = ({ recipe, navigation }: RecipeProps) => {
           uri: recipe_images[0]
         }}>
         <PriceTag price={token_reward} />
-        <Text className="pb-2 pl-2 text-xs font-bold text-white">{recipe_name}</Text>
+        <Text className="pb-2 pl-2 font-[Poppins-400] text-xs font-bold text-white">
+          {recipe_name}
+        </Text>
       </ImageBackground>
     </TouchableOpacity>
   );
