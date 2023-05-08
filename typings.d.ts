@@ -11,15 +11,32 @@ type RecipeProps = {
       protein_in_grams: number;
     };
     number_of_servings: number;
-    ingredients: {
-      measurement_units: string;
-      measurement_value: string;
-      name: string;
-    };
+    ingredients: [
+      {
+        measurement_units: string;
+        measurement_value: number;
+        name: string;
+      }
+    ];
     difficulty: string;
     description: string;
     cooking_instructions: string;
     cook_time_in_mins: number;
+    cook_count: number;
   };
-  navigation: any;
+  navigation?: any;
+};
+
+type MealProps = {
+  meal: {
+    current_state: string;
+    dish_photos: string[];
+    ingredients_photos: string[];
+    my_meals_id: number;
+    recipe_id: number;
+    time_stamp_started: number;
+    time_stamp_validated: number;
+    tokens_earned: number;
+  };
+  navigation?: any;
 };
