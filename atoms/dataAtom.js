@@ -1,8 +1,36 @@
 import { atom } from 'recoil';
 
+export const recipeListState = atom({
+  key: 'recipeListState',
+  default: [],
+});
+
+export const mealsListState = atom({
+  key: 'mealsListState',
+  default: [],
+});
+
 export const recipeItemState = atom({
   key: 'recipeItemState',
-  default: {},
+  default: {
+    recipeName: '',
+    price: 0,
+    recipeImages: '',
+    recipeId: 0,
+    nutritionalInformation: {
+      calories_in_cal: 0,
+      carbs_in_grams: 0,
+      protein_in_grams: 0,
+      fat_in_grams: 0,
+    },
+    numberOfServings: 0,
+    ingredients: [{ measurement_units: '', measurement_value: 0, name: '' }],
+    difficulty: '',
+    description: '',
+    cookingInstructions: '',
+    cookTimeInMins: 0,
+    cookCount: 0,
+  },
 });
 
 export const recipeStepsStatusState = atom({

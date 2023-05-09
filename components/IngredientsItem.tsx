@@ -1,22 +1,24 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-type IngredientsItemProps = {
-  item: {
-    ingredient: string;
-    quantity: string;
+type IngredientItemProps = {
+  ingredient: {
+    measurement_units: string;
+    measurement_value: number;
+    name: string;
   };
 };
 
-const IngredientsItem = ({ item }: IngredientsItemProps) => {
+const IngredientsItem = ({ ingredient }: IngredientItemProps) => {
   return (
-    <View
-      // key={index}
-      className="h-12 w-full flex-row items-center justify-between border-b border-[#E0E0E0] bg-red-300 pt-4">
-      <Text className="bg-red-400 font-[Poppins-400] text-xs text-[#6D6D6D]">
-        {item.ingredient}
+    <View className="h-12 w-full flex-row items-center justify-between border-b border-[#E0E0E0]">
+      <Text className=" font-[Poppins-400] text-xs text-[#6D6D6D]">
+        {ingredient.name}
       </Text>
-      <Text className="font-[Poppins-500] text-xs text-[#6D6D6D]">{item.quantity}</Text>
+      <Text className="font-[Poppins-500] text-xs text-[#6D6D6D]">
+        {ingredient.measurement_value}
+        {ingredient.measurement_units}
+      </Text>
     </View>
   );
 };
