@@ -1,5 +1,5 @@
 import { Text, ImageBackground, View, TouchableOpacity, Image } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useRecoilState } from "recoil";
 import { recipeItemState } from "../atoms/dataAtom";
@@ -8,46 +8,57 @@ import { LogBox } from "react-native";
 
 LogBox.ignoreLogs(["Non-serializable values were found in the navigation state"]);
 
-type PopularCardProps = {
-  imageUri?: any;
-  imagePath?: string;
-  recipeName?: string;
-  price?: number;
-  navigation: any;
-};
-
-const PopularCard = ({
-  imageUri = "https://raw.githubusercontent.com/AboutReact/sampleresource/master/sample_img.png",
-  imagePath = "../assets/png/popularDishImage.png",
-  recipeName = "mousaka",
-  price = 40,
-  navigation
-}: PopularCardProps) => {
+const PopularCard = ({ recipe, navigation }: RecipeProps) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+  const {
+    recipe_name,
+    token_reward,
+    recipe_images,
+    recipe_id,
+    nutritional_information,
+    number_of_servings,
+    ingredients,
+    difficulty,
+    description,
+    cooking_instructions,
+    cook_time_in_mins,
+    cook_count
+  } = recipe;
+
   const handleItemPress = () => {
-    // () =>
-    //     navigation.navigate("RecipeDetails", {
-    //       imageUri: imageUri,
-    //       recipeName: recipeName,
-    //       price: price,
-    //       navigation: navigation
-    //     })
     setRecipeItem({
-      imageUri: imageUri,
-      recipeName: recipeName,
-      price: price
+      recipeName: recipe_name,
+      price: token_reward,
+      recipeImages: recipe_images[0],
+      recipeId: recipe_id,
+      nutritionalInformation: nutritional_information,
+      numberOfServings: number_of_servings,
+      ingredients: ingredients,
+      difficulty: difficulty,
+      description: description,
+      cookingInstructions: cooking_instructions,
+      cookTimeInMins: cook_time_in_mins,
+      cookCount: cook_count
     });
     navigation.navigate("RecipeDetails");
   };
 
+  useEffect(() => {
+    console.log(recipe);
+  }, [recipe]);
+
   return (
-    <TouchableOpacity className="mr-2 shadow-2xl rounded-2xl" onPress={handleItemPress}>
+    <TouchableOpacity className="mr-2 rounded-2xl shadow-2xl" onPress={handleItemPress}>
       <ImageBackground
         className=" h-[130px] w-[96px] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
         borderRadius={16}
-        source={require("../assets/png/popularDishImage.png")}>
-        <PriceTag price={price} />
-        <Text className="pb-2 pl-2 text-xs font-bold text-white">{recipeName}</Text>
+        source={{
+          uri: recipe_images[0]
+        }}>
+        <PriceTag price={token_reward} />
+        <Text className="pb-2 pl-2 font-[Poppins-400] text-xs font-bold text-white">
+          {recipe_name}
+        </Text>
       </ImageBackground>
     </TouchableOpacity>
   );

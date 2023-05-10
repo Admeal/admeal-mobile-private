@@ -10,7 +10,7 @@ const PriceTag = ({ price, coinNo = 1 }: PriceTagProps) => {
   return (
     <View className="flex-row items-center justify-end px-2 pt-2 ">
       <View className=" h-[21px] w-[55px] flex-row items-center justify-between rounded-xl bg-white px-[4px] pt-[1px]">
-        <Text className="text-xs font-bold">+{price}</Text>
+        <Text className="font-[Poppins-700] text-xs">+{price}</Text>
         {coinNo === 1 ? (
           <Image source={require("../assets/png/coin1.png")} />
         ) : (

@@ -4,7 +4,7 @@ import HomeTopBar from "../components/HomeTopBar";
 import RecipesBar from "../components/RecipesBar";
 import RecipeTabs from "../components/RecipeTabs";
 
-export default function Meals({ navigation }) {
+export default function Meals({ navigation }: any) {
   return (
     <SafeAreaView className="relative">
       <HomeTopBar navigation={navigation} />
