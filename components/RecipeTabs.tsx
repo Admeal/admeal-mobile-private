@@ -4,11 +4,12 @@ import PopularCard from "./PopularCard";
 import TopEarningsCard from "./TopEarningsCard";
 import MyMealsCard from "./MyMealsCard";
 
-import { recipeListState, mealsListState } from "../atoms/dataAtom";
+import { recipeListState, mealsListState, userListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import getRecipesEndpoint from "../endpoints/getRecipesEndpoint";
 import getMyMealsEndpoint from "../endpoints/getMyMealsEndpoint";
 import { useEffect } from "react";
+import getUserEndpoint from "../endpoints/getUsersEndpoint";
 
 type RecipeTabsProps = {
   navigation: any;
@@ -18,9 +19,7 @@ type RecipeTabsProps = {
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [mealsList, setMealsList] = useRecoilState(mealsListState);
-
-  getRecipesEndpoint();
-  getMyMealsEndpoint();
+  const [userList, setUserList] = useRecoilState(userListState);
 
   return (
     <View className="px-5 ">
@@ -63,7 +62,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 className="flex-row py-4">
-                {recipeList.map((recipe, index) => {
+                {recipeList?.map((recipe, index) => {
                   return (
                     <PopularCard navigation={navigation} recipe={recipe} key={index} />
                   );
@@ -73,7 +72,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
             <View className="pb-60">
               <Text className="py-4 font-[Poppins-700] text-lg">Top Earnings</Text>
               <View className="h-[100%] flex-row flex-wrap items-center justify-between pt-4">
-                {recipeList.map((recipe, index) => {
+                {recipeList?.map((recipe, index) => {
                   return (
                     <TopEarningsCard
                       navigation={navigation}
