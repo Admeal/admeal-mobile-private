@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "830854626619",
+    "firebase_url": "https://admeal-firebase-default-rtdb.firebaseio.com",
+    "project_id": "admeal-firebase",
+    "storage_bucket": "admeal-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830854626619:android:b638b6daecda4d277f0b1e",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830854626619-ngo8mmt726er8eb3kn8ql47tijf1h7ob.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "host.exp.exponent",
+            "certificate_hash": "6ead49e174e4c1fcc4ee49fc33f3edc544b2587b"
+          }
+        },
+        {
+          "client_id": "830854626619-abahvf95ravv8fcovu4adtvs7pc4fr32.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1fuHSgCF8WXpnz1b23Cvf66WsjEL5iFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830854626619-abahvf95ravv8fcovu4adtvs7pc4fr32.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "830854626619-mtvvvmboi9jlcapq41kinrtuu8s5vuu9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "admeal-modile",
     "plugins": [
       [
         "expo-camera",
@@ -30,7 +31,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "host.exp.exponent",
+      "permissions": ["android.permission.CAMERA", "android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
