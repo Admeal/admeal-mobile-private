@@ -1,5 +1,15 @@
 import { atom } from 'recoil';
 
+export const userListState = atom({
+  key: 'userListState',
+  default: [],
+});
+
+export const userIdState = atom({
+  key: 'userIdState',
+  default: null,
+});
+
 export const recipeListState = atom({
   key: 'recipeListState',
   default: [],
@@ -49,11 +59,11 @@ export const isReadyDishState = atom({
 });
 
 export const ingredientsImageState = atom({
-  key: 'ingredientsImage',
+  key: 'ingredientsImageState',
   default: '',
 });
 
 export const dishImageState = atom({
-  key: 'dishImage',
+  key: 'dishImageState',
   default: '',
 });

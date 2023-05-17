@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { recipeListState } from "../atoms/dataAtom";
+import { userListState } from "../atoms/dataAtom";
 
-function getRecipesEndpoint() {
-  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
+function getUserEndpoint() {
+  const [userList, setUserList] = useRecoilState(userListState);
   useEffect(() => {
-    fetch("https://admeal-firebase-default-rtdb.firebaseio.com/recipes.json")
+    fetch("https://admeal-firebase-default-rtdb.firebaseio.com/users.json")
       .then((response) => response.json())
       .then((data) => {
         const array = Object.keys(data).map((key) => {
           return data[key];
         });
-        setRecipeList(array);
-        console.log(recipeList);
+        setUserList(array);
+        console.log(userList);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  return recipeList;
+  return userList;
 }
 
-export default getRecipesEndpoint;
+export default getUserEndpoint;

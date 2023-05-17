@@ -33,6 +33,7 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
         return "";
     }
   };
+
   const getRecipeName = () => {
     const recipe = recipeList.find((recipe) => recipe.recipe_id === meal.recipe_id);
     return recipe?.recipe_name;
@@ -46,28 +47,28 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   const handleItemPress = () => {
     const recipeId = meal.recipe_id;
 
-    setRecipeItem({
-      recipeName: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.recipe_name,
-      price: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.token_reward,
-      recipeImages: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-        ?.recipe_images[0],
-      recipeId: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.recipe_id,
-      nutritionalInformation: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-        ?.nutritional_information,
-      numberOfServings: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-        ?.number_of_servings,
-      ingredients: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-        ?.ingredients,
-      difficulty: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.difficulty,
-      description: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-        ?.description,
-      cookingInstructions: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-        ?.cooking_instructions,
-      cookTimeInMins: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-        ?.cook_time_in_mins,
-      cookCount: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.cook_count
-    });
-    navigation.navigate("RecipeDetails");
+    // setRecipeItem({
+    //   recipeName: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.recipe_name,
+    //   price: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.token_reward,
+    //   recipeImages: recipeList.find((recipe) => recipe.recipe_id === recipeId)
+    //     ?.recipe_images[0],
+    //   recipeId: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.recipe_id,
+    //   nutritionalInformation: recipeList.find((recipe) => recipe.recipe_id === recipeId)
+    //     ?.nutritional_information,
+    //   numberOfServings: recipeList.find((recipe) => recipe.recipe_id === recipeId)
+    //     ?.number_of_servings,
+    //   ingredients: recipeList.find((recipe) => recipe.recipe_id === recipeId)
+    //     ?.ingredients,
+    //   difficulty: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.difficulty,
+    //   description: recipeList.find((recipe) => recipe.recipe_id === recipeId)
+    //     ?.description,
+    //   cookingInstructions: recipeList.find((recipe) => recipe.recipe_id === recipeId)
+    //     ?.cooking_instructions,
+    //   cookTimeInMins: recipeList.find((recipe) => recipe.recipe_id === recipeId)
+    //     ?.cook_time_in_mins,
+    //   cookCount: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.cook_count
+    // });
+    navigation.navigate("CheckStatus"); //
   };
 
   return (

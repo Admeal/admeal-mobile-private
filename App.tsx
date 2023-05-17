@@ -22,11 +22,14 @@ import RecipeDetails from "./screens/RecipeDetails";
 import CheckStatus from "./screens/CheckStatus";
 import CameraUpload from "./screens/CameraUpload";
 import ImageVerification from "./screens/ImageVerification";
+import Login from "./screens/Login";
+import useAuth, { AuthProvider } from "./hooks/useAuth";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const RecipeStack = () => {
+  const { user } = useAuth();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -35,11 +38,19 @@ const RecipeStack = () => {
           backgroundColor: "transparent"
         }
       }}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
-      <Stack.Screen name="CheckStatus" component={CheckStatus} />
-      <Stack.Screen name="CameraUpload" component={CameraUpload} />
-      <Stack.Screen name="ImageVerification" component={ImageVerification} />
+      {user ? (
+        <Stack.Group>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
+          <Stack.Screen name="CheckStatus" component={CheckStatus} />
+          <Stack.Screen name="CameraUpload" component={CameraUpload} />
+          <Stack.Screen name="ImageVerification" component={ImageVerification} />
+        </Stack.Group>
+      ) : (
+        <Stack.Group>
+          <Stack.Screen name="Login" component={Login} />
+        </Stack.Group>
+      )}
     </Stack.Navigator>
   );
 };
@@ -68,62 +79,64 @@ export default function App() {
   }
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-      <RecoilRoot>
-        <NavigationContainer>
-          <Drawer.Navigator
-            initialRouteName="Recipes"
-            useLegacyImplementation
-            drawerContent={(props: any) => <Sidebar {...props} />}
-            screenOptions={{
-              headerShown: false,
-              drawerContentContainerStyle: {
-                backgroundColor: "white"
-              },
-              drawerActiveBackgroundColor: "#FF1E00",
-              drawerActiveTintColor: "white",
-              drawerInactiveTintColor: "#6D6D6D",
-              drawerInactiveBackgroundColor: "white",
-              drawerLabelStyle: {
-                fontSize: 16,
-                fontWeight: "bold",
-                marginLeft: -10
-              }
-            }}>
-            <Drawer.Screen
-              options={{
-                drawerIcon: ({ color }) => (
-                  <WalletIcon
-                    className="mt-2"
-                    size={22}
-                    stroke={color}
-                    strokeWidth={1.6}
-                  />
-                )
-              }}
-              name="Wallet"
-              component={Wallet}
-            />
-            <Drawer.Screen
-              options={{
-                drawerIcon: ({ color }) => (
-                  <RecipeIcon className="mt-2" size={22} fill={color} />
-                )
-              }}
-              name="Recipes"
-              component={RecipeStack}
-            />
-            <Drawer.Screen
-              options={{
-                drawerIcon: ({ color }) => (
-                  <MealsIcon className="mt-2" size={22} color={color} />
-                )
-              }}
-              name="My Meals"
-              component={Meals}
-            />
-          </Drawer.Navigator>
-        </NavigationContainer>
-      </RecoilRoot>
+      <AuthProvider>
+        <RecoilRoot>
+          <NavigationContainer>
+            <Drawer.Navigator
+              initialRouteName="Recipes"
+              useLegacyImplementation
+              drawerContent={(props: any) => <Sidebar {...props} />}
+              screenOptions={{
+                headerShown: false,
+                drawerContentContainerStyle: {
+                  backgroundColor: "white"
+                },
+                drawerActiveBackgroundColor: "#FF1E00",
+                drawerActiveTintColor: "white",
+                drawerInactiveTintColor: "#6D6D6D",
+                drawerInactiveBackgroundColor: "white",
+                drawerLabelStyle: {
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  marginLeft: -10
+                }
+              }}>
+              <Drawer.Screen
+                options={{
+                  drawerIcon: ({ color }) => (
+                    <WalletIcon
+                      className="mt-2"
+                      size={22}
+                      stroke={color}
+                      strokeWidth={1.6}
+                    />
+                  )
+                }}
+                name="Wallet"
+                component={Wallet}
+              />
+              <Drawer.Screen
+                options={{
+                  drawerIcon: ({ color }) => (
+                    <RecipeIcon className="mt-2" size={22} fill={color} />
+                  )
+                }}
+                name="Recipes"
+                component={RecipeStack}
+              />
+              <Drawer.Screen
+                options={{
+                  drawerIcon: ({ color }) => (
+                    <MealsIcon className="mt-2" size={22} color={color} />
+                  )
+                }}
+                name="My Meals"
+                component={Meals}
+              />
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </RecoilRoot>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }
