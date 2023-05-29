@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { mealsListState } from "../atoms/dataAtom";
+import { mealsListState, myMealsListState } from "../atoms/dataAtom";
 import useAuth from "../hooks/useAuth";
 
 function getMyMealsEndpoint() {
   const [mealsList, setMealsList] = useRecoilState(mealsListState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
 
   const { user } = useAuth();
 
@@ -15,11 +16,12 @@ function getMyMealsEndpoint() {
         const array = Object.keys(data).map((key) => {
           return data[key];
         });
-        // const filteredArray = array.filter((meal) => {
-        //   if (meal.user_id === user?.id) return meal;
-        // });
+        const filteredArray = array.filter((meal) => {
+          if (meal.user_id === user?.id) return meal;
+        });
 
         setMealsList(array);
+        setMyMealsList(filteredArray);
       })
       .catch((error) => {
         console.log(error);

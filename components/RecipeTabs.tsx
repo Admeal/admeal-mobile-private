@@ -4,7 +4,7 @@ import PopularCard from "./PopularCard";
 import TopEarningsCard from "./TopEarningsCard";
 import MyMealsCard from "./MyMealsCard";
 
-import { recipeListState, mealsListState, userListState } from "../atoms/dataAtom";
+import { recipeListState, mealsListState, myMealsListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 
 type RecipeTabsProps = {
@@ -15,6 +15,7 @@ type RecipeTabsProps = {
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [mealsList, setMealsList] = useRecoilState<any>(mealsListState);
+  const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
 
   return (
     <View className="px-5 ">
@@ -84,7 +85,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
             <View className="flex-row items-center space-x-2">
               <Text className="font-[Poppins-700] text-lg ">Total meals</Text>
               <Text className="rounded-full bg-[#FFCAC2] px-3 pt-1 font-[Poppins-700] text-[#BB1E09]">
-                {mealsList?.length}
+                {myMealsList?.length}
               </Text>
             </View>
             <View className="relative">
@@ -94,7 +95,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 scrollEnabled={true}
                 className="h-screen ">
                 <View onStartShouldSetResponder={() => true} className="pb-[500px]">
-                  {mealsList?.map((meal, index) => {
+                  {myMealsList?.map((meal, index) => {
                     return <MyMealsCard meal={meal} key={index} />;
                   })}
                 </View>

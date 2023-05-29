@@ -20,6 +20,11 @@ export const mealsListState = atom({
   default: [],
 });
 
+export const myMealsListState = atom({
+  key: 'myMealsListState',
+  default: [],
+});
+
 export const recipeItemState = atom({
   key: 'recipeItemState',
   default: {
