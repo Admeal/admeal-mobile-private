@@ -13,18 +13,26 @@ import IngredientsItem from "../components/IngredientsItem";
 import GoBackButton from "../components/buttons/GoBackButton";
 import { recipeItemState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
+import useAuth from "../hooks/useAuth";
 
 const RecipeDetails = ({ navigation }: any) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
-  const { recipeImages, ingredients } = recipeItem;
 
   const [toggle, setToggle] = useState(false);
 
+  const { user } = useAuth();
+
+  const handleCookButton = () => {
+    navigation.navigate("CheckStatus", {
+      navigation: navigation
+    });
+  };
+
   return (
     <ImageBackground
-      className="flex-1 flex-col justify-between bg-gray-500"
+      className="flex-col justify-between flex-1 bg-gray-500"
       source={{
-        uri: recipeImages
+        uri: recipeItem.recipeImages
       }}
       resizeMode="cover">
       <GoBackButton navigation={navigation} />
@@ -40,7 +48,7 @@ const RecipeDetails = ({ navigation }: any) => {
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
-        <ScrollView className="flex-1 pb-5 pt-3">
+        <ScrollView className="flex-1 pt-3 pb-5">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
             {recipeItem.description}
           </Text>
@@ -51,7 +59,7 @@ const RecipeDetails = ({ navigation }: any) => {
               flexDirection: "row",
               alignItems: "center"
             }}
-            className="space-x-2 pt-4 ">
+            className="pt-4 space-x-2 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
@@ -144,7 +152,7 @@ const RecipeDetails = ({ navigation }: any) => {
           <ScrollView className="pb-32">
             {!toggle ? (
               <View className="">
-                {ingredients.map((ingredient, index) => (
+                {recipeItem.ingredients.map((ingredient, index) => (
                   <IngredientsItem key={index} ingredient={ingredient} />
                 ))}
               </View>
@@ -158,11 +166,7 @@ const RecipeDetails = ({ navigation }: any) => {
           </ScrollView>
         </ScrollView>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("CheckStatus", {
-              navigation: navigation
-            })
-          }
+          onPress={() => handleCookButton()}
           className="absolute bottom-8 left-[9%] z-10 h-[60px] w-full flex-col items-center justify-center rounded-full bg-[#FF1E00] shadow-xl shadow-[#FF1E00]">
           <Text className="font-[Poppins-700] text-base text-white">LET'S COOK IT</Text>
         </TouchableOpacity>

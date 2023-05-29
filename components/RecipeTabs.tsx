@@ -6,10 +6,6 @@ import MyMealsCard from "./MyMealsCard";
 
 import { recipeListState, mealsListState, userListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
-import getRecipesEndpoint from "../endpoints/getRecipesEndpoint";
-import getMyMealsEndpoint from "../endpoints/getMyMealsEndpoint";
-import { useEffect } from "react";
-import getUserEndpoint from "../endpoints/getUsersEndpoint";
 
 type RecipeTabsProps = {
   navigation: any;
@@ -18,8 +14,7 @@ type RecipeTabsProps = {
 
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [mealsList, setMealsList] = useRecoilState(mealsListState);
-  const [userList, setUserList] = useRecoilState(userListState);
+  const [mealsList, setMealsList] = useRecoilState<any>(mealsListState);
 
   return (
     <View className="px-5 ">
@@ -89,7 +84,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
             <View className="flex-row items-center space-x-2">
               <Text className="font-[Poppins-700] text-lg ">Total meals</Text>
               <Text className="rounded-full bg-[#FFCAC2] px-3 pt-1 font-[Poppins-700] text-[#BB1E09]">
-                {mealsList.length}
+                {mealsList?.length}
               </Text>
             </View>
             <View className="relative">
@@ -99,10 +94,8 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 scrollEnabled={true}
                 className="h-screen ">
                 <View onStartShouldSetResponder={() => true} className="pb-[500px]">
-                  {mealsList.map((meal, index) => {
-                    return (
-                      <MyMealsCard navigation={navigation} meal={meal} key={index} />
-                    );
+                  {mealsList?.map((meal, index) => {
+                    return <MyMealsCard meal={meal} key={index} />;
                   })}
                 </View>
               </ScrollView>
