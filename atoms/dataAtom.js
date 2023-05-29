@@ -67,3 +67,8 @@ export const dishImageState = atom({
   key: 'dishImageState',
   default: '',
 });
+
+export const mealStatusState = atom({
+  key: 'mealStatusState',
+  default: '',
+});

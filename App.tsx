@@ -24,12 +24,18 @@ import CameraUpload from "./screens/CameraUpload";
 import ImageVerification from "./screens/ImageVerification";
 import Login from "./screens/Login";
 import useAuth, { AuthProvider } from "./hooks/useAuth";
+import getMyMealsEndpoint from "./endpoints/getMyMealsEndpoint";
+import getRecipesEndpoint from "./endpoints/getRecipesEndpoint";
+import getUserEndpoint from "./endpoints/getUsersEndpoint";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const RecipeStack = () => {
   const { user } = useAuth();
+  getUserEndpoint();
+  getRecipesEndpoint();
+  getMyMealsEndpoint();
   return (
     <Stack.Navigator
       screenOptions={{
