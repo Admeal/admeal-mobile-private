@@ -4,13 +4,12 @@ import useAuth from "../hooks/useAuth";
 import AdmealLogoBig from "../assets/icons/admealLogoBig";
 import AppleLogo from "../assets/icons/appleLogo";
 import GoogleLogo from "../assets/icons/googleLogo";
-import getUserEndpoint from "../endpoints/getUsersEndpoint";
 
 const Login = () => {
   const { request, promptAsync, user }: any = useAuth();
 
   return (
-    <View className="h-screen items-center space-y-4 bg-white">
+    <View className="items-center h-screen space-y-4 bg-white">
       <AdmealLogoBig className="my-28" />
       <TouchableOpacity
         onPress={() => {

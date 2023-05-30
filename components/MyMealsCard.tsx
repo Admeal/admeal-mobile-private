@@ -1,19 +1,39 @@
 import { View, Text, ImageBackground, Image, TouchableOpacity } from "react-native";
 import { useRecoilState } from "recoil";
-import { recipeListState, recipeItemState } from "../atoms/dataAtom";
+import {
+  recipeListState,
+  recipeItemState,
+  isIngredientsSumbittedState,
+  isReadyDishState,
+  ingredientsImageState,
+  dishImageState,
+  mealsListState,
+  mealStatusState
+} from "../atoms/dataAtom";
 
 const MyMealsCard = ({ meal, navigation }: MealProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+  const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
+    isIngredientsSumbittedState
+  );
+  const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
+  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
+  const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const { recipeImages, ingredients } = recipeItem;
+  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
 
   const handleStatusButtonUI = () => {
     switch (meal.current_state) {
       case "Finished":
       case "COMPLETE":
-        return "bg-none text-[#637381] text-xs font-normal";
+      case "COMPLETED":
+      case "AWAITING_VALIDATION":
+      case "INVALID":
+        return "bg-none text-[#637381] text-xs font-[Poppins-400] font-normal";
       case "IN_PROGRESS_DISH":
-        return "h-[30px] rounded-[18px] bg-[#FF1E00] pt-1 text-center align-middle text-sm font-extrabold  text-white px-3 font-[Poppins-700]";
       case "IN_PROGRESS_INGREDIENTS":
+      case "INCOMPLETE":
         return "h-[30px] rounded-[18px] bg-[#FF1E00] pt-1 text-center align-middle text-sm font-extrabold  text-white px-3 font-[Poppins-700]";
       default:
         return "";
@@ -24,11 +44,18 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
     switch (meal.current_state) {
       case "Finished":
       case "COMPLETE":
-        return "Finished";
+      case "COMPLETED":
+        return "Complete";
       case "IN_PROGRESS_DISH":
         return "Take a photo of the dish";
       case "IN_PROGRESS_INGREDIENTS":
         return "Take a photo of ingredients";
+      case "INVALID":
+        return "Invalid";
+      case "AWAITING_VALIDATION":
+        return "Awaiting validation";
+      case "INCOMPLETE":
+        return "Incomplete";
       default:
         return "";
     }
@@ -45,30 +72,22 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   };
 
   const handleItemPress = () => {
-    const recipeId = meal.recipe_id;
+    setIsIngredientsSumbitted(false);
+    setIsReadyDish(false);
+    setIngredientsImage(meal.ingredients_photos[0]);
+    setDishImage(meal.dish_photos[0]);
+    setMealStatus(meal.current_state);
 
-    // setRecipeItem({
-    //   recipeName: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.recipe_name,
-    //   price: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.token_reward,
-    //   recipeImages: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-    //     ?.recipe_images[0],
-    //   recipeId: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.recipe_id,
-    //   nutritionalInformation: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-    //     ?.nutritional_information,
-    //   numberOfServings: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-    //     ?.number_of_servings,
-    //   ingredients: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-    //     ?.ingredients,
-    //   difficulty: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.difficulty,
-    //   description: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-    //     ?.description,
-    //   cookingInstructions: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-    //     ?.cooking_instructions,
-    //   cookTimeInMins: recipeList.find((recipe) => recipe.recipe_id === recipeId)
-    //     ?.cook_time_in_mins,
-    //   cookCount: recipeList.find((recipe) => recipe.recipe_id === recipeId)?.cook_count
-    // });
-    navigation.navigate("CheckStatus"); //
+    if (ingredientsImage) {
+      setIsIngredientsSumbitted(true);
+    }
+    if (ingredientsImage && dishImage) {
+      setIsReadyDish(true);
+    }
+
+    navigation.navigate("CheckStatus", {
+      meal
+    }); //
   };
 
   return (

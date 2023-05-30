@@ -11,20 +11,144 @@ import ClockIcon from "../assets/icons/clockIcon";
 import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
 import GoBackButton from "../components/buttons/GoBackButton";
-import { recipeItemState } from "../atoms/dataAtom";
+import {
+  recipeItemState,
+  isIngredientsSumbittedState,
+  isReadyDishState,
+  ingredientsImageState,
+  dishImageState,
+  mealsListState,
+  mealStatusState,
+  myMealsListState
+} from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
+import useAuth from "../hooks/useAuth";
 
 const RecipeDetails = ({ navigation }: any) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
-  const { recipeImages, ingredients } = recipeItem;
+  const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
+    isIngredientsSumbittedState
+  );
+  const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
+  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
+  const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const [mealsList, setMealsList] = useRecoilState(mealsListState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
+  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
 
   const [toggle, setToggle] = useState(false);
 
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const meal = myMealsList.find(
+      (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
+    );
+  }, []);
+
+  useEffect(() => {}, []);
+
+  const handleCookButton = () => {
+    console.log("cook 1", typeof mealsList);
+    if (myMealsList) {
+      const meal = myMealsList.find(
+        (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
+      );
+      if (meal) {
+        if (meal.dish_photos[0] === "") {
+          setIsReadyDish(false);
+        } else {
+          setIsReadyDish(true);
+        }
+        if (meal.ingredients_photos[0] === "") {
+          setIsIngredientsSumbitted(false);
+        } else {
+          setIsIngredientsSumbitted(true);
+        }
+        setMealStatus(meal.current_state);
+      } else {
+        console.log("create new meal");
+        // create new meal in database
+        fetch("https://admeal-firebase-default-rtdb.firebaseio.com/my_meals.json", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            ser_id: user?.id,
+            tokens_earned: 0,
+            recipe_id: recipeItem.recipeId,
+            my_meals_id: mealsList?.length,
+            ingredients_photos: [""],
+            dish_photos: [""],
+            current_state: "INCOMPLETE"
+          })
+        });
+        setIsIngredientsSumbitted(false);
+        setIsReadyDish(false);
+        setMealStatus("INCOMPLETE");
+      }
+    }
+
+    // myMealsList.map((meal, index) => {
+    //   console.log("cook 2");
+    //   if (meal.recipeId === recipeItem.recipeId) {
+    //     console.log("cook 3");
+    //     if (meal.dish_photos[0] === "") {
+    //       setIsReadyDish(false);
+    //     } else {
+    //       setIsReadyDish(true);
+    //     }
+    //     if (meal.ingredients_photos[0] === "") {
+    //       setIsIngredientsSumbitted(false);
+    //     } else {
+    //       setIsIngredientsSumbitted(true);
+    //     }
+    //     setMealStatus(meal.current_state);
+    //     return;
+    //   }
+    //   console.log("check status");
+
+    //   if (index === myMealsList?.length - 1) {
+    //     // create new meal in database
+    //     fetch("https://admeal-firebase-default-rtdb.firebaseio.com/my_meals.json", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json"
+    //       },
+    //       body: JSON.stringify({
+    //         user_id: user?.id,
+    //         tokens_earned: 0,
+    //         recipe_id: recipeItem.recipeId,
+    //         my_meals_id: mealsList?.length,
+    //         ingredients_photos: [""],
+    //         dish_photos: [""],
+    //         current_state: "INCOMPLETE"
+    //       })
+    //     })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       })
+    //       .finally(() => {
+    //         console.log("new meal created");
+    //       });
+    //     setIsIngredientsSumbitted(false);
+    //     setIsReadyDish(false);
+    //     setMealStatus("INCOMPLETE");
+    //   }
+    // });
+    setTimeout(() => {
+      navigation.navigate("CheckStatus", {
+        navigation: navigation
+      });
+    }, 500);
+  };
+
   return (
     <ImageBackground
-      className="flex-1 flex-col justify-between bg-gray-500"
+      className="flex-col justify-between flex-1 bg-gray-500"
       source={{
-        uri: recipeImages
+        uri: recipeItem.recipeImages
       }}
       resizeMode="cover">
       <GoBackButton navigation={navigation} />
@@ -40,7 +164,7 @@ const RecipeDetails = ({ navigation }: any) => {
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
-        <ScrollView className="flex-1 pb-5 pt-3">
+        <ScrollView className="flex-1 pt-3 pb-5">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
             {recipeItem.description}
           </Text>
@@ -51,7 +175,7 @@ const RecipeDetails = ({ navigation }: any) => {
               flexDirection: "row",
               alignItems: "center"
             }}
-            className="space-x-2 pt-4 ">
+            className="pt-4 space-x-2 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
@@ -144,7 +268,7 @@ const RecipeDetails = ({ navigation }: any) => {
           <ScrollView className="pb-32">
             {!toggle ? (
               <View className="">
-                {ingredients.map((ingredient, index) => (
+                {recipeItem.ingredients.map((ingredient, index) => (
                   <IngredientsItem key={index} ingredient={ingredient} />
                 ))}
               </View>
@@ -158,11 +282,7 @@ const RecipeDetails = ({ navigation }: any) => {
           </ScrollView>
         </ScrollView>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("CheckStatus", {
-              navigation: navigation
-            })
-          }
+          onPress={() => handleCookButton()}
           className="absolute bottom-8 left-[9%] z-10 h-[60px] w-full flex-col items-center justify-center rounded-full bg-[#FF1E00] shadow-xl shadow-[#FF1E00]">
           <Text className="font-[Poppins-700] text-base text-white">LET'S COOK IT</Text>
         </TouchableOpacity>

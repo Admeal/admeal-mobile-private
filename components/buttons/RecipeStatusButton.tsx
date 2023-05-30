@@ -40,10 +40,12 @@ const RecipeStatusButton = ({
 
       if (ingredientsImage && !isIngredientsSumbitted) {
         setIsIngredientsSumbitted(true);
+        // set IngredientsImage to google cloud
         navigation.navigate("CheckStatus", { navigation });
       }
       if (dishImage && ingredientsImage && isIngredientsSumbitted) {
         setIsReadyDish(true);
+        // set dishImage to google cloud
         navigation.navigate("CheckStatus", { navigation });
       }
     }
