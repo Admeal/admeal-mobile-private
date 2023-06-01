@@ -20,6 +20,19 @@ const Wallet = ({ navigation }: any) => {
         colors={["#9F87FF", "#3A13D6"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
+        style={[
+          {
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 5
+            },
+            shadowOpacity: 0.36,
+            shadowRadius: 6.68,
+
+            elevation: 11
+          }
+        ]}
         className="h-[421px] w-full rounded-b-3xl bg-blue-600">
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} path="Home" />
