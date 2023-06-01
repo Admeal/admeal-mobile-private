@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "admeal",
     "scheme": "admeal-modile",
     "plugins": [
       [
@@ -23,9 +24,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -35,10 +34,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "host.exp.exponent",
-      "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
-      ]
+      "permissions": ["android.permission.CAMERA", "android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
