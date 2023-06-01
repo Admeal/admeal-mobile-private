@@ -75,7 +75,7 @@ const RecipeDetails = ({ navigation }: any) => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            ser_id: user?.id,
+            user_id: user?.id,
             tokens_earned: 0,
             recipe_id: recipeItem.recipeId,
             my_meals_id: mealsList?.length,

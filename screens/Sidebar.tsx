@@ -32,10 +32,10 @@ const Sidebar = (props: any) => {
   };
 
   return (
-    <SafeAreaView className="relative h-full flex-col justify-between">
+    <SafeAreaView className="relative flex-col justify-between h-full">
       <DrawerContentScrollView className="relative h-full" {...props}>
         <View className="flex-1">
-          <View className="px-5 pb-12 pt-20">
+          <View className="px-5 pt-20 pb-12">
             <Image source={require("../assets/png/Logo.png")} />
           </View>
 
@@ -48,8 +48,12 @@ const Sidebar = (props: any) => {
       </DrawerContentScrollView>
       <View className="h-[72px] w-full flex-row items-center justify-between bg-[#F8F8F8] p-4">
         <View>
-          <Text>{user?.given_name}</Text>
-          <Text>{user?.email}</Text>
+          <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            {user?.given_name}
+          </Text>
+          <Text className="font-[Poppins-400] text-xs font-semibold text-[#6D6D6D]">
+            {user?.email}
+          </Text>
         </View>
         <Image
           className="rounded-full"
