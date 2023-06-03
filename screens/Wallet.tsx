@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView } from "react-native";
-import { useState } from "react";
+import { useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import useAuth from "../hooks/useAuth";
 import GoBackButton from "../components/buttons/GoBackButton";
@@ -10,8 +10,15 @@ import NFTcard from "../components/NFTcard";
 import ArrowTopRight from "../assets/icons/arrowTopRight";
 import ArrowBottom from "../assets/icons/arrowBottom";
 
+import { useWeb3Modal } from "@web3modal/react-native";
+import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
+
 const Wallet = ({ navigation }: any) => {
-  const [wallet, setWallet] = useState<boolean | null>(null); // [1]
+  const { isOpen, open, close, provider, isConnected, address } = useWeb3Modal();
+
+  useEffect(() => {
+    console.log("provider", provider);
+  }, [provider]);
   const { user } = useAuth();
 
   return (
@@ -36,13 +43,7 @@ const Wallet = ({ navigation }: any) => {
         className="h-[421px] w-full rounded-b-3xl bg-blue-600">
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} path="Home" />
-          {wallet ? (
-            <Text className="pr-4 pt-12 font-[Poppins-400] text-base text-white">
-              Wallet Connected
-            </Text>
-          ) : (
-            <ConnectWalletButton />
-          )}
+          {isConnected ? <ReconnectWalletButton /> : <ConnectWalletButton />}
         </View>
         {/* // profile */}
         <View className="justify- h-[76px] w-full flex-row items-center space-x-4 p-5 pt-10">
@@ -62,11 +63,11 @@ const Wallet = ({ navigation }: any) => {
         </View>
         <View className="p-5 space-y-2">
           <Text className="font-[Poppins-400] text-base font-semibold text-white">
-            Wallet Address
+            {isConnected ? "Wallet Address" : "Wallet not Connected"}
           </Text>
           <View className="flex-row items-center space-x-4">
             <Text className="font-[Poppins-400] text-xs font-semibold text-white">
-              345456345...67fghjghj456m546
+              {address ? address : ""}
             </Text>
           </View>
           <View className="flex-row items-center space-x-2">
@@ -74,7 +75,7 @@ const Wallet = ({ navigation }: any) => {
             <DishCoinLogo size={20} scale={0.85} />
             <View className="flex-row items-baseline ">
               <Text className="font-[Poppins-700] text-[32px] font-semibold leading-[48px] text-white">
-                {wallet ? "115" : "0"}
+                {isConnected ? "115" : "0"}
               </Text>
               <Text className="font-[Poppins-700] text-xl font-semibold text-white">
                 .00
