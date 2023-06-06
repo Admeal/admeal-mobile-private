@@ -1,3 +1,4 @@
+import "./expo-crypto-shim.js";
 import { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
