@@ -42,7 +42,7 @@ const Wallet = ({ navigation }: any) => {
         ]}
         className="h-[421px] w-full rounded-b-3xl bg-blue-600">
         <View className="flex-row items-center justify-between">
-          <GoBackButton navigation={navigation} path="Home" />
+          <GoBackButton navigation={navigation} color="white" />
           {isConnected ? <ReconnectWalletButton /> : <ConnectWalletButton />}
         </View>
         {/* // profile */}
@@ -52,11 +52,11 @@ const Wallet = ({ navigation }: any) => {
             style={{ width: 50, height: 50 }}
             source={{ uri: user?.picture }}
           />
-          <View>
+          <View className="h-[50px]">
             <Text className="font-[Poppins-600] text-base font-semibold text-white">
               Hello, {user?.given_name}
             </Text>
-            <Text className="font-[Poppins-400] text-xs font-semibold text-white">
+            <Text className="pt-2 font-[Poppins-400] text-xs font-semibold text-white">
               {user?.email}
             </Text>
           </View>

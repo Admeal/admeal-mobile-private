@@ -18,7 +18,7 @@ type RecipeStatusButtonProps = {
 const RecipeStatusButton = ({
   navigation,
   disabled,
-  label = "Upload"
+  label = "TAKE A PHOTO"
 }: RecipeStatusButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(

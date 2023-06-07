@@ -33,18 +33,18 @@ const ImageVerification = ({ navigation }) => {
   };
 
   return (
-    <View className="flex-1 flex-col items-center justify-between">
+    <View className="flex-col items-center justify-between flex-1">
       <View className="pt-[110px]"></View>
       {!isIngredientsSumbitted ? (
         <Image
-          className="mx-5 h-1/2 w-full rounded-xl p-4"
+          className="w-full p-4 mx-5 h-1/2 rounded-xl"
           source={{ uri: ingredientsImage }}
         />
       ) : (
-        <Image className="mx-5 h-1/2 w-full rounded-xl p-4" source={{ uri: dishImage }} />
+        <Image className="w-full p-4 mx-5 h-1/2 rounded-xl" source={{ uri: dishImage }} />
       )}
       <Text className="font-[Poppins-700] text-2xl">Great! Upload this photo?</Text>
-      <RecipeStatusButton navigation={navigation} />
+      <RecipeStatusButton label="UPLOAD" navigation={navigation} />
       <TouchableOpacity onPress={handleTakeAnotherShot}>
         <Text className="pb-4 font-[Poppins-500] text-sm underline">
           Take another shot

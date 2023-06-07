@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { TextInput, View, Text, SafeAreaView } from "react-native";
+import { TextInput, View, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome } from "@expo/vector-icons";
 
 const Search = () => {
@@ -12,14 +13,14 @@ const Search = () => {
   };
 
   return (
-    <SafeAreaView className="relative flex-row items-center">
+    <View className="relative flex-row items-center">
       <TextInput
         value={search}
         onEndEditing={handleEndEditing}
         onChange={(e) => setSearch(e.nativeEvent.text)}
-        className="absolute right-1 z-10 rounded pr-4 text-right text-sm "></TextInput>
+        className="absolute z-10 pr-4 text-sm text-right rounded right-1 "></TextInput>
       <FontAwesome name="search" size={16} color="black" className="" />
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
   isIngredientsSumbittedState,
@@ -24,6 +24,23 @@ const CheckStatus = ({ navigation, meal }: any) => {
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
 
+  // const { dish_photos, ingredients_photos, current_state } = meal;
+  useEffect(() => {
+    if (meal) {
+      if (meal.dish_photos[0] === "") {
+        setIsReadyDish(false);
+      } else {
+        setIsReadyDish(true);
+      }
+      if (meal.ingredients_photos[0] === "") {
+        setIsIngredientsSumbitted(false);
+      } else {
+        setIsIngredientsSumbitted(true);
+      }
+      setMealStatus(meal.current_state);
+    }
+  }, [meal]);
+
   const handleMealStatus = () => {
     switch (mealStatus) {
       case "IN_PROGRESS_INGREDIENTS":
@@ -46,7 +63,7 @@ const CheckStatus = ({ navigation, meal }: any) => {
   return (
     <View className="flex-col items-center w-full h-full">
       <View className="flex-row items-start w-full pb-10">
-        <GoBackButton navigation={navigation} color="black" />
+        <GoBackButton navigation={navigation} color="white" />
       </View>
       <ScrollView
         className="w-full h-full"
@@ -62,7 +79,10 @@ const CheckStatus = ({ navigation, meal }: any) => {
         {!isIngredientsSumbitted ? (
           <FoodIngredientsIcon />
         ) : (
-          <Image style={{ width: 200, height: 200 }} source={{ uri: ingredientsImage }} />
+          <Image
+            style={{ width: 200, height: 200 }}
+            source={{ uri: meal.ingredients_photos[0] }}
+          />
         )}
         <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
           {!isIngredientsSumbitted ? "Take a photo of ingredients" : "Ingredients photo"}
@@ -80,7 +100,10 @@ const CheckStatus = ({ navigation, meal }: any) => {
         {!isReadyDish && dishImage === "" ? (
           <PreparedDishIcon />
         ) : (
-          <Image style={{ width: 200, height: 200 }} source={{ uri: dishImage }} />
+          <Image
+            style={{ width: 200, height: 200 }}
+            source={{ uri: meal.dish_photos[0] }}
+          />
         )}
         <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
           {!isReadyDish ? "Take a photo of prepared dish" : "Dish photo"}

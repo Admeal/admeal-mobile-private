@@ -40,11 +40,11 @@ const RecipeDetails = ({ navigation }: any) => {
 
   const { user } = useAuth();
 
-  useEffect(() => {
-    const meal = myMealsList.find(
-      (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
-    );
-  }, []);
+  // useEffect(() => {
+  //   const meal = myMealsList.find(
+  //     (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
+  //   );
+  // }, []);
 
   useEffect(() => {}, []);
 
@@ -90,57 +90,8 @@ const RecipeDetails = ({ navigation }: any) => {
       }
     }
 
-    // myMealsList.map((meal, index) => {
-    //   console.log("cook 2");
-    //   if (meal.recipeId === recipeItem.recipeId) {
-    //     console.log("cook 3");
-    //     if (meal.dish_photos[0] === "") {
-    //       setIsReadyDish(false);
-    //     } else {
-    //       setIsReadyDish(true);
-    //     }
-    //     if (meal.ingredients_photos[0] === "") {
-    //       setIsIngredientsSumbitted(false);
-    //     } else {
-    //       setIsIngredientsSumbitted(true);
-    //     }
-    //     setMealStatus(meal.current_state);
-    //     return;
-    //   }
-    //   console.log("check status");
-
-    //   if (index === myMealsList?.length - 1) {
-    //     // create new meal in database
-    //     fetch("https://admeal-firebase-default-rtdb.firebaseio.com/my_meals.json", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json"
-    //       },
-    //       body: JSON.stringify({
-    //         user_id: user?.id,
-    //         tokens_earned: 0,
-    //         recipe_id: recipeItem.recipeId,
-    //         my_meals_id: mealsList?.length,
-    //         ingredients_photos: [""],
-    //         dish_photos: [""],
-    //         current_state: "INCOMPLETE"
-    //       })
-    //     })
-    //       .catch((error) => {
-    //         console.log(error);
-    //       })
-    //       .finally(() => {
-    //         console.log("new meal created");
-    //       });
-    //     setIsIngredientsSumbitted(false);
-    //     setIsReadyDish(false);
-    //     setMealStatus("INCOMPLETE");
-    //   }
-    // });
     setTimeout(() => {
-      navigation.navigate("CheckStatus", {
-        navigation: navigation
-      });
+      navigation.navigate("CheckStatus");
     }, 500);
   };
 
@@ -151,7 +102,7 @@ const RecipeDetails = ({ navigation }: any) => {
         uri: recipeItem.recipeImages
       }}
       resizeMode="cover">
-      <GoBackButton navigation={navigation} />
+      <GoBackButton color="white" navigation={navigation} />
 
       <View className="relative h-2/3 flex-col  justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
         <View className="flex-row items-end justify-between">
