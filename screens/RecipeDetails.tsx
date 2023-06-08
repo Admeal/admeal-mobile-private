@@ -19,10 +19,13 @@ import {
   dishImageState,
   mealsListState,
   mealStatusState,
-  myMealsListState
+  myMealsListState,
+  mealIdState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import useAuth from "../hooks/useAuth";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { db, realtimeDB } from "../firebaseConfig";
 
 const RecipeDetails = ({ navigation }: any) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
@@ -35,26 +38,22 @@ const RecipeDetails = ({ navigation }: any) => {
   const [mealsList, setMealsList] = useRecoilState(mealsListState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [mealId, setMealId] = useRecoilState(mealIdState);
 
   const [toggle, setToggle] = useState(false);
 
   const { user } = useAuth();
 
-  // useEffect(() => {
-  //   const meal = myMealsList.find(
-  //     (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
-  //   );
-  // }, []);
-
-  useEffect(() => {}, []);
-
-  const handleCookButton = () => {
+  const handleCookButton = async () => {
     console.log("cook 1", typeof mealsList);
     if (myMealsList) {
       const meal = myMealsList.find(
         (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
+        // setMealId(index)
       );
       if (meal) {
+        // setMealId(meal?.my_meals_id);
+        console.log("meal found", meal.id);
         if (meal.dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
@@ -68,22 +67,36 @@ const RecipeDetails = ({ navigation }: any) => {
         setMealStatus(meal.current_state);
       } else {
         console.log("create new meal");
-        // create new meal in database
-        fetch("https://admeal-firebase-default-rtdb.firebaseio.com/my_meals.json", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            user_id: user?.id,
-            tokens_earned: 0,
-            recipe_id: recipeItem.recipeId,
-            my_meals_id: mealsList?.length,
-            ingredients_photos: [""],
-            dish_photos: [""],
-            current_state: "INCOMPLETE"
-          })
+        const docRef = await addDoc(collection(db, "my_meals"), {
+          user_id: user?.id,
+          tokens_earned: 0,
+          recipe_id: recipeItem.recipeId,
+          my_meals_id: mealsList?.length,
+          ingredients_photos: [""],
+          dish_photos: [""],
+          current_state: "INCOMPLETE"
         });
+
+        console.log("Document written with ID: ", docRef.id);
+        setMealId(docRef.id);
+
+        // const docRef = realtimeDB.ref("my_meals");
+        // create new meal in database
+        // fetch("https://admeal-firebase-default-rtdb.firebaseio.com/my_meals.json", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json"
+        //   },
+        //   body: JSON.stringify({
+        //     user_id: user?.id,
+        //     tokens_earned: 0,
+        //     recipe_id: recipeItem.recipeId,
+        //     my_meals_id: mealsList?.length,
+        //     ingredients_photos: [""],
+        //     dish_photos: [""],
+        //     current_state: "INCOMPLETE"
+        //   })
+        // });
         setIsIngredientsSumbitted(false);
         setIsReadyDish(false);
         setMealStatus("INCOMPLETE");

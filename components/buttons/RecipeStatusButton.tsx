@@ -1,13 +1,26 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { storage, realtimeDB, db } from "../../firebaseConfig";
+import { ref, getDownloadURL, uploadString } from "@firebase/storage";
+import { encode } from "base-64";
+import {
+  addDoc,
+  collection,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  getDoc
+} from "@firebase/firestore";
 
 import {
   isIngredientsSumbittedState,
   isReadyDishState,
   ingredientsImageState,
-  dishImageState
+  dishImageState,
+  mealIdState
 } from "../../atoms/dataAtom";
+import useAuth from "../../hooks/useAuth";
 
 type RecipeStatusButtonProps = {
   navigation: any;
@@ -27,28 +40,61 @@ const RecipeStatusButton = ({
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const [mealId, setMealId] = useRecoilState(mealIdState);
 
-  const handleUpload = () => {
+  const { user } = useAuth();
+
+  useEffect(() => {}, []);
+
+  const handleUpload = async () => {
     disabled ? null : console.log(label);
     if (!disabled) {
+      console.log("upload id", mealId, typeof mealId);
+
       if (!ingredientsImage && !isIngredientsSumbitted) {
-        navigation.navigate("CameraUpload", { navigation });
+        navigation.navigate("CameraUpload");
       }
       if (ingredientsImage && isIngredientsSumbitted && !dishImage) {
-        navigation.navigate("CameraUpload", { navigation });
+        navigation.navigate("CameraUpload");
       }
 
-      if (ingredientsImage && !isIngredientsSumbitted) {
-        setIsIngredientsSumbitted(true);
-        // set IngredientsImage to google cloud
-        navigation.navigate("CheckStatus", { navigation });
-      }
-      if (dishImage && ingredientsImage && isIngredientsSumbitted) {
-        setIsReadyDish(true);
-        // set dishImage to google cloud
-        navigation.navigate("CheckStatus", { navigation });
+      if (ingredientsImage && !isIngredientsSumbitted && mealId) {
+        const docRef = await getDoc(doc(db, "my_meals", mealId));
+        console.log("docRef", docRef);
+        if (docRef.exists()) {
+          console.log("Document data:", docRef.data());
+          const imageRef = ref(
+            storage,
+            `meals/${mealId}/${user?.id}/ingredientsImage.png`
+          );
+          console.log("upload 1id", mealId);
+
+          await uploadString(imageRef, ingredientsImage, "base64").then(
+            async (snapshot) => {
+              console.log("upload 2id", mealId);
+
+              const downLoadUrl = await getDownloadURL(imageRef);
+              await updateDoc(doc(db, "my_meals", mealId), {
+                ingredients_photos: [downLoadUrl]
+              });
+              console.log("ingredientsImage uploaded");
+            }
+          );
+
+          navigation.navigate("CheckStatus");
+        }
       }
     }
+
+    // setIsIngredientsSumbitted(true);
+    // set IngredientsImage to firebase storage
+    // navigation.navigate("CheckStatus");
+
+    // if (dishImage && ingredientsImage && isIngredientsSumbitted) {
+    //   // setIsReadyDish(true);
+    //   // set dishImage to firebase storage
+    // }
+    // }
   };
 
   return (

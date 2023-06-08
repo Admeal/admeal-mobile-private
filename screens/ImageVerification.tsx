@@ -20,7 +20,7 @@ const ImageVerification = ({ navigation }) => {
   const handleTakeAnotherShot = () => {
     ingredientsImage && setIngredientsImage(null);
     dishImage && setDishImage(null);
-    navigation.navigate("CheckStatus", { navigation });
+    navigation.navigate("CheckStatus");
   };
 
   const handleStatusButton = () => {
@@ -29,19 +29,22 @@ const ImageVerification = ({ navigation }) => {
     } else {
       setIsReadyDish(true);
     }
-    navigation.navigate("CheckStatus", { navigation });
+    navigation.navigate("CheckStatus");
   };
 
   return (
-    <View className="flex-col items-center justify-between flex-1">
+    <View className="flex-1 flex-col items-center justify-between">
       <View className="pt-[110px]"></View>
       {!isIngredientsSumbitted ? (
         <Image
-          className="w-full p-4 mx-5 h-1/2 rounded-xl"
+          className="mx-5 h-1/2 w-full rounded-xl p-4"
           source={{ uri: ingredientsImage }}
         />
       ) : (
-        <Image className="w-full p-4 mx-5 h-1/2 rounded-xl" source={{ uri: dishImage }} />
+        <Image
+          className="mx-5 h-1/2 w-full rounded-xl p-4 px-4"
+          source={{ uri: dishImage }}
+        />
       )}
       <Text className="font-[Poppins-700] text-2xl">Great! Upload this photo?</Text>
       <RecipeStatusButton label="UPLOAD" navigation={navigation} />
