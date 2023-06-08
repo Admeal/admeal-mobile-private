@@ -20,7 +20,7 @@ const ImageVerification = ({ navigation }) => {
   const handleTakeAnotherShot = () => {
     ingredientsImage && setIngredientsImage(null);
     dishImage && setDishImage(null);
-    navigation.navigate("CheckStatus", { navigation });
+    navigation.navigate("CheckStatus");
   };
 
   const handleStatusButton = () => {
@@ -29,7 +29,7 @@ const ImageVerification = ({ navigation }) => {
     } else {
       setIsReadyDish(true);
     }
-    navigation.navigate("CheckStatus", { navigation });
+    navigation.navigate("CheckStatus");
   };
 
   return (
@@ -41,10 +41,13 @@ const ImageVerification = ({ navigation }) => {
           source={{ uri: ingredientsImage }}
         />
       ) : (
-        <Image className="mx-5 h-1/2 w-full rounded-xl p-4" source={{ uri: dishImage }} />
+        <Image
+          className="mx-5 h-1/2 w-full rounded-xl p-4 px-4"
+          source={{ uri: dishImage }}
+        />
       )}
       <Text className="font-[Poppins-700] text-2xl">Great! Upload this photo?</Text>
-      <RecipeStatusButton navigation={navigation} />
+      <RecipeStatusButton label="UPLOAD" navigation={navigation} />
       <TouchableOpacity onPress={handleTakeAnotherShot}>
         <Text className="pb-4 font-[Poppins-500] text-sm underline">
           Take another shot

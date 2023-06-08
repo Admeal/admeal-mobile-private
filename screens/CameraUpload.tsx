@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
@@ -38,7 +38,7 @@ const CameraUpload = ({ navigation }: any) => {
       } else {
         setDishImage(data.uri);
       }
-      navigation.navigate("ImageVerification", { navigation });
+      navigation.navigate("ImageVerification");
     }
   };
 
@@ -67,12 +67,12 @@ const CameraUpload = ({ navigation }: any) => {
         setCamera(ref);
       }}>
       <View className="flex-row items-center self-start justify-between w-full">
-        <GoBackButton navigation={navigation} color="black" />
-        {/* flash button
+        <GoBackButton navigation={navigation} color="white" />
+        {/* flash button */}
         <TouchableOpacity
-          className="mr-8 h-[25px] w-[25px] self-end rounded-full bg-[#919EAB]/70"
+          className="mr-8 h-[40px] w-[40px] self-end rounded-full bg-[#919EAB]/70"
           style={{}}
-          onPress={handlePictureButton}></TouchableOpacity> */}
+          onPress={handleFlashButton}></TouchableOpacity>
       </View>
       <View className="flex-row flex-1 bg-transparent">
         <TouchableOpacity

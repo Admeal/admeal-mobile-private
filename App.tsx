@@ -86,8 +86,8 @@ export default function App() {
   }
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-      <AuthProvider>
-        <RecoilRoot>
+      <RecoilRoot>
+        <AuthProvider>
           <NavigationContainer>
             <Drawer.Navigator
               initialRouteName="Recipes"
@@ -142,8 +142,8 @@ export default function App() {
               />
             </Drawer.Navigator>
           </NavigationContainer>
-        </RecoilRoot>
-      </AuthProvider>
+        </AuthProvider>
+      </RecoilRoot>
     </SafeAreaProvider>
   );
 }

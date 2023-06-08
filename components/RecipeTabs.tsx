@@ -19,7 +19,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
 
   return (
     <View className="px-5 ">
-      <View className="flex-row items-center justify-center pb-5">
+      <View className="flex-row items-center justify-center">
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Recipes");
@@ -52,7 +52,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       <View>
         {routeName === "Recipes" ? (
           <ScrollView className="h-screen pb-40">
-            <View>
+            {/* <View>
               <Text className="font-[Poppins-700] text-lg">Popular recipes</Text>
               <ScrollView
                 horizontal={true}
@@ -64,10 +64,10 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                   );
                 })}
               </ScrollView>
-            </View>
+            </View> */}
             <View className="pb-60">
-              <Text className="py-4 font-[Poppins-700] text-lg">Top Earnings</Text>
-              <View className="h-[100%] flex-row flex-wrap items-center justify-between pt-4">
+              <Text className="py-4 font-[Poppins-700] text-lg">All Recipes</Text>
+              <View className="h-[100%] flex-row flex-wrap items-center justify-between ">
                 {recipeList?.map((recipe, index) => {
                   return (
                     <TopEarningsCard
@@ -81,7 +81,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
             </View>
           </ScrollView>
         ) : (
-          <View className="">
+          <View className="py-4">
             <View className="flex-row items-center space-x-2">
               <Text className="font-[Poppins-700] text-lg ">Total meals</Text>
               <Text className="rounded-full bg-[#FFCAC2] px-3 pt-1 font-[Poppins-700] text-[#BB1E09]">
@@ -96,7 +96,9 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 className="h-screen ">
                 <View onStartShouldSetResponder={() => true} className="pb-[500px]">
                   {myMealsList?.map((meal, index) => {
-                    return <MyMealsCard meal={meal} key={index} />;
+                    return (
+                      <MyMealsCard meal={meal} navigation={navigation} key={index} />
+                    );
                   })}
                 </View>
               </ScrollView>

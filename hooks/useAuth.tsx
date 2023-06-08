@@ -4,6 +4,9 @@ import { createContext, useContext } from "react";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import React, { useState, useEffect } from "react";
+import getUserEndpoint from "../endpoints/getUsersEndpoint";
+import { useRecoilState } from "recoil";
+import { userListState } from "../atoms/dataAtom";
 
 const AuthContext = createContext({});
 
@@ -21,7 +24,10 @@ const config = {
 };
 
 export const AuthProvider = ({ children }: any) => {
+  const [userList, setUserList] = useRecoilState(userListState);
   const [userInfo, setUserInfo] = useState(null);
+  getUserEndpoint();
+
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
   useEffect(() => {
@@ -57,6 +63,7 @@ export const AuthProvider = ({ children }: any) => {
 
   const logout = async () => {
     await AsyncStorage.removeItem("@user");
+    setUserInfo(null);
   };
 
   return (

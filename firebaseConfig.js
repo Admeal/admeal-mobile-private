@@ -3,6 +3,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
+import { getDatabase } from "firebase/database";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -11,7 +12,7 @@ import { getAuth } from 'firebase/auth';
 const firebaseConfig = {
   apiKey: "AIzaSyB92cfOPTeF54H6tjPS6cSwOnZoUUNF5V8",
   authDomain: "admeal-firebase.firebaseapp.com",
-  databaseURL: "https://admeal-firebase-default-rtdb.firebaseio.com/",
+  databaseURL: "https://admeal-firebase-default-rtdb.firebaseio.com",
   projectId: "admeal-firebase",
   storageBucket: "admeal-firebase.appspot.com",
   messagingSenderId: "830854626619",
@@ -26,5 +27,6 @@ const auth = getAuth();
 
 const db = getFirestore();
 const storage = getStorage();
+const realtimeDB = getDatabase();
 
-export { app, db, storage, auth };
+export { app, db, storage, auth, realtimeDB };

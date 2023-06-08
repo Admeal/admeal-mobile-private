@@ -28,13 +28,15 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
       case "Finished":
       case "COMPLETE":
       case "COMPLETED":
+        return "bg-[#229A16] text-white ";
       case "AWAITING_VALIDATION":
+        return "bg-[#919EAB]/25 text-[#919EAB] ";
       case "INVALID":
-        return "bg-none text-[#637381] text-xs font-[Poppins-400] font-normal";
+        return "bg-white text-[#919EAB] ";
       case "IN_PROGRESS_DISH":
       case "IN_PROGRESS_INGREDIENTS":
       case "INCOMPLETE":
-        return "h-[30px] rounded-[18px] bg-[#FF1E00] pt-1 text-center align-middle text-sm font-extrabold  text-white px-3 font-[Poppins-700]";
+        return " bg-[#FF1E00] text-white ";
       default:
         return "";
     }
@@ -92,8 +94,21 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
 
   return (
     <TouchableOpacity
+      style={[
+        {
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 1,
+            height: 5
+          },
+          shadowOpacity: 0.26,
+          shadowRadius: 3.18,
+
+          elevation: 4
+        }
+      ]}
       onPress={handleItemPress}
-      className="my-2 w-[100%] flex-row space-x-4 rounded-2xl bg-white shadow-2xl">
+      className="my-1 w-[100%] flex-row space-x-4 rounded-2xl bg-white shadow-2xl">
       <ImageBackground
         className="h-[121px] w-[84px] flex-col justify-between "
         borderBottomLeftRadius={16}
@@ -106,7 +121,21 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
           {getRecipeName()}
         </Text>
         <View className="flex-row items-center">
-          <Text className={`text-xs ${handleStatusButtonUI()}`}>
+          <Text
+            style={[
+              {
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 1,
+                  height: 5
+                },
+                shadowOpacity: 0.36,
+                shadowRadius: 4.18,
+
+                elevation: 5
+              }
+            ]}
+            className={`h-[30px] rounded-[18px] px-3 pt-1 text-center align-middle font-[Poppins-700] text-[13px] ${handleStatusButtonUI()}`}>
             {handleStatusText()}
           </Text>
         </View>

@@ -15,6 +15,11 @@ export const recipeListState = atom({
   default: [],
 });
 
+export const mealIdState = atom({
+  key: 'mealIdState',
+  default: '',
+});
+
 export const mealsListState = atom({
   key: 'mealsListState',
   default: [],
