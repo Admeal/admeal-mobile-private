@@ -47,13 +47,15 @@ const RecipeDetails = ({ navigation }: any) => {
   const handleCookButton = async () => {
     console.log("cook 1", typeof mealsList);
     if (myMealsList) {
+      const dbDocRef = doc(db, "my_meals", mealId);
+
       const meal = myMealsList.find(
         (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
         // setMealId(index)
       );
       if (meal) {
         // setMealId(meal?.my_meals_id);
-        console.log("meal found", meal.id);
+        console.log("meal found", meal.user_id);
         if (meal.dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
@@ -80,23 +82,6 @@ const RecipeDetails = ({ navigation }: any) => {
         console.log("Document written with ID: ", docRef.id);
         setMealId(docRef.id);
 
-        // const docRef = realtimeDB.ref("my_meals");
-        // create new meal in database
-        // fetch("https://admeal-firebase-default-rtdb.firebaseio.com/my_meals.json", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json"
-        //   },
-        //   body: JSON.stringify({
-        //     user_id: user?.id,
-        //     tokens_earned: 0,
-        //     recipe_id: recipeItem.recipeId,
-        //     my_meals_id: mealsList?.length,
-        //     ingredients_photos: [""],
-        //     dish_photos: [""],
-        //     current_state: "INCOMPLETE"
-        //   })
-        // });
         setIsIngredientsSumbitted(false);
         setIsReadyDish(false);
         setMealStatus("INCOMPLETE");

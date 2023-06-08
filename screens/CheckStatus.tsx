@@ -39,7 +39,7 @@ const CheckStatus = ({ navigation, meal }: any) => {
       }
       setMealStatus(meal.current_state);
     }
-  }, [meal]);
+  });
 
   const handleMealStatus = () => {
     switch (mealStatus) {

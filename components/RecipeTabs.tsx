@@ -6,6 +6,10 @@ import MyMealsCard from "./MyMealsCard";
 
 import { recipeListState, mealsListState, myMealsListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import useAuth from "../hooks/useAuth";
 
 type RecipeTabsProps = {
   navigation: any;
@@ -16,6 +20,30 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [mealsList, setMealsList] = useRecoilState<any>(mealsListState);
   const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    onSnapshot(collection(db, "recipes"), (snapshot) => {
+      const array = snapshot.docs.map((doc) => {
+        return doc.data();
+      });
+      setRecipeList(array);
+    });
+  }, [db]);
+
+  useEffect(() => {
+    onSnapshot(collection(db, "my_meals"), (snapshot) => {
+      const array = snapshot.docs.map((doc) => {
+        return doc.data();
+      });
+      const filteredArray = array.filter((meal) => {
+        if (meal.user_id === user?.id) return meal;
+      });
+      setMealsList(array);
+      setMyMealsList(filteredArray);
+    });
+  }, [db, user]);
 
   return (
     <View className="px-5 ">
@@ -52,19 +80,6 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       <View>
         {routeName === "Recipes" ? (
           <ScrollView className="h-screen pb-40">
-            {/* <View>
-              <Text className="font-[Poppins-700] text-lg">Popular recipes</Text>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                className="flex-row py-4">
-                {recipeList?.map((recipe, index) => {
-                  return (
-                    <PopularCard navigation={navigation} recipe={recipe} key={index} />
-                  );
-                })}
-              </ScrollView>
-            </View> */}
             <View className="pb-60">
               <Text className="py-4 font-[Poppins-700] text-lg">All Recipes</Text>
               <View className="h-[100%] flex-row flex-wrap items-center justify-between ">

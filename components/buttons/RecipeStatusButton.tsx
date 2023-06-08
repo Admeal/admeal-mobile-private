@@ -68,18 +68,16 @@ const RecipeStatusButton = ({
             `meals/${mealId}/${user?.id}/ingredientsImage.png`
           );
           console.log("upload 1id", mealId);
+          const encodedData = encode(ingredientsImage);
+          await uploadString(imageRef, encodedData, "base64").then(async (snapshot) => {
+            console.log("upload 2id", mealId);
 
-          await uploadString(imageRef, ingredientsImage, "base64").then(
-            async (snapshot) => {
-              console.log("upload 2id", mealId);
-
-              const downLoadUrl = await getDownloadURL(imageRef);
-              await updateDoc(doc(db, "my_meals", mealId), {
-                ingredients_photos: [downLoadUrl]
-              });
-              console.log("ingredientsImage uploaded");
-            }
-          );
+            const downLoadUrl = await getDownloadURL(imageRef);
+            await updateDoc(doc(db, "my_meals", mealId), {
+              ingredients_photos: [downLoadUrl]
+            });
+            console.log("ingredients Image uploaded");
+          });
 
           navigation.navigate("CheckStatus");
         }

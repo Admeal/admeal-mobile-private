@@ -76,8 +76,12 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   const handleItemPress = () => {
     setIsIngredientsSumbitted(false);
     setIsReadyDish(false);
-    setIngredientsImage(meal.ingredients_photos[0]);
-    setDishImage(meal.dish_photos[0]);
+    if (meal.ingredients_photos[0] !== "") {
+      setIngredientsImage(meal.ingredients_photos[0]);
+    }
+    if (meal.dish_photos[0] !== "") {
+      setDishImage(meal.dish_photos[0]);
+    }
     setMealStatus(meal.current_state);
 
     if (ingredientsImage) {
