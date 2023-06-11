@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { View, Text, ImageBackground, Image, TouchableOpacity } from "react-native";
 import { useRecoilState } from "recoil";
 import {
@@ -8,7 +9,8 @@ import {
   ingredientsImageState,
   dishImageState,
   mealsListState,
-  mealStatusState
+  mealStatusState,
+  mealIdState
 } from "../atoms/dataAtom";
 
 const MyMealsCard = ({ meal, navigation }: MealProps) => {
@@ -22,6 +24,15 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const { recipeImages, ingredients } = recipeItem;
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [mealId, setMealId] = useRecoilState(mealIdState);
+
+  useEffect(() => {
+    if (meal) {
+      let string = meal.my_meals_id.toString();
+      setMealId(string);
+      console.log("string mealId", mealId);
+    }
+  }, [meal]);
 
   const handleStatusButtonUI = () => {
     switch (meal.current_state) {
@@ -77,10 +88,10 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
     setIsIngredientsSumbitted(false);
     setIsReadyDish(false);
     if (meal.ingredients_photos[0] !== "") {
-      setIngredientsImage(meal.ingredients_photos[0]);
+      setIngredientsImage(meal?.ingredients_photos[0]);
     }
-    if (meal.dish_photos[0] !== "") {
-      setDishImage(meal.dish_photos[0]);
+    if (meal?.dish_photos[0] !== "") {
+      setDishImage(meal?.dish_photos[0]);
     }
     setMealStatus(meal.current_state);
 

@@ -18,8 +18,8 @@ const ImageVerification = ({ navigation }) => {
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
 
   const handleTakeAnotherShot = () => {
-    ingredientsImage && setIngredientsImage(null);
-    dishImage && setDishImage(null);
+    ingredientsImage && setIngredientsImage("");
+    dishImage && setDishImage("");
     navigation.navigate("CheckStatus");
   };
 
@@ -33,17 +33,17 @@ const ImageVerification = ({ navigation }) => {
   };
 
   return (
-    <View className="flex-1 flex-col items-center justify-between">
+    <View className="flex-col items-center justify-between flex-1">
       <View className="pt-[110px]"></View>
       {!isIngredientsSumbitted ? (
         <Image
-          className="mx-5 h-1/2 w-full rounded-xl p-4"
-          source={{ uri: ingredientsImage }}
+          className="w-full p-4 mx-5 h-1/2 rounded-xl"
+          source={{ uri: ingredientsImage !== "" ? ingredientsImage : "" }}
         />
       ) : (
         <Image
-          className="mx-5 h-1/2 w-full rounded-xl p-4 px-4"
-          source={{ uri: dishImage }}
+          className="w-full p-4 px-4 mx-5 h-1/2 rounded-xl"
+          source={{ uri: dishImage !== "" ? dishImage : "" }}
         />
       )}
       <Text className="font-[Poppins-700] text-2xl">Great! Upload this photo?</Text>

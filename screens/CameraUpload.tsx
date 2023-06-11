@@ -32,7 +32,10 @@ const CameraUpload = ({ navigation }: any) => {
 
   const takePicture = async () => {
     if (camera) {
-      const data = await camera.takePictureAsync(null);
+      const data = await camera.takePictureAsync();
+      console.log("data", typeof data, data);
+      // convert data to Blob
+
       if (!isIngredientsSumbitted) {
         setIngredientsImage(data.uri);
       } else {

@@ -65,41 +65,58 @@ const RecipeStatusButton = ({
           console.log("Document data:", docRef.data());
           const imageRef = ref(
             storage,
-            `meals/${mealId}/${user?.id}/ingredientsImage.png`
+            `meals/${mealId}/${user?.id}/ingredientsImage.jpg`
           );
           console.log("upload 1id", mealId);
           const encodedData = encode(ingredientsImage);
-          await uploadString(imageRef, encodedData, "base64").then(async (snapshot) => {
+          await uploadString(imageRef, encodedData, "base64").then(async () => {
             console.log("upload 2id", mealId);
 
             const downLoadUrl = await getDownloadURL(imageRef);
             await updateDoc(doc(db, "my_meals", mealId), {
-              ingredients_photos: [downLoadUrl]
+              ingredients_photos: [downLoadUrl],
+              my_meals_id: mealId
             });
             console.log("ingredients Image uploaded");
           });
 
+          setIsIngredientsSumbitted(true);
           navigation.navigate("CheckStatus");
         }
       }
     }
 
-    // setIsIngredientsSumbitted(true);
-    // set IngredientsImage to firebase storage
-    // navigation.navigate("CheckStatus");
+    if (dishImage && ingredientsImage && isIngredientsSumbitted) {
+      const docRef = await getDoc(doc(db, "my_meals", mealId));
+      console.log("docRef", docRef);
+      if (docRef.exists()) {
+        console.log("Document data:", docRef.data());
+        const imageRef = ref(storage, `meals/${mealId}/${user?.id}/dishImage.jpg`);
+        console.log("upload 1id", mealId);
+        const encodedData = encode(dishImage);
+        await uploadString(imageRef, encodedData, "base64").then(async () => {
+          console.log("upload 2id", mealId);
 
-    // if (dishImage && ingredientsImage && isIngredientsSumbitted) {
-    //   // setIsReadyDish(true);
-    //   // set dishImage to firebase storage
-    // }
-    // }
+          const downLoadUrl = await getDownloadURL(imageRef);
+          await updateDoc(doc(db, "my_meals", mealId), {
+            dish_photos: [downLoadUrl],
+            my_meals_id: mealId,
+            current_state: "AWAITING_VALIDATION"
+          });
+          console.log("ingredients Image uploaded", downLoadUrl);
+        });
+
+        setIsReadyDish(true);
+        navigation.navigate("CheckStatus");
+      }
+    }
   };
 
   return (
     <TouchableOpacity
       disabled={disabled}
       onPress={handleUpload}
-      className={`mb-[48px] h-12 w-[55%] flex-col items-center justify-center rounded-full  px-3 pt-1 text-center shadow-xl  ${
+      className={`mb-[48px] h-12 w-[55%] flex-col items-center justify-center rounded-full  px-3 pt-1 text-center shadow-xl ${
         disabled ? "bg-[#919EAB]/20 shadow-[#919EAB]/20" : "bg-[#FF1E00] shadow-[#FF1E00]"
       }`}>
       <Text

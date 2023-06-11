@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   isIngredientsSumbittedState,
@@ -23,8 +23,8 @@ const CheckStatus = ({ navigation, meal }: any) => {
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [textStatus, setTextStatus] = useState<string>("");
 
-  // const { dish_photos, ingredients_photos, current_state } = meal;
   useEffect(() => {
     if (meal) {
       if (meal.dish_photos[0] === "") {
@@ -40,6 +40,9 @@ const CheckStatus = ({ navigation, meal }: any) => {
       setMealStatus(meal.current_state);
     }
   });
+  useEffect(() => {
+    setTextStatus(handleMealStatus());
+  }, [mealStatus]);
 
   const handleMealStatus = () => {
     switch (mealStatus) {
@@ -81,7 +84,7 @@ const CheckStatus = ({ navigation, meal }: any) => {
         ) : (
           <Image
             style={{ width: 200, height: 200 }}
-            source={{ uri: meal.ingredients_photos[0] }}
+            source={{ uri: ingredientsImage !== "" ? ingredientsImage : "" }}
           />
         )}
         <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
@@ -102,7 +105,7 @@ const CheckStatus = ({ navigation, meal }: any) => {
         ) : (
           <Image
             style={{ width: 200, height: 200 }}
-            source={{ uri: meal.dish_photos[0] }}
+            source={{ uri: dishImage !== "" ? dishImage : "" }}
           />
         )}
         <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
@@ -120,7 +123,7 @@ const CheckStatus = ({ navigation, meal }: any) => {
               <Text className="font-[Poppins-600] text-sm text-[#919EAB]">Submitted</Text>
             </View>
             <Text className="w-[253px] text-center font-[Poppins-600] text-[#6D6D6D]">
-              {handleMealStatus()}
+              {textStatus}
             </Text>
           </>
         )}

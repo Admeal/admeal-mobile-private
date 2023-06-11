@@ -24,7 +24,7 @@ import {
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import useAuth from "../hooks/useAuth";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, realtimeDB } from "../firebaseConfig";
 
 const RecipeDetails = ({ navigation }: any) => {
@@ -47,21 +47,22 @@ const RecipeDetails = ({ navigation }: any) => {
   const handleCookButton = async () => {
     console.log("cook 1", typeof mealsList);
     if (myMealsList) {
-      const dbDocRef = doc(db, "my_meals", mealId);
-
       const meal = myMealsList.find(
         (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
-        // setMealId(index)
       );
+
+      console.log("doc found?", meal?.my_meals_id, meal, mealId);
       if (meal) {
+        setMealId(meal?.my_meals_id);
+
         // setMealId(meal?.my_meals_id);
-        console.log("meal found", meal.user_id);
-        if (meal.dish_photos[0] === "") {
+        console.log("meal found", meal.my_meals_id);
+        if (meal?.dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
           setIsReadyDish(true);
         }
-        if (meal.ingredients_photos[0] === "") {
+        if (meal?.ingredients_photos[0] === "") {
           setIsIngredientsSumbitted(false);
         } else {
           setIsIngredientsSumbitted(true);
@@ -77,6 +78,9 @@ const RecipeDetails = ({ navigation }: any) => {
           ingredients_photos: [""],
           dish_photos: [""],
           current_state: "INCOMPLETE"
+        });
+        await updateDoc(doc(db, "my_meals", docRef.id), {
+          my_meals_id: docRef.id
         });
 
         console.log("Document written with ID: ", docRef.id);
