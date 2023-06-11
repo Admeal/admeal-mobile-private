@@ -48,14 +48,14 @@ const PopularCard = ({ recipe, navigation }: RecipeProps) => {
   }, [recipe]);
 
   return (
-    <TouchableOpacity className="mr-2 rounded-2xl shadow-2xl" onPress={handleItemPress}>
+    <TouchableOpacity className="mr-2 shadow-2xl rounded-2xl" onPress={handleItemPress}>
       <ImageBackground
         className=" h-[130px] w-[96px] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
         borderRadius={16}
         source={{
           uri: recipe_images[0]
         }}>
-        <PriceTag price={token_reward} />
+        <PriceTag tokenName="DISH" price={token_reward} />
         <Text className="pb-2 pl-2 font-[Poppins-400] text-xs font-bold text-white">
           {recipe_name}
         </Text>

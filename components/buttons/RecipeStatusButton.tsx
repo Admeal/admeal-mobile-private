@@ -2,7 +2,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { storage, realtimeDB, db } from "../../firebaseConfig";
-import { ref, getDownloadURL, uploadString } from "@firebase/storage";
+import {
+  ref,
+  getDownloadURL,
+  uploadString,
+  uploadBytesResumable
+} from "@firebase/storage";
 import { encode } from "base-64";
 import {
   addDoc,
@@ -26,6 +31,23 @@ type RecipeStatusButtonProps = {
   navigation: any;
   disabled?: boolean;
   label?: string;
+};
+
+const getBlobFromUri = async (uri: string) => {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function (e) {
+      reject(new TypeError("Network request failed"));
+    };
+    xhr.responseType = "blob";
+    xhr.open("GET", uri, true);
+    xhr.send(null);
+  });
+
+  return blob;
 };
 
 const RecipeStatusButton = ({
@@ -59,6 +81,7 @@ const RecipeStatusButton = ({
       }
 
       if (ingredientsImage && !isIngredientsSumbitted && mealId) {
+        setIsLoading(true);
         const docRef = await getDoc(doc(db, "my_meals", mealId));
         console.log("docRef", docRef);
         if (docRef.exists()) {
@@ -68,8 +91,11 @@ const RecipeStatusButton = ({
             `meals/${mealId}/${user?.id}/ingredientsImage.jpg`
           );
           console.log("upload 1id", mealId);
-          const encodedData = encode(ingredientsImage);
-          await uploadString(imageRef, encodedData, "base64").then(async () => {
+          const imageBlob = await getBlobFromUri(ingredientsImage);
+
+          // const encodedData = encode(ingredientsImage);
+          await uploadBytesResumable(imageRef, imageBlob).then(async () => {
+            // await uploadString(imageRef, encodedData, "base64").then(async () => {
             console.log("upload 2id", mealId);
 
             const downLoadUrl = await getDownloadURL(imageRef);
@@ -81,20 +107,24 @@ const RecipeStatusButton = ({
           });
 
           setIsIngredientsSumbitted(true);
+          setIsLoading(false);
           navigation.navigate("CheckStatus");
         }
       }
     }
 
     if (dishImage && ingredientsImage && isIngredientsSumbitted) {
+      setIsLoading(true);
       const docRef = await getDoc(doc(db, "my_meals", mealId));
       console.log("docRef", docRef);
       if (docRef.exists()) {
         console.log("Document data:", docRef.data());
         const imageRef = ref(storage, `meals/${mealId}/${user?.id}/dishImage.jpg`);
         console.log("upload 1id", mealId);
-        const encodedData = encode(dishImage);
-        await uploadString(imageRef, encodedData, "base64").then(async () => {
+        const imageBlob = await getBlobFromUri(dishImage);
+        // const encodedData = encode(dishImage);
+        await uploadBytesResumable(imageRef, imageBlob).then(async () => {
+          // await uploadString(imageRef, imageBlob, "base64").then(async () => {
           console.log("upload 2id", mealId);
 
           const downLoadUrl = await getDownloadURL(imageRef);
@@ -107,6 +137,7 @@ const RecipeStatusButton = ({
         });
 
         setIsReadyDish(true);
+        setIsLoading(false);
         navigation.navigate("CheckStatus");
       }
     }
@@ -119,12 +150,16 @@ const RecipeStatusButton = ({
       className={`mb-[48px] h-12 w-[55%] flex-col items-center justify-center rounded-full  px-3 pt-1 text-center shadow-xl ${
         disabled ? "bg-[#919EAB]/20 shadow-[#919EAB]/20" : "bg-[#FF1E00] shadow-[#FF1E00]"
       }`}>
-      <Text
-        className={`font-[Poppins-600] text-base ${
-          disabled ? "text-[#919EAB]" : "text-white"
-        }`}>
-        {label}
-      </Text>
+      {isLoading ? (
+        <></>
+      ) : (
+        <Text
+          className={`font-[Poppins-600] text-base ${
+            disabled ? "text-[#919EAB]" : "text-white"
+          }`}>
+          {label}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

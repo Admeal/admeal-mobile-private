@@ -46,6 +46,7 @@ const CameraUpload = ({ navigation }: any) => {
   };
 
   const handlePictureButton = () => {
+    Camera.Constants.FlashMode.torch;
     const picture = takePicture();
   };
 
