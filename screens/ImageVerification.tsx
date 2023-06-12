@@ -23,27 +23,18 @@ const ImageVerification = ({ navigation }) => {
     navigation.navigate("CheckStatus");
   };
 
-  const handleStatusButton = () => {
-    if (!isIngredientsSumbitted) {
-      setIsIngredientsSumbitted(true);
-    } else {
-      setIsReadyDish(true);
-    }
-    navigation.navigate("CheckStatus");
-  };
-
   return (
     <View className="flex-col items-center justify-between flex-1">
       <View className="pt-[110px]"></View>
-      {!isIngredientsSumbitted ? (
+      {!isIngredientsSumbitted && ingredientsImage !== "" ? (
         <Image
           className="w-full p-4 mx-5 h-1/2 rounded-xl"
-          source={{ uri: ingredientsImage !== "" ? ingredientsImage : "" }}
+          source={{ uri: ingredientsImage }}
         />
       ) : (
         <Image
           className="w-full p-4 px-4 mx-5 h-1/2 rounded-xl"
-          source={{ uri: dishImage !== "" ? dishImage : "" }}
+          source={{ uri: dishImage }}
         />
       )}
       <Text className="font-[Poppins-700] text-2xl">Great! Upload this photo?</Text>

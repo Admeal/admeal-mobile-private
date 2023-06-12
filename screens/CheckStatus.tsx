@@ -6,7 +6,8 @@ import {
   isReadyDishState,
   ingredientsImageState,
   dishImageState,
-  mealStatusState
+  mealStatusState,
+  mealIdState
 } from "../atoms/dataAtom";
 
 import FoodIngredientsIcon from "../assets/icons/foodIngredientsIcon";
@@ -23,6 +24,7 @@ const CheckStatus = ({ navigation, meal }: any) => {
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [mealId, setMealId] = useRecoilState<string>(mealIdState);
   const [textStatus, setTextStatus] = useState<string>("");
 
   useEffect(() => {
@@ -31,18 +33,21 @@ const CheckStatus = ({ navigation, meal }: any) => {
         setIsReadyDish(false);
       } else {
         setIsReadyDish(true);
+        setDishImage(meal.dish_photos[0]);
       }
       if (meal.ingredients_photos[0] === "") {
         setIsIngredientsSumbitted(false);
       } else {
         setIsIngredientsSumbitted(true);
+        setIngredientsImage(meal.ingredients_photos[0]);
       }
       setMealStatus(meal.current_state);
     }
-  });
+  }, []);
+
   useEffect(() => {
     setTextStatus(handleMealStatus());
-  }, [mealStatus]);
+  }, []);
 
   const handleMealStatus = () => {
     switch (mealStatus) {
@@ -79,14 +84,13 @@ const CheckStatus = ({ navigation, meal }: any) => {
         <Text className="w-[70%] pb-[60px] text-center font-[Poppins-400] text-sm text-[#6D6D6D]">
           Now follow the steps to get tokens and track your progress.
         </Text>
-        {!isIngredientsSumbitted ? (
+
+        {!isIngredientsSumbitted && ingredientsImage === "" ? (
           <FoodIngredientsIcon />
         ) : (
-          <Image
-            style={{ width: 200, height: 200 }}
-            source={{ uri: ingredientsImage !== "" ? ingredientsImage : "" }}
-          />
+          <Image style={{ width: 300, height: 200 }} source={{ uri: ingredientsImage }} />
         )}
+
         <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
           {!isIngredientsSumbitted ? "Take a photo of ingredients" : "Ingredients photo"}
         </Text>
@@ -103,15 +107,14 @@ const CheckStatus = ({ navigation, meal }: any) => {
         {!isReadyDish && dishImage === "" ? (
           <PreparedDishIcon />
         ) : (
-          <Image
-            style={{ width: 200, height: 200 }}
-            source={{ uri: dishImage !== "" ? dishImage : "" }}
-          />
+          <Image style={{ width: 300, height: 200 }} source={{ uri: dishImage }} />
         )}
+
         <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
           {!isReadyDish ? "Take a photo of prepared dish" : "Dish photo"}
         </Text>
-        {!isReadyDish ? (
+
+        {!isReadyDish && dishImage === "" ? (
           <RecipeStatusButton
             navigation={navigation}
             disabled={!isIngredientsSumbitted}

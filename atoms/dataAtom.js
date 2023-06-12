@@ -53,11 +53,6 @@ export const recipeItemState = atom({
   },
 });
 
-export const recipeStepsStatusState = atom({
-  key: 'recipeStepsStatusState',
-  default: '',
-});
-
 export const isIngredientsSumbittedState = atom({
   key: 'isIngredientsSumbittedState',
   default: false,

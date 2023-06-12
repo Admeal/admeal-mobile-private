@@ -30,7 +30,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       });
       setRecipeList(array);
     });
-  }, [db]);
+  }, []);
 
   useEffect(() => {
     onSnapshot(collection(db, "my_meals"), (snapshot) => {
@@ -43,7 +43,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       setMealsList(array);
       setMyMealsList(filteredArray);
     });
-  }, [db, user]);
+  }, [db]);
 
   return (
     <View className="px-5 ">

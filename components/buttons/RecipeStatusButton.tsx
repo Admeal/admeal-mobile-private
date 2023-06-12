@@ -2,22 +2,9 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { storage, realtimeDB, db } from "../../firebaseConfig";
-import {
-  ref,
-  getDownloadURL,
-  uploadString,
-  uploadBytesResumable
-} from "@firebase/storage";
-import { encode } from "base-64";
-import {
-  addDoc,
-  collection,
-  doc,
-  updateDoc,
-  serverTimestamp,
-  getDoc
-} from "@firebase/firestore";
-
+import { ref, getDownloadURL, uploadBytesResumable } from "@firebase/storage";
+import { doc, updateDoc, getDoc } from "@firebase/firestore";
+import { AntDesign } from "@expo/vector-icons";
 import {
   isIngredientsSumbittedState,
   isReadyDishState,
@@ -26,28 +13,12 @@ import {
   mealIdState
 } from "../../atoms/dataAtom";
 import useAuth from "../../hooks/useAuth";
+import getBlobFromUri from "../../hooks/getBlobFromUri";
 
 type RecipeStatusButtonProps = {
   navigation: any;
   disabled?: boolean;
   label?: string;
-};
-
-const getBlobFromUri = async (uri: string) => {
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      resolve(xhr.response);
-    };
-    xhr.onerror = function (e) {
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.responseType = "blob";
-    xhr.open("GET", uri, true);
-    xhr.send(null);
-  });
-
-  return blob;
 };
 
 const RecipeStatusButton = ({
@@ -73,14 +44,14 @@ const RecipeStatusButton = ({
     if (!disabled) {
       console.log("upload id", mealId, typeof mealId);
 
-      if (!ingredientsImage && !isIngredientsSumbitted) {
+      if (ingredientsImage === "" && !isIngredientsSumbitted) {
         navigation.navigate("CameraUpload");
       }
-      if (ingredientsImage && isIngredientsSumbitted && !dishImage) {
+      if (ingredientsImage !== "" && isIngredientsSumbitted && dishImage === "") {
         navigation.navigate("CameraUpload");
       }
 
-      if (ingredientsImage && !isIngredientsSumbitted && mealId) {
+      if (ingredientsImage !== "" && !isIngredientsSumbitted && mealId) {
         setIsLoading(true);
         const docRef = await getDoc(doc(db, "my_meals", mealId));
         console.log("docRef", docRef);
@@ -93,9 +64,7 @@ const RecipeStatusButton = ({
           console.log("upload 1id", mealId);
           const imageBlob = await getBlobFromUri(ingredientsImage);
 
-          // const encodedData = encode(ingredientsImage);
           await uploadBytesResumable(imageRef, imageBlob).then(async () => {
-            // await uploadString(imageRef, encodedData, "base64").then(async () => {
             console.log("upload 2id", mealId);
 
             const downLoadUrl = await getDownloadURL(imageRef);
@@ -113,7 +82,7 @@ const RecipeStatusButton = ({
       }
     }
 
-    if (dishImage && ingredientsImage && isIngredientsSumbitted) {
+    if (dishImage !== "" && ingredientsImage !== "" && isIngredientsSumbitted) {
       setIsLoading(true);
       const docRef = await getDoc(doc(db, "my_meals", mealId));
       console.log("docRef", docRef);
@@ -122,9 +91,8 @@ const RecipeStatusButton = ({
         const imageRef = ref(storage, `meals/${mealId}/${user?.id}/dishImage.jpg`);
         console.log("upload 1id", mealId);
         const imageBlob = await getBlobFromUri(dishImage);
-        // const encodedData = encode(dishImage);
+
         await uploadBytesResumable(imageRef, imageBlob).then(async () => {
-          // await uploadString(imageRef, imageBlob, "base64").then(async () => {
           console.log("upload 2id", mealId);
 
           const downLoadUrl = await getDownloadURL(imageRef);
@@ -147,11 +115,13 @@ const RecipeStatusButton = ({
     <TouchableOpacity
       disabled={disabled}
       onPress={handleUpload}
-      className={`mb-[48px] h-12 w-[55%] flex-col items-center justify-center rounded-full  px-3 pt-1 text-center shadow-xl ${
+      className={`mb-[48px] h-12 w-[55%] flex-col items-center justify-center rounded-full px-3 pt-1 text-center shadow-xl ${
         disabled ? "bg-[#919EAB]/20 shadow-[#919EAB]/20" : "bg-[#FF1E00] shadow-[#FF1E00]"
       }`}>
       {isLoading ? (
-        <></>
+        <View className="flex-row items-center justify-center animate-spin">
+          {/* <AntDesign name="reload1" size={24} color="white" /> */}
+        </View>
       ) : (
         <Text
           className={`font-[Poppins-600] text-base ${

@@ -55,7 +55,6 @@ const RecipeDetails = ({ navigation }: any) => {
       if (meal) {
         setMealId(meal?.my_meals_id);
 
-        // setMealId(meal?.my_meals_id);
         console.log("meal found", meal.my_meals_id);
         if (meal?.dish_photos[0] === "") {
           setIsReadyDish(false);
@@ -99,7 +98,7 @@ const RecipeDetails = ({ navigation }: any) => {
 
   return (
     <ImageBackground
-      className="flex-col justify-between flex-1 bg-gray-500"
+      className="flex-1 flex-col justify-between bg-gray-500"
       source={{
         uri: recipeItem.recipeImages
       }}
@@ -117,7 +116,7 @@ const RecipeDetails = ({ navigation }: any) => {
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
-        <ScrollView className="flex-1 pt-3 pb-5">
+        <ScrollView className="flex-1 pb-5 pt-3">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
             {recipeItem.description}
           </Text>
@@ -128,7 +127,7 @@ const RecipeDetails = ({ navigation }: any) => {
               flexDirection: "row",
               alignItems: "center"
             }}
-            className="pt-4 space-x-2 ">
+            className="space-x-2 pt-4 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">

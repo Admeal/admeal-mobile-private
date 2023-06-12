@@ -32,7 +32,9 @@ const CameraUpload = ({ navigation }: any) => {
 
   const takePicture = async () => {
     if (camera) {
-      const data = await camera.takePictureAsync();
+      const data = await camera.takePictureAsync({
+        quality: 0.3
+      });
       console.log("data", typeof data, data);
       // convert data to Blob
 

@@ -86,7 +86,10 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
 
   const handleItemPress = () => {
     setIsIngredientsSumbitted(false);
+    setIngredientsImage("");
     setIsReadyDish(false);
+    setDishImage("");
+
     if (meal.ingredients_photos[0] !== "") {
       setIngredientsImage(meal?.ingredients_photos[0]);
     }
@@ -95,10 +98,10 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
     }
     setMealStatus(meal.current_state);
 
-    if (ingredientsImage) {
+    if (ingredientsImage !== "") {
       setIsIngredientsSumbitted(true);
     }
-    if (ingredientsImage && dishImage) {
+    if (ingredientsImage !== "" && dishImage !== "") {
       setIsReadyDish(true);
     }
 
