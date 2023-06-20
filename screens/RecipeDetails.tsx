@@ -45,7 +45,7 @@ const RecipeDetails = ({ navigation }: any) => {
   const { user } = useAuth();
 
   const handleCookButton = async () => {
-    console.log("cook 1", typeof mealsList);
+    // console.log("cook 1", typeof mealsList);
     if (myMealsList) {
       const meal = myMealsList.find(
         (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
@@ -98,14 +98,14 @@ const RecipeDetails = ({ navigation }: any) => {
 
   return (
     <ImageBackground
-      className="flex-1 flex-col justify-between bg-gray-500"
+      className="relative flex-1 flex-col justify-between bg-gray-500"
       source={{
         uri: recipeItem.recipeImages
       }}
       resizeMode="cover">
       <GoBackButton color="white" navigation={navigation} />
 
-      <View className="relative h-2/3 flex-col  justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
+      <View className="absolute bottom-0 h-2/3 flex-col justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
         <View className="flex-row items-end justify-between">
           <Text className="w-[50%] font-[Poppins-700] text-2xl">
             {recipeItem.recipeName}

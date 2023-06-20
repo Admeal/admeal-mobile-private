@@ -69,8 +69,8 @@ const CheckStatus = ({ navigation, meal }: any) => {
   };
 
   return (
-    <View className="flex-col items-center w-full h-full">
-      <View className="flex-row items-start w-full pb-10">
+    <View className="h-full w-full flex-col items-center justify-between">
+      <View className="w-full">
         <GoBackButton navigation={navigation} color="white" />
       </View>
       <ScrollView

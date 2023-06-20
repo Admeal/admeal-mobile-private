@@ -34,17 +34,17 @@ const Sidebar = (props: any) => {
   };
 
   return (
-    <View className="relative h-full flex-col justify-between">
+    <View className="relative flex-col justify-between h-full">
       <DrawerContentScrollView className="relative h-full" {...props}>
         <View className="flex-1">
-          <View className="px-5 pb-12 pt-20">
+          <View className="px-5 pt-20 pb-12">
             <Image source={require("../assets/png/Logo.png")} />
           </View>
 
           <DrawerItemList {...props} />
           <DrawerItem
             label={({ focused, color }) => getLabel(focused, color, "Logout")}
-            onPress={() => props.navigation.navigate("Recipes")}
+            onPress={() => props.navigation.navigate("Home")}
           />
         </View>
       </DrawerContentScrollView>

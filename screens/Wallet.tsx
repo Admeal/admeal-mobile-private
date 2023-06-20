@@ -43,6 +43,7 @@ const Wallet = ({ navigation }: any) => {
         className="h-[421px] w-full rounded-b-3xl bg-blue-600">
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} color="white" />
+          <View className="flex-1 flex-row"></View>
           {isConnected ? <ReconnectWalletButton /> : <ConnectWalletButton />}
         </View>
         {/* // profile */}
@@ -61,7 +62,7 @@ const Wallet = ({ navigation }: any) => {
             </Text>
           </View>
         </View>
-        <View className="p-5 space-y-2">
+        <View className="space-y-2 p-5">
           <Text className="font-[Poppins-400] text-base font-semibold text-white">
             {isConnected ? "Wallet Address" : "Wallet not Connected"}
           </Text>
@@ -82,7 +83,7 @@ const Wallet = ({ navigation }: any) => {
               </Text>
             </View>
           </View>
-          <View className="flex-row items-center pt-8 space-x-10">
+          <View className="flex-row items-center space-x-10 pt-8">
             <View className="flex-col items-center justify-center">
               <View className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
                 <ArrowTopRight />
@@ -129,13 +130,13 @@ const Wallet = ({ navigation }: any) => {
           <Text className="px-5 py-3 font-[Poppins-600] text-base text-[#212B36]">
             NFTs
           </Text>
-          <View className="relative flex-row flex-wrap items-center justify-between px-5 space-y-4">
+          <View className="relative flex-row flex-wrap items-center justify-between space-y-4 px-5">
             <NFTcard />
             <NFTcard />
             <NFTcard />
             <NFTcard />
           </View>
-          <View className="absolute top-0 flex-row items-center justify-center w-full h-full bg-slate-400/50 ">
+          <View className="absolute top-0 h-full w-full flex-row items-center justify-center bg-slate-400/50 ">
             <Text className="font-[Poppins-600] text-3xl text-[#212B36]">
               Coming Soon...
             </Text>

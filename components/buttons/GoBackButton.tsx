@@ -20,7 +20,7 @@ const GoBackButton = ({ navigation, color }: any) => {
 
   return (
     <TouchableOpacity
-      className="mx-7 mt-12 h-10 w-10 flex-row items-center  justify-center rounded-full bg-[#919EAB]/50 pl-3 pt-1 "
+      className="absolute left-5 top-10 h-10 w-10 flex-row items-center justify-center rounded-full bg-[#919EAB]/50 pl-3 pt-1 "
       onPress={press}>
       <BackIcon fill={color} />
     </TouchableOpacity>

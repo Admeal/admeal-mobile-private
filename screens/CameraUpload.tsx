@@ -66,21 +66,21 @@ const CameraUpload = ({ navigation }: any) => {
 
   return (
     <Camera
-      flashMode={Camera.Constants.FlashMode.off}
-      className="flex-col items-center justify-center flex-1"
+      // flashMode={Camera.Constants.FlashMode}
+      className="flex-1 flex-col items-center justify-center"
       type={type}
       ref={(ref) => {
         setCamera(ref);
       }}>
-      <View className="flex-row items-center self-start justify-between w-full">
+      <View className="w-full flex-row items-center justify-between self-start">
         <GoBackButton navigation={navigation} color="white" />
         {/* flash button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className="mr-8 h-[40px] w-[40px] self-end rounded-full bg-[#919EAB]/70"
           style={{}}
-          onPress={handleFlashButton}></TouchableOpacity>
+          onPress={handleFlashButton}></TouchableOpacity> */}
       </View>
-      <View className="flex-row flex-1 bg-transparent">
+      <View className="flex-1 flex-row bg-transparent">
         <TouchableOpacity
           className="mb-8 h-[60px] w-[60px] self-end rounded-full bg-[#919EAB]/70"
           style={{}}

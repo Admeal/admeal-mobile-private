@@ -35,6 +35,8 @@ const RecipeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
+        // headerBackground: () => null,
+        headerTransparent: true,
         headerShown: false,
         headerStyle: {
           backgroundColor: "transparent"
@@ -79,6 +81,7 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <RecoilRoot>

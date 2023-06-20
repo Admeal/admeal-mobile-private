@@ -59,15 +59,15 @@ const TopEarningsCard = ({ recipe, navigation }: RecipeProps) => {
         }
       ]}
       onPress={handleItemPress}
-      className="relative mb-4 h-[208px] w-[47%] max-w-[163px] rounded-xl bg-gray-800 shadow-md">
+      className="relative mb-4 h-[60vw] w-[47%] rounded-xl bg-gray-800 shadow-md">
       <Image
         borderRadius={16}
         source={{ uri: recipe.recipe_images[0] }}
         resizeMode="cover"
-        className="absolute w-full h-full rounded-xl"
+        className="absolute h-full w-full rounded-xl"
       />
       <PriceTag tokenName="DISH" price={recipe.token_reward} />
-      <View className="absolute bottom-0 w-full p-2 bg-white h-2/5 rounded-b-xl">
+      <View className="absolute bottom-0 h-2/5 w-full rounded-b-xl bg-white p-2">
         <Text className="h-10 font-[Poppins-600] text-base leading-5 text-[#1D1D1D]">
           {recipe.recipe_name}
         </Text>
