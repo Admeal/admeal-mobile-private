@@ -10,35 +10,20 @@ import CookCountIcon from "../assets/icons/cookCountIcon";
 const TopEarningsCard = ({ recipe, navigation }: RecipeProps) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
 
-  const {
-    recipe_name,
-    token_reward,
-    recipe_images,
-    recipe_id,
-    nutritional_information,
-    number_of_servings,
-    ingredients,
-    difficulty,
-    description,
-    cooking_instructions,
-    cook_time_in_mins,
-    cook_count
-  } = recipe;
-
   const handleItemPress = () => {
     setRecipeItem({
-      recipeName: recipe_name,
-      price: token_reward,
-      recipeImages: recipe_images[0],
-      recipeId: recipe_id,
-      nutritionalInformation: nutritional_information,
-      numberOfServings: number_of_servings,
-      ingredients: ingredients,
-      difficulty: difficulty,
-      description: description,
-      cookingInstructions: cooking_instructions,
-      cookTimeInMins: cook_time_in_mins,
-      cookCount: cook_count
+      recipeName: recipe.recipe_name,
+      price: recipe.token_reward,
+      recipeImages: recipe.recipe_images[0],
+      recipeId: recipe.recipe_id,
+      nutritionalInformation: recipe.nutritional_information,
+      numberOfServings: recipe.number_of_servings,
+      ingredients: recipe.ingredients,
+      difficulty: recipe.difficulty,
+      description: recipe.description,
+      cookingInstructions: recipe.cooking_instructions,
+      cookTimeInMins: recipe.cook_time_in_mins,
+      cookCount: recipe.cook_count
     });
     navigation.navigate("RecipeDetails");
   };

@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import React, { useEffect, useState } from "react";
+
 import { useRecoilState } from "recoil";
 import {
   isIngredientsSumbittedState,
@@ -15,8 +16,10 @@ import GoBackButton from "../components/buttons/GoBackButton";
 import PreparedDishIcon from "../assets/icons/preparedDishIcon";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import CheckboxIcon from "../assets/icons/checkboxIcon";
+import { collection, doc, getDoc, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
-const CheckStatus = ({ navigation, meal }: any) => {
+const CheckStatus = ({ navigation }: any) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
@@ -26,28 +29,49 @@ const CheckStatus = ({ navigation, meal }: any) => {
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [mealId, setMealId] = useRecoilState<string>(mealIdState);
   const [textStatus, setTextStatus] = useState<string>("");
+  const [meal, setMeal] = useState<object | null>(null);
+
+  useEffect(() => {}, [mealId]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, "my_meals", mealId), (snapshot) => {
+      console.log("snapshot", snapshot.data());
+      setMeal(snapshot.data());
+    });
+
+    return () => {
+      setMeal(null);
+      setIngredientsImage("");
+      setDishImage("");
+      setIsIngredientsSumbitted(false);
+      setIsReadyDish(false);
+      unsubscribe();
+      console.log("unsubscribed");
+    };
+  }, [mealId]);
 
   useEffect(() => {
     if (meal) {
-      if (meal.dish_photos[0] === "") {
+      console.log("does this shit change? meal", meal.my_meals_id);
+      if (meal?.dish_photos[0] === "") {
         setIsReadyDish(false);
       } else {
         setIsReadyDish(true);
-        setDishImage(meal.dish_photos[0]);
+        setDishImage(meal?.dish_photos[0]);
       }
-      if (meal.ingredients_photos[0] === "") {
+      if (meal?.ingredients_photos[0] === "") {
         setIsIngredientsSumbitted(false);
       } else {
         setIsIngredientsSumbitted(true);
-        setIngredientsImage(meal.ingredients_photos[0]);
+        setIngredientsImage(meal?.ingredients_photos[0]);
       }
-      setMealStatus(meal.current_state);
+      setMealStatus(meal?.current_state);
     }
-  }, []);
+  });
 
   useEffect(() => {
     setTextStatus(handleMealStatus());
-  }, []);
+  }, [meal?.current_state]);
 
   const handleMealStatus = () => {
     switch (mealStatus) {
@@ -56,9 +80,9 @@ const CheckStatus = ({ navigation, meal }: any) => {
       case "IN_PROGRESS_DISH":
         return "Take a photo of the dish";
       case "COMPLETE":
-        return `you have earned ${meal.tokens_earned} tokens!`;
+        return `you have earned ${meal?.tokens_earned} tokens!`;
       case "INVALID":
-        return "Invalid photos for further information you will receive an email";
+        return "Your photos weren’t approved.  Probably your uploaded wrong photos.";
       case "AWAITING_VALIDATION":
         return "We’re checking your photos. You’ll receive your reward soon!";
       case "INCOMPLETE":
@@ -73,64 +97,63 @@ const CheckStatus = ({ navigation, meal }: any) => {
       <View className="w-full">
         <GoBackButton navigation={navigation} color="white" />
       </View>
-      <ScrollView
-        className="w-full h-full"
-        contentContainerStyle={{
-          flexGrow: 1,
-          alignItems: "center",
-          justifyContent: "space-between"
-        }}>
-        <Text className="pb-3 font-[Poppins-700] text-2xl">Excellent choice!</Text>
-        <Text className="w-[70%] pb-[60px] text-center font-[Poppins-400] text-sm text-[#6D6D6D]">
+      <View className="h-full w-[100vh] flex-col items-center justify-between">
+        <Text className="pt-10 font-[Poppins-700] text-2xl">Excellent choice!</Text>
+        <Text className="w-[70%] text-center font-[Poppins-400] text-xs text-[#6D6D6D]">
           Now follow the steps to get tokens and track your progress.
         </Text>
 
-        {!isIngredientsSumbitted && ingredientsImage === "" ? (
-          <FoodIngredientsIcon />
-        ) : (
-          <Image style={{ width: 300, height: 200 }} source={{ uri: ingredientsImage }} />
+        {!isIngredientsSumbitted && ingredientsImage === "" && <FoodIngredientsIcon />}
+        {isIngredientsSumbitted && ingredientsImage !== "" && (
+          <Image
+            style={{ width: 300, height: 200, borderRadius: 12 }}
+            source={{ uri: ingredientsImage }}
+          />
         )}
 
-        <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
+        <Text className="font-[Poppins-600] text-lg">
           {!isIngredientsSumbitted ? "Take a photo of ingredients" : "Ingredients photo"}
         </Text>
 
-        {!isIngredientsSumbitted && ingredientsImage === "" ? (
+        {!isIngredientsSumbitted && ingredientsImage === "" && (
           <RecipeStatusButton navigation={navigation} />
-        ) : (
+        )}
+        {isIngredientsSumbitted && ingredientsImage !== "" && (
           <View className="mb-[16px] flex-row items-center space-x-2">
             <CheckboxIcon />
             <Text className="font-[Poppins-600] text-sm text-[#919EAB]">Submitted</Text>
           </View>
         )}
 
-        {!isReadyDish && dishImage === "" ? (
-          <PreparedDishIcon />
-        ) : (
+        {!isReadyDish && dishImage === "" && <PreparedDishIcon />}
+        {isReadyDish && dishImage !== "" && (
           <Image style={{ width: 300, height: 200 }} source={{ uri: dishImage }} />
         )}
 
-        <Text className="pb-8 pt-3 font-[Poppins-600] text-lg">
+        <Text className="font-[Poppins-600] text-lg">
           {!isReadyDish ? "Take a photo of prepared dish" : "Dish photo"}
         </Text>
 
-        {!isReadyDish && dishImage === "" ? (
+        {!isReadyDish && dishImage === "" && (
           <RecipeStatusButton
             navigation={navigation}
             disabled={!isIngredientsSumbitted}
           />
-        ) : (
+        )}
+        {isReadyDish && dishImage !== "" && (
           <>
-            <View className="mb-[16px] flex-row items-center space-x-2">
+            <View className="flex-row items-center space-x-2">
               <CheckboxIcon />
               <Text className="font-[Poppins-600] text-sm text-[#919EAB]">Submitted</Text>
             </View>
-            <Text className="w-[253px] text-center font-[Poppins-600] text-[#6D6D6D]">
-              {textStatus}
-            </Text>
+            <View className="w-full px-8">
+              <Text className="text-center font-[Poppins-600] text-[#6D6D6D]">
+                {textStatus}
+              </Text>
+            </View>
           </>
         )}
-      </ScrollView>
+      </View>
     </View>
   );
 };

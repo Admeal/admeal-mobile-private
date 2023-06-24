@@ -1,5 +1,4 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   DrawerContentScrollView,
@@ -34,10 +33,10 @@ const Sidebar = (props: any) => {
   };
 
   return (
-    <View className="relative flex-col justify-between h-full">
+    <View className="relative h-full flex-col justify-between">
       <DrawerContentScrollView className="relative h-full" {...props}>
         <View className="flex-1">
-          <View className="px-5 pt-20 pb-12">
+          <View className="px-5 pb-12 pt-20">
             <Image source={require("../assets/png/Logo.png")} />
           </View>
 

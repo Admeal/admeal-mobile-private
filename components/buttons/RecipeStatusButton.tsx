@@ -10,7 +10,8 @@ import {
   isReadyDishState,
   ingredientsImageState,
   dishImageState,
-  mealIdState
+  mealIdState,
+  mealStatusState
 } from "../../atoms/dataAtom";
 import useAuth from "../../hooks/useAuth";
 import getBlobFromUri from "../../hooks/getBlobFromUri";
@@ -34,6 +35,7 @@ const RecipeStatusButton = ({
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
+  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
 
   const { user } = useAuth();
 
@@ -43,6 +45,14 @@ const RecipeStatusButton = ({
     disabled ? null : console.log(label);
     if (!disabled) {
       console.log("upload id", mealId, typeof mealId);
+
+      if (mealStatus === "COMPLETE" && ingredientsImage !== "" && dishImage !== "") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Home" }]
+        });
+        return;
+      }
 
       if (ingredientsImage === "" && !isIngredientsSumbitted) {
         navigation.navigate("CameraUpload");
@@ -77,6 +87,7 @@ const RecipeStatusButton = ({
 
           setIsIngredientsSumbitted(true);
           setIsLoading(false);
+
           navigation.navigate("CheckStatus");
         }
       }
@@ -115,11 +126,11 @@ const RecipeStatusButton = ({
     <TouchableOpacity
       disabled={disabled}
       onPress={handleUpload}
-      className={`mb-[48px] h-12 w-[55%] flex-col items-center justify-center rounded-full px-3 pt-1 text-center shadow-xl ${
+      className={`mb-[48px] h-12 w-[40%] flex-col items-center justify-center rounded-full px-3 pt-1 text-center shadow-xl ${
         disabled ? "bg-[#919EAB]/20 shadow-[#919EAB]/20" : "bg-[#FF1E00] shadow-[#FF1E00]"
       }`}>
       {isLoading ? (
-        <View className="flex-row items-center justify-center animate-spin">
+        <View className="animate-spin flex-row items-center justify-center">
           {/* <AntDesign name="reload1" size={24} color="white" /> */}
         </View>
       ) : (

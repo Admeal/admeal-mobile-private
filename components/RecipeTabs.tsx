@@ -24,16 +24,20 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const { user } = useAuth();
 
   useEffect(() => {
-    onSnapshot(collection(db, "recipes"), (snapshot) => {
+    const unsubscribe = onSnapshot(collection(db, "recipes"), (snapshot) => {
       const array = snapshot.docs.map((doc) => {
         return doc.data();
       });
       setRecipeList(array);
     });
+    return () => {
+      unsubscribe();
+      console.log("unsubscribed recipes");
+    };
   }, []);
 
   useEffect(() => {
-    onSnapshot(collection(db, "my_meals"), (snapshot) => {
+    const unsubscribe = onSnapshot(collection(db, "my_meals"), (snapshot) => {
       const array = snapshot.docs.map((doc) => {
         return doc.data();
       });
@@ -43,14 +47,18 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       setMealsList(array);
       setMyMealsList(filteredArray);
     });
-  }, [db]);
+    return () => {
+      unsubscribe();
+      console.log("unsubscribed meals");
+    };
+  }, []);
 
   return (
     <View className="px-5 ">
       <View className="flex-row items-center justify-center">
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Recipes");
+            navigation.navigate("Home");
           }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
             routeName === "Recipes" ? "border-[#FF1E00]" : "border-[#919EAB]"

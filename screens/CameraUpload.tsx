@@ -36,7 +36,6 @@ const CameraUpload = ({ navigation }: any) => {
         quality: 0.3
       });
       console.log("data", typeof data, data);
-      // convert data to Blob
 
       if (!isIngredientsSumbitted) {
         setIngredientsImage(data.uri);
@@ -66,7 +65,6 @@ const CameraUpload = ({ navigation }: any) => {
 
   return (
     <Camera
-      // flashMode={Camera.Constants.FlashMode}
       className="flex-1 flex-col items-center justify-center"
       type={type}
       ref={(ref) => {

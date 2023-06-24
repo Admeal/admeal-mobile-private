@@ -29,9 +29,6 @@ const ReconnectWalletButton = ({ navigation, color }: any) => {
       <Web3Modal
         projectId={projectId}
         providerMetadata={providerMetadata}
-        // sessionParams={}
-        // key={}
-        // relayUrl
       />
     </>
   );

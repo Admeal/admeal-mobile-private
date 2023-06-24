@@ -45,6 +45,7 @@ const RecipeStack = () => {
       {user ? (
         <Stack.Group>
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="My Meals" component={Meals} />
           <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
           <Stack.Screen name="CheckStatus" component={CheckStatus} />
           <Stack.Screen name="CameraUpload" component={CameraUpload} />

@@ -33,8 +33,6 @@ const RecipeDetails = ({ navigation }: any) => {
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
-  const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [mealsList, setMealsList] = useRecoilState(mealsListState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
@@ -45,13 +43,11 @@ const RecipeDetails = ({ navigation }: any) => {
   const { user } = useAuth();
 
   const handleCookButton = async () => {
-    // console.log("cook 1", typeof mealsList);
     if (myMealsList) {
       const meal = myMealsList.find(
         (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
       );
 
-      console.log("doc found?", meal?.my_meals_id, meal, mealId);
       if (meal) {
         setMealId(meal?.my_meals_id);
 

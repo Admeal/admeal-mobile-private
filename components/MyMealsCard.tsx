@@ -1,6 +1,7 @@
-import { useEffect } from "react";
 import { View, Text, ImageBackground, Image, TouchableOpacity } from "react-native";
 import { useRecoilState } from "recoil";
+import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
+import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import {
   recipeListState,
   recipeItemState,
@@ -8,10 +9,10 @@ import {
   isReadyDishState,
   ingredientsImageState,
   dishImageState,
-  mealsListState,
   mealStatusState,
   mealIdState
 } from "../atoms/dataAtom";
+import useAuth from "../hooks/useAuth";
 
 const MyMealsCard = ({ meal, navigation }: MealProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
@@ -22,17 +23,8 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
-  const { recipeImages, ingredients } = recipeItem;
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
-
-  useEffect(() => {
-    if (meal) {
-      let string = meal.my_meals_id.toString();
-      setMealId(string);
-      console.log("string mealId", mealId);
-    }
-  }, [meal]);
 
   const handleStatusButtonUI = () => {
     switch (meal.current_state) {
@@ -85,29 +77,34 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   };
 
   const handleItemPress = () => {
+
+    setMealId(meal?.my_meals_id);
     setIsIngredientsSumbitted(false);
     setIngredientsImage("");
     setIsReadyDish(false);
     setDishImage("");
+    if (meal !== undefined || meal !== null) {
+      setMealId(meal?.my_meals_id);
+      console.log("meal found222", meal.my_meals_id, mealId);
+      setMealId(meal?.my_meals_id);
+      console.log("meal found333", meal.my_meals_id, mealId);
 
-    if (meal.ingredients_photos[0] !== "") {
-      setIngredientsImage(meal?.ingredients_photos[0]);
+      if (meal?.dish_photos[0] === "") {
+        setIsReadyDish(false);
+      } else {
+        setIsReadyDish(true);
+      }
+      if (meal?.ingredients_photos[0] === "") {
+        setIsIngredientsSumbitted(false);
+      } else {
+        setIsIngredientsSumbitted(true);
+      }
+      setMealStatus(meal.current_state);
     }
-    if (meal?.dish_photos[0] !== "") {
-      setDishImage(meal?.dish_photos[0]);
-    }
-    setMealStatus(meal.current_state);
-
-    if (ingredientsImage !== "") {
-      setIsIngredientsSumbitted(true);
-    }
-    if (ingredientsImage !== "" && dishImage !== "") {
-      setIsReadyDish(true);
-    }
-
-    navigation.navigate("CheckStatus", {
-      meal
-    }); //
+    // }
+    setTimeout(() => {
+      navigation.navigate("CheckStatus");
+    }, 500);
   };
 
   return (
@@ -161,12 +158,16 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
           <Text className="font-[Poppins-400] text-sm text-[#637381]">Earned:</Text>
           <View className="flex-row items-center space-x-4">
             <View className="flex-row items-center space-x-2">
-              <Text className="font-[Poppins-700]">{meal.tokens_earned}</Text>
-              <Image source={require("../assets/png/coin1.png")} />
+              <Text className="font-[Poppins-700] text-lg">{meal.tokens_earned}</Text>
+              <View>
+                <DishCoinLogo size={16} scale={0.7} />
+              </View>
             </View>
             <View className="flex-row items-center space-x-2">
-              <Text className="font-[Poppins-700]">0</Text>
-              <Image source={require("../assets/png/coin2.png")} />
+              <Text className="font-[Poppins-700] text-lg">0</Text>
+              <View>
+                <AdmealCoinLogo size={16} scale={0.7} />
+              </View>
             </View>
           </View>
         </View>

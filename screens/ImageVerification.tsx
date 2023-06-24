@@ -20,7 +20,12 @@ const ImageVerification = ({ navigation }) => {
   const handleTakeAnotherShot = () => {
     ingredientsImage && setIngredientsImage("");
     dishImage && setDishImage("");
-    navigation.navigate("CheckStatus");
+    setIsIngredientsSumbitted(false);
+    setIsReadyDish(false);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "CheckStatus" }]
+    });
   };
 
   return (

@@ -16,9 +16,6 @@ import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
 const Wallet = ({ navigation }: any) => {
   const { isOpen, open, close, provider, isConnected, address } = useWeb3Modal();
 
-  useEffect(() => {
-    console.log("provider", provider);
-  }, [provider]);
   const { user } = useAuth();
 
   return (
