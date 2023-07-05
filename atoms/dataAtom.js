@@ -20,11 +20,6 @@ export const mealIdState = atom({
   default: '',
 });
 
-export const mealsListState = atom({
-  key: 'mealsListState',
-  default: [],
-});
-
 export const myMealsListState = atom({
   key: 'myMealsListState',
   default: [],

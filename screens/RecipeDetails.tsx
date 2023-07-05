@@ -15,9 +15,7 @@ import {
   recipeItemState,
   isIngredientsSumbittedState,
   isReadyDishState,
-  ingredientsImageState,
-  dishImageState,
-  mealsListState,
+
   mealStatusState,
   myMealsListState,
   mealIdState
@@ -25,7 +23,7 @@ import {
 import { useRecoilState } from "recoil";
 import useAuth from "../hooks/useAuth";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db, realtimeDB } from "../firebaseConfig";
+import { db } from "../firebaseConfig";
 
 const RecipeDetails = ({ navigation }: any) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
@@ -33,7 +31,6 @@ const RecipeDetails = ({ navigation }: any) => {
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [mealsList, setMealsList] = useRecoilState(mealsListState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
@@ -69,7 +66,7 @@ const RecipeDetails = ({ navigation }: any) => {
           user_id: user?.id,
           tokens_earned: 0,
           recipe_id: recipeItem.recipeId,
-          my_meals_id: mealsList?.length,
+          my_meals_id: myMealsList?.length,
           ingredients_photos: [""],
           dish_photos: [""],
           current_state: "INCOMPLETE"
@@ -94,7 +91,7 @@ const RecipeDetails = ({ navigation }: any) => {
 
   return (
     <ImageBackground
-      className="relative flex-1 flex-col justify-between bg-gray-500"
+      className="relative flex-col justify-between flex-1 bg-gray-500"
       source={{
         uri: recipeItem.recipeImages
       }}
@@ -112,7 +109,7 @@ const RecipeDetails = ({ navigation }: any) => {
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
-        <ScrollView className="flex-1 pb-5 pt-3">
+        <ScrollView className="flex-1 pt-3 pb-5">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
             {recipeItem.description}
           </Text>
@@ -123,7 +120,7 @@ const RecipeDetails = ({ navigation }: any) => {
               flexDirection: "row",
               alignItems: "center"
             }}
-            className="space-x-2 pt-4 ">
+            className="pt-4 space-x-2 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
