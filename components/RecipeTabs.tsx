@@ -4,8 +4,12 @@ import PopularCard from "./PopularCard";
 import TopEarningsCard from "./TopEarningsCard";
 import MyMealsCard from "./MyMealsCard";
 
-import { recipeListState, mealsListState, myMealsListState } from "../atoms/dataAtom";
+import { recipeListState, myMealsListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import useAuth from "../hooks/useAuth";
 
 type RecipeTabsProps = {
   navigation: any;
@@ -14,15 +18,61 @@ type RecipeTabsProps = {
 
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [mealsList, setMealsList] = useRecoilState<any>(mealsListState);
   const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (routeName === "Recipes") {
+      const fetchRecipes = async () => {
+        const query = await getDocs(collection(db, "recipes"));
+        const array = query.docs.map((doc) => {
+          return doc.data();
+        });
+        setRecipeList(array);
+        console.log("get recipes");
+      };
+      // const unsubscribe = onSnapshot(collection(db, "recipes"), (snapshot) => {
+      //   const array = snapshot.docs.map((doc) => {
+      //     return doc.data();
+      //   });
+      //   setRecipeList(array);
+      // });
+      fetchRecipes();
+      return () => {
+        // unsubscribe();
+        console.log("unsubscribed recipes");
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (routeName === "Recipes") {
+      const unsubscribe = onSnapshot(
+        query(collection(db, "my_meals"), where("user_id", "==", user?.id)),
+        (snapshot) => {
+          console.log("sub meals");
+
+          const array = snapshot.docs.map((doc) => {
+            return doc.data();
+          });
+
+          setMyMealsList(array);
+        }
+      );
+      return () => {
+        unsubscribe();
+        console.log("unsubscribed meals");
+      };
+    }
+  }, []);
 
   return (
     <View className="px-5 ">
       <View className="flex-row items-center justify-center">
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Recipes");
+            navigation.navigate("Home");
           }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
             routeName === "Recipes" ? "border-[#FF1E00]" : "border-[#919EAB]"
@@ -52,19 +102,6 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       <View>
         {routeName === "Recipes" ? (
           <ScrollView className="h-screen pb-40">
-            {/* <View>
-              <Text className="font-[Poppins-700] text-lg">Popular recipes</Text>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                className="flex-row py-4">
-                {recipeList?.map((recipe, index) => {
-                  return (
-                    <PopularCard navigation={navigation} recipe={recipe} key={index} />
-                  );
-                })}
-              </ScrollView>
-            </View> */}
             <View className="pb-60">
               <Text className="py-4 font-[Poppins-700] text-lg">All Recipes</Text>
               <View className="h-[100%] flex-row flex-wrap items-center justify-between ">

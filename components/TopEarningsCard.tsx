@@ -10,35 +10,20 @@ import CookCountIcon from "../assets/icons/cookCountIcon";
 const TopEarningsCard = ({ recipe, navigation }: RecipeProps) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
 
-  const {
-    recipe_name,
-    token_reward,
-    recipe_images,
-    recipe_id,
-    nutritional_information,
-    number_of_servings,
-    ingredients,
-    difficulty,
-    description,
-    cooking_instructions,
-    cook_time_in_mins,
-    cook_count
-  } = recipe;
-
   const handleItemPress = () => {
     setRecipeItem({
-      recipeName: recipe_name,
-      price: token_reward,
-      recipeImages: recipe_images[0],
-      recipeId: recipe_id,
-      nutritionalInformation: nutritional_information,
-      numberOfServings: number_of_servings,
-      ingredients: ingredients,
-      difficulty: difficulty,
-      description: description,
-      cookingInstructions: cooking_instructions,
-      cookTimeInMins: cook_time_in_mins,
-      cookCount: cook_count
+      recipeName: recipe.recipe_name,
+      price: recipe.token_reward,
+      recipeImages: recipe.recipe_images[0],
+      recipeId: recipe.recipe_id,
+      nutritionalInformation: recipe.nutritional_information,
+      numberOfServings: recipe.number_of_servings,
+      ingredients: recipe.ingredients,
+      difficulty: recipe.difficulty,
+      description: recipe.description,
+      cookingInstructions: recipe.cooking_instructions,
+      cookTimeInMins: recipe.cook_time_in_mins,
+      cookCount: recipe.cook_count
     });
     navigation.navigate("RecipeDetails");
   };
@@ -59,15 +44,15 @@ const TopEarningsCard = ({ recipe, navigation }: RecipeProps) => {
         }
       ]}
       onPress={handleItemPress}
-      className="relative mb-4 h-[208px] w-[47%] max-w-[163px] rounded-xl bg-gray-800 shadow-md">
+      className="relative mb-4 h-[60vw] w-[47%] rounded-xl bg-gray-800 shadow-md">
       <Image
         borderRadius={16}
         source={{ uri: recipe.recipe_images[0] }}
         resizeMode="cover"
-        className="absolute w-full h-full rounded-xl"
+        className="absolute h-full w-full rounded-xl"
       />
       <PriceTag tokenName="DISH" price={recipe.token_reward} />
-      <View className="absolute bottom-0 w-full p-2 bg-white h-2/5 rounded-b-xl">
+      <View className="absolute bottom-0 h-2/5 w-full rounded-b-xl bg-white p-2">
         <Text className="h-10 font-[Poppins-600] text-base leading-5 text-[#1D1D1D]">
           {recipe.recipe_name}
         </Text>

@@ -25,21 +25,18 @@ import CameraUpload from "./screens/CameraUpload";
 import ImageVerification from "./screens/ImageVerification";
 import Login from "./screens/Login";
 import useAuth, { AuthProvider } from "./hooks/useAuth";
-import getMyMealsEndpoint from "./endpoints/getMyMealsEndpoint";
-import getRecipesEndpoint from "./endpoints/getRecipesEndpoint";
-import getUserEndpoint from "./endpoints/getUsersEndpoint";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const RecipeStack = () => {
   const { user } = useAuth();
-  getUserEndpoint();
-  getRecipesEndpoint();
-  getMyMealsEndpoint();
+
   return (
     <Stack.Navigator
       screenOptions={{
+        // headerBackground: () => null,
+        headerTransparent: true,
         headerShown: false,
         headerStyle: {
           backgroundColor: "transparent"
@@ -48,6 +45,7 @@ const RecipeStack = () => {
       {user ? (
         <Stack.Group>
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="My Meals" component={Meals} />
           <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
           <Stack.Screen name="CheckStatus" component={CheckStatus} />
           <Stack.Screen name="CameraUpload" component={CameraUpload} />
@@ -84,6 +82,7 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <RecoilRoot>

@@ -32,7 +32,7 @@ type MealProps = {
     current_state: string;
     dish_photos: string[];
     ingredients_photos: string[];
-    my_meals_id: number;
+    my_meals_id: string;
     recipe_id: number;
     time_stamp_started: number;
     time_stamp_validated: number;

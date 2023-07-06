@@ -20,11 +20,6 @@ export const mealIdState = atom({
   default: '',
 });
 
-export const mealsListState = atom({
-  key: 'mealsListState',
-  default: [],
-});
-
 export const myMealsListState = atom({
   key: 'myMealsListState',
   default: [],
@@ -51,11 +46,6 @@ export const recipeItemState = atom({
     cookTimeInMins: 0,
     cookCount: 0,
   },
-});
-
-export const recipeStepsStatusState = atom({
-  key: 'recipeStepsStatusState',
-  default: '',
 });
 
 export const isIngredientsSumbittedState = atom({

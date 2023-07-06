@@ -15,17 +15,15 @@ import {
   recipeItemState,
   isIngredientsSumbittedState,
   isReadyDishState,
-  ingredientsImageState,
-  dishImageState,
-  mealsListState,
+
   mealStatusState,
   myMealsListState,
   mealIdState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import useAuth from "../hooks/useAuth";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
-import { db, realtimeDB } from "../firebaseConfig";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const RecipeDetails = ({ navigation }: any) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
@@ -33,9 +31,6 @@ const RecipeDetails = ({ navigation }: any) => {
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
-  const [dishImage, setDishImage] = useRecoilState(dishImageState);
-  const [mealsList, setMealsList] = useRecoilState(mealsListState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
@@ -45,21 +40,21 @@ const RecipeDetails = ({ navigation }: any) => {
   const { user } = useAuth();
 
   const handleCookButton = async () => {
-    console.log("cook 1", typeof mealsList);
     if (myMealsList) {
       const meal = myMealsList.find(
         (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
-        // setMealId(index)
       );
+
       if (meal) {
-        // setMealId(meal?.my_meals_id);
-        console.log("meal found", meal.id);
-        if (meal.dish_photos[0] === "") {
+        setMealId(meal?.my_meals_id);
+
+        console.log("meal found", meal.my_meals_id);
+        if (meal?.dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
           setIsReadyDish(true);
         }
-        if (meal.ingredients_photos[0] === "") {
+        if (meal?.ingredients_photos[0] === "") {
           setIsIngredientsSumbitted(false);
         } else {
           setIsIngredientsSumbitted(true);
@@ -71,32 +66,18 @@ const RecipeDetails = ({ navigation }: any) => {
           user_id: user?.id,
           tokens_earned: 0,
           recipe_id: recipeItem.recipeId,
-          my_meals_id: mealsList?.length,
+          my_meals_id: myMealsList?.length,
           ingredients_photos: [""],
           dish_photos: [""],
           current_state: "INCOMPLETE"
+        });
+        await updateDoc(doc(db, "my_meals", docRef.id), {
+          my_meals_id: docRef.id
         });
 
         console.log("Document written with ID: ", docRef.id);
         setMealId(docRef.id);
 
-        // const docRef = realtimeDB.ref("my_meals");
-        // create new meal in database
-        // fetch("https://admeal-firebase-default-rtdb.firebaseio.com/my_meals.json", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json"
-        //   },
-        //   body: JSON.stringify({
-        //     user_id: user?.id,
-        //     tokens_earned: 0,
-        //     recipe_id: recipeItem.recipeId,
-        //     my_meals_id: mealsList?.length,
-        //     ingredients_photos: [""],
-        //     dish_photos: [""],
-        //     current_state: "INCOMPLETE"
-        //   })
-        // });
         setIsIngredientsSumbitted(false);
         setIsReadyDish(false);
         setMealStatus("INCOMPLETE");
@@ -110,14 +91,14 @@ const RecipeDetails = ({ navigation }: any) => {
 
   return (
     <ImageBackground
-      className="flex-col justify-between flex-1 bg-gray-500"
+      className="relative flex-col justify-between flex-1 bg-gray-500"
       source={{
         uri: recipeItem.recipeImages
       }}
       resizeMode="cover">
       <GoBackButton color="white" navigation={navigation} />
 
-      <View className="relative h-2/3 flex-col  justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
+      <View className="absolute bottom-0 h-2/3 flex-col justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
         <View className="flex-row items-end justify-between">
           <Text className="w-[50%] font-[Poppins-700] text-2xl">
             {recipeItem.recipeName}

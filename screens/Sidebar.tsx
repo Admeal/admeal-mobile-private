@@ -1,5 +1,4 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   DrawerContentScrollView,
@@ -44,7 +43,7 @@ const Sidebar = (props: any) => {
           <DrawerItemList {...props} />
           <DrawerItem
             label={({ focused, color }) => getLabel(focused, color, "Logout")}
-            onPress={() => props.navigation.navigate("Recipes")}
+            onPress={() => props.navigation.navigate("Home")}
           />
         </View>
       </DrawerContentScrollView>

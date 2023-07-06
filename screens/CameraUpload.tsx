@@ -32,7 +32,11 @@ const CameraUpload = ({ navigation }: any) => {
 
   const takePicture = async () => {
     if (camera) {
-      const data = await camera.takePictureAsync(null);
+      const data = await camera.takePictureAsync({
+        quality: 0.3
+      });
+      console.log("data", typeof data, data);
+
       if (!isIngredientsSumbitted) {
         setIngredientsImage(data.uri);
       } else {
@@ -43,6 +47,7 @@ const CameraUpload = ({ navigation }: any) => {
   };
 
   const handlePictureButton = () => {
+    Camera.Constants.FlashMode.torch;
     const picture = takePicture();
   };
 
@@ -60,21 +65,20 @@ const CameraUpload = ({ navigation }: any) => {
 
   return (
     <Camera
-      flashMode={Camera.Constants.FlashMode.off}
-      className="flex-col items-center justify-center flex-1"
+      className="flex-1 flex-col items-center justify-center"
       type={type}
       ref={(ref) => {
         setCamera(ref);
       }}>
-      <View className="flex-row items-center self-start justify-between w-full">
+      <View className="w-full flex-row items-center justify-between self-start">
         <GoBackButton navigation={navigation} color="white" />
         {/* flash button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className="mr-8 h-[40px] w-[40px] self-end rounded-full bg-[#919EAB]/70"
           style={{}}
-          onPress={handleFlashButton}></TouchableOpacity>
+          onPress={handleFlashButton}></TouchableOpacity> */}
       </View>
-      <View className="flex-row flex-1 bg-transparent">
+      <View className="flex-1 flex-row bg-transparent">
         <TouchableOpacity
           className="mb-8 h-[60px] w-[60px] self-end rounded-full bg-[#919EAB]/70"
           style={{}}
