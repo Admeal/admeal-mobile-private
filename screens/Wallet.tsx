@@ -29,12 +29,12 @@ const Wallet = ({ navigation }: any) => {
             shadowColor: "#000",
             shadowOffset: {
               width: 0,
-              height: 5
+              height: 9
             },
-            shadowOpacity: 0.36,
-            shadowRadius: 6.68,
+            shadowOpacity: 0.48,
+            shadowRadius: 11.95,
 
-            elevation: 11
+            elevation: 18
           }
         ]}
         className="h-[421px] w-full rounded-b-3xl bg-blue-600">

@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: any) => {
   const handleSignInWithGoogle = async () => {
     const user = await AsyncStorage.getItem("@user");
     if (!user) {
-      if (response?.type === "success") {
+      if (response && response.type === "success") {
         await getUserInfo(response?.authentication?.accessToken);
       }
     } else {
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }: any) => {
     await AsyncStorage.removeItem("@user");
     setUserInfo(null);
   };
-
+  console.log("userInfo", userInfo);
   return (
     <AuthContext.Provider
       value={{
