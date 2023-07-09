@@ -11,8 +11,16 @@ const GoBackButton = ({ navigation, color }: any) => {
     } else if (
       navigation.getState().routes.find((route) => route.name === "CheckStatus")
     ) {
-      navigation.goBack();
-      // navigation.dispatch(StackActions.push("My Meals"));
+      navigation.dispatch(StackActions.push("My Meals"));
+    } else if (
+      navigation.getState().routes.find((route) => route.name === "CameraUpload")
+    ) {
+      // navigation.goBack();
+      navigation.dispatch(StackActions.push("CheckStatus"));
+    } else if (
+      navigation.getState().routes.find((route) => route.name === "ImageVerification")
+    ) {
+      navigation.dispatch(StackActions.push("CameraUpload"));
     } else {
       navigation.goBack();
     }

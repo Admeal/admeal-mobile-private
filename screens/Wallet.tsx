@@ -1,19 +1,34 @@
-import { View, Text, Image, ScrollView } from "react-native";
-import { useEffect } from "react";
+import { View, Text, Image, ScrollView, BackHandler } from "react-native";
+import { useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+
 import useAuth from "../hooks/useAuth";
+
+import { useWeb3Modal } from "@web3modal/react-native";
+
 import GoBackButton from "../components/buttons/GoBackButton";
 import ConnectWalletButton from "../components/buttons/ConnectWalletButton";
+import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
+import NFTcard from "../components/NFTcard";
+
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
-import NFTcard from "../components/NFTcard";
 import ArrowTopRight from "../assets/icons/arrowTopRight";
 import ArrowBottom from "../assets/icons/arrowBottom";
 
-import { useWeb3Modal } from "@web3modal/react-native";
-import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
-
 const Wallet = ({ navigation }: any) => {
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
+
   const { isOpen, open, close, provider, isConnected, address } = useWeb3Modal();
 
   const { user } = useAuth();

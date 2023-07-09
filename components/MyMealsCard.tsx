@@ -77,30 +77,31 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   };
 
   const handleItemPress = () => {
-
     setMealId(meal?.my_meals_id);
     setIsIngredientsSumbitted(false);
     setIngredientsImage("");
     setIsReadyDish(false);
     setDishImage("");
-    if (meal !== undefined || meal !== null) {
-      setMealId(meal?.my_meals_id);
-      console.log("meal found222", meal.my_meals_id, mealId);
-      setMealId(meal?.my_meals_id);
-      console.log("meal found333", meal.my_meals_id, mealId);
+    setTimeout(() => {
+      if (meal !== undefined || meal !== null) {
+        setMealId(meal?.my_meals_id);
+        console.log("meal found222", meal.my_meals_id, mealId);
+        setMealId(meal?.my_meals_id);
+        console.log("meal found333", meal.my_meals_id, mealId);
 
-      if (meal?.dish_photos[0] === "") {
-        setIsReadyDish(false);
-      } else {
-        setIsReadyDish(true);
+        if (meal?.dish_photos[0] === "") {
+          setIsReadyDish(false);
+        } else {
+          setIsReadyDish(true);
+        }
+        if (meal?.ingredients_photos[0] === "") {
+          setIsIngredientsSumbitted(false);
+        } else {
+          setIsIngredientsSumbitted(true);
+        }
+        setMealStatus(meal.current_state);
       }
-      if (meal?.ingredients_photos[0] === "") {
-        setIsIngredientsSumbitted(false);
-      } else {
-        setIsIngredientsSumbitted(true);
-      }
-      setMealStatus(meal.current_state);
-    }
+    }, 50);
     // }
     setTimeout(() => {
       navigation.navigate("CheckStatus");

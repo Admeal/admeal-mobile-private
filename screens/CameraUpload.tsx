@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, BackHandler } from "react-native";
+import { useEffect, useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import {
   isIngredientsSumbittedState,
@@ -9,6 +9,9 @@ import {
 } from "../atoms/dataAtom";
 import { Camera } from "expo-camera";
 import GoBackButton from "../components/buttons/GoBackButton";
+import { useFocusEffect } from "@react-navigation/native";
+import * as SplashScreen from "expo-splash-screen";
+import LoadingScreen from "./LoadingScreen";
 
 const CameraUpload = ({ navigation }: any) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -20,8 +23,30 @@ const CameraUpload = ({ navigation }: any) => {
 
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [camera, setCamera] = useState<Camera | null>(null);
-  const [image, setImage] = useState<string | null>(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      setIsLoading(true);
+    });
+
+    return () => {
+      setIsLoading(false);
+      unsubscribe();
+    };
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
 
   useEffect(() => {
     (async () => {
@@ -63,7 +88,9 @@ const CameraUpload = ({ navigation }: any) => {
     return <Text>No access to camera</Text>;
   }
 
-  return (
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <Camera
       className="flex-1 flex-col items-center justify-center"
       type={type}

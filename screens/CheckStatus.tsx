@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
-import { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, BackHandler, Image } from "react-native";
+import { useEffect, useState, useCallback } from "react";
 
 import { db } from "../firebaseConfig";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -23,6 +23,8 @@ import FoodIngredientsIcon from "../assets/icons/foodIngredientsIcon";
 import PreparedDishIcon from "../assets/icons/preparedDishIcon";
 import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
+import { useFocusEffect } from "@react-navigation/native";
+import LoadingScreen from "./LoadingScreen";
 
 const CheckStatus = ({ navigation }: any) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -39,8 +41,29 @@ const CheckStatus = ({ navigation }: any) => {
   const [textStatus, setTextStatus] = useState<string>("");
   const [meal, setMeal] = useState<object | null>(null);
   const [tokenReward, setTokenReward] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {}, [mealId]);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      setIsLoading(true);
+    });
+
+    return () => {
+      setIsLoading(false);
+      unsubscribe();
+    };
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
 
   useEffect(() => {
     const unsubscribe = onSnapshot(doc(db, "my_meals", mealId), (snapshot) => {
@@ -117,7 +140,9 @@ const CheckStatus = ({ navigation }: any) => {
     }
   };
 
-  return (
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <View className="h-full w-full flex-col items-center justify-between">
       <View className="w-full">
         <GoBackButton navigation={navigation} color="white" />
@@ -163,27 +188,18 @@ const CheckStatus = ({ navigation }: any) => {
             </Text>
           </View>
 
-          <View className="pt-4">
-            {!isIngredientsSumbitted && ingredientsImage === "" && (
-              <FoodIngredientsIcon />
-            )}
-          </View>
-          {isIngredientsSumbitted && ingredientsImage !== "" && (
+          {isIngredientsSumbitted ? (
             <View className="h-[160px] w-[300px] rounded-xl bg-gray-300">
               <Image
                 style={{ width: 300, height: 160, borderRadius: 12 }}
                 source={{ uri: ingredientsImage }}
               />
             </View>
+          ) : (
+            <FoodIngredientsIcon />
           )}
 
-          {!isIngredientsSumbitted && (
-            <Text className="font-[Poppins-600] text-lg">
-              Take a photo of ingredients
-            </Text>
-          )}
-
-          {!isIngredientsSumbitted && (
+          {!isIngredientsSumbitted ? (
             <TouchableOpacity
               onPress={() => navigation.navigate("RecipeDetails")}
               className="flex-row items-center space-x-2">
@@ -192,26 +208,30 @@ const CheckStatus = ({ navigation }: any) => {
                 View recipe
               </Text>
             </TouchableOpacity>
+          ) : (
+            <Text className="font-[Poppins-600] text-lg">
+              Take a photo of ingredients
+            </Text>
           )}
 
-          {!isIngredientsSumbitted && ingredientsImage === "" && (
-            <RecipeStatusButton navigation={navigation} />
-          )}
-          {isIngredientsSumbitted && ingredientsImage !== "" && (
+          {isIngredientsSumbitted ? (
             <View className="mb-[16px] flex-row items-center space-x-2">
               <CheckboxIcon />
               <Text className="font-[Poppins-600] text-sm text-[#919EAB]">Submitted</Text>
             </View>
+          ) : (
+            <RecipeStatusButton navigation={navigation} />
           )}
 
-          {!isReadyDish && dishImage === "" && <PreparedDishIcon />}
-          {isReadyDish && dishImage !== "" && (
+          {isReadyDish ? (
             <View className="h-[160px] w-[300px] rounded-xl bg-gray-300">
               <Image
                 style={{ width: 300, height: 160, borderRadius: 12 }}
                 source={{ uri: dishImage }}
               />
             </View>
+          ) : (
+            <PreparedDishIcon />
           )}
 
           {!isReadyDish && (
@@ -220,14 +240,14 @@ const CheckStatus = ({ navigation }: any) => {
             </Text>
           )}
 
-          {!isReadyDish && dishImage === "" && (
+          {!isReadyDish && (
             <RecipeStatusButton
               navigation={navigation}
               disabled={!isIngredientsSumbitted}
             />
           )}
 
-          {isReadyDish && dishImage !== "" && (
+          {isReadyDish && (
             <>
               <View className="flex-row items-center space-x-2">
                 <CheckboxIcon />

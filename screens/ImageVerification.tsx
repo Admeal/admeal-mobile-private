@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import { View, Text, Image, TouchableOpacity, BackHandler } from "react-native";
+import { useCallback } from "react";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import {
   dishImageState,
@@ -8,6 +8,7 @@ import {
   isReadyDishState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ImageVerification = ({ navigation }) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -17,6 +18,17 @@ const ImageVerification = ({ navigation }) => {
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
 
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
+
   const handleTakeAnotherShot = () => {
     ingredientsImage && setIngredientsImage("");
     dishImage && setDishImage("");
@@ -24,7 +36,7 @@ const ImageVerification = ({ navigation }) => {
     setIsReadyDish(false);
     navigation.reset({
       index: 0,
-      routes: [{ name: "CheckStatus" }]
+      routes: [{ name: "CameraUpload" }]
     });
   };
 

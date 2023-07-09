@@ -7,6 +7,7 @@ import Sidebar from "../screens/Sidebar";
 
 import Wallet from "../screens/Wallet";
 import Meals from "../screens/Meals";
+import * as SplashScreen from "expo-splash-screen";
 
 import WalletIcon from "../assets/icons/walletIcon";
 import RecipeIcon from "../assets/icons/recipeIcon";
