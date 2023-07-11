@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, BackHandler } from "react-native";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useLayoutEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
   isIngredientsSumbittedState,
@@ -26,7 +26,7 @@ const CameraUpload = ({ navigation }: any) => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
       setIsLoading(true);
     });

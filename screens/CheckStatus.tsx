@@ -73,10 +73,6 @@ const CheckStatus = ({ navigation }: any) => {
 
     return () => {
       setMeal(null);
-      // setIngredientsImage("");
-      // setDishImage("");
-      // setIsIngredientsSumbitted(false);
-      // setIsReadyDish(false);
       unsubscribe();
       console.log("unsubscribed");
     };

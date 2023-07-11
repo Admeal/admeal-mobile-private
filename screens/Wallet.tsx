@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView, BackHandler } from "react-native";
-import { useEffect, useCallback } from "react";
+import { useLayoutEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -16,8 +16,22 @@ import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import ArrowTopRight from "../assets/icons/arrowTopRight";
 import ArrowBottom from "../assets/icons/arrowBottom";
+import LoadingScreen from "./LoadingScreen";
 
 const Wallet = ({ navigation }: any) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useLayoutEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      setIsLoading(true);
+    });
+
+    return () => {
+      setIsLoading(false);
+      unsubscribe();
+    };
+  }, [navigation]);
+
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
@@ -33,7 +47,9 @@ const Wallet = ({ navigation }: any) => {
 
   const { user } = useAuth();
 
-  return (
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <View className="h-full bg-[#E0E0E0]">
       <LinearGradient
         colors={["#9F87FF", "#3A13D6"]}
