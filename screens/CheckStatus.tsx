@@ -1,5 +1,6 @@
+import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { View, Text, TouchableOpacity, BackHandler, Image } from "react-native";
-import { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { db } from "../firebaseConfig";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -23,7 +24,6 @@ import FoodIngredientsIcon from "../assets/icons/foodIngredientsIcon";
 import PreparedDishIcon from "../assets/icons/preparedDishIcon";
 import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
-import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 
 const CheckStatus = ({ navigation }: any) => {
@@ -43,7 +43,7 @@ const CheckStatus = ({ navigation }: any) => {
   const [tokenReward, setTokenReward] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
       setIsLoading(true);
     });
@@ -73,10 +73,10 @@ const CheckStatus = ({ navigation }: any) => {
 
     return () => {
       setMeal(null);
-      setIngredientsImage("");
-      setDishImage("");
-      setIsIngredientsSumbitted(false);
-      setIsReadyDish(false);
+      // setIngredientsImage("");
+      // setDishImage("");
+      // setIsIngredientsSumbitted(false);
+      // setIsReadyDish(false);
       unsubscribe();
       console.log("unsubscribed");
     };
@@ -143,14 +143,15 @@ const CheckStatus = ({ navigation }: any) => {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <View className="h-full w-full flex-col items-center justify-between">
+    <View className="- h-screen w-full flex-col items-center justify-between">
       <View className="w-full">
+        <View className="pr-8 pt-16"></View>
         <GoBackButton navigation={navigation} color="white" />
       </View>
 
       {mealStatus === "COMPLETE" ? (
-        <View className="h-full flex-col items-center justify-between">
-          <View className="mt-24 h-[50%] w-[300px] rounded-xl bg-gray-300">
+        <View className=" h-5/6 flex-col items-center justify-between">
+          <View className="mt- h-[58%] w-[300px] rounded-xl bg-gray-300">
             {dishImage !== "" && (
               <Image
                 style={{ width: 300, height: "100%", borderRadius: 12 }}
@@ -175,13 +176,13 @@ const CheckStatus = ({ navigation }: any) => {
           </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("Home")}
-            className="my-4 h-[50px] w-[220px] flex-col items-center justify-center rounded-full bg-[#FF1E00] py-2 shadow-[#FF1E00]">
+            className="mt-4 h-[50px] w-[220px] flex-col items-center justify-center rounded-full bg-[#FF1E00] py-2 shadow-[#FF1E00]">
             <Text className="font-[Poppins-700] text-xl text-white">MY RECIPES</Text>
           </TouchableOpacity>
         </View>
       ) : (
-        <View className="h-full w-full flex-col items-center justify-between">
-          <Text className="pt-11 font-[Poppins-700] text-2xl">Excellent choice!</Text>
+        <View className="h-full w-full flex-col items-center justify-between pb-16">
+          <Text className=" font-[Poppins-700] text-2xl">Excellent choice!</Text>
           <View>
             <Text className="px-4 text-center font-[Poppins-600] text-sm text-[#6D6D6D]">
               Now follow the steps to get tokens and track your progress.
@@ -190,10 +191,12 @@ const CheckStatus = ({ navigation }: any) => {
 
           {isIngredientsSumbitted ? (
             <View className="h-[160px] w-[300px] rounded-xl bg-gray-300">
-              <Image
-                style={{ width: 300, height: 160, borderRadius: 12 }}
-                source={{ uri: ingredientsImage }}
-              />
+              {ingredientsImage !== "" && (
+                <Image
+                  style={{ width: 300, height: 160, borderRadius: 12 }}
+                  source={{ uri: ingredientsImage }}
+                />
+              )}
             </View>
           ) : (
             <FoodIngredientsIcon />
@@ -225,10 +228,12 @@ const CheckStatus = ({ navigation }: any) => {
 
           {isReadyDish ? (
             <View className="h-[160px] w-[300px] rounded-xl bg-gray-300">
-              <Image
-                style={{ width: 300, height: 160, borderRadius: 12 }}
-                source={{ uri: dishImage }}
-              />
+              {dishImage !== "" && (
+                <Image
+                  style={{ width: 300, height: 160, borderRadius: 12 }}
+                  source={{ uri: dishImage }}
+                />
+              )}
             </View>
           ) : (
             <PreparedDishIcon />

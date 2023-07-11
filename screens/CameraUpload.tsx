@@ -72,7 +72,6 @@ const CameraUpload = ({ navigation }: any) => {
   };
 
   const handlePictureButton = () => {
-    Camera.Constants.FlashMode.torch;
     const picture = takePicture();
   };
 
@@ -97,17 +96,19 @@ const CameraUpload = ({ navigation }: any) => {
       ref={(ref) => {
         setCamera(ref);
       }}>
-      <View className="w-full flex-row items-center justify-between self-start">
-        <GoBackButton navigation={navigation} color="white" />
+      <GoBackButton navigation={navigation} color="white" />
+      <View className="w-full flex-row items-center justify-end self-start">
         {/* flash button */}
-        {/* <TouchableOpacity
-          className="mr-8 h-[40px] w-[40px] self-end rounded-full bg-[#919EAB]/70"
+        <TouchableOpacity
+          className="mr-8 mt-10 h-[40px] w-[40px] self-end rounded-full bg-[#919EAB]/50"
           style={{}}
-          onPress={handleFlashButton}></TouchableOpacity> */}
+          onPress={handleFlashButton}>
+          <Text>11</Text>
+        </TouchableOpacity>
       </View>
       <View className="flex-1 flex-row bg-transparent">
         <TouchableOpacity
-          className="mb-8 h-[60px] w-[60px] self-end rounded-full bg-[#919EAB]/70"
+          className="mb-8 h-[60px] w-[60px] self-end rounded-full bg-[#919EAB]/50"
           style={{}}
           onPress={handlePictureButton}></TouchableOpacity>
       </View>

@@ -55,10 +55,16 @@ const RecipeStatusButton = ({
       }
 
       if (ingredientsImage === "" && !isIngredientsSumbitted) {
-        navigation.navigate("CameraUpload");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "CameraUpload" }]
+        });
       }
       if (ingredientsImage !== "" && isIngredientsSumbitted && dishImage === "") {
-        navigation.navigate("CameraUpload");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "CameraUpload" }]
+        });
       }
 
       if (ingredientsImage !== "" && !isIngredientsSumbitted && mealId) {

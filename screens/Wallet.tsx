@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import useAuth from "../hooks/useAuth";
 
-import { useWeb3Modal } from "@web3modal/react-native";
+import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 
 import GoBackButton from "../components/buttons/GoBackButton";
 import ConnectWalletButton from "../components/buttons/ConnectWalletButton";
@@ -29,7 +29,7 @@ const Wallet = ({ navigation }: any) => {
     }, [])
   );
 
-  const { isOpen, open, close, provider, isConnected, address } = useWeb3Modal();
+  const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
 
   const { user } = useAuth();
 
