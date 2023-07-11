@@ -1,24 +1,55 @@
-import { View, Text, Image, ScrollView } from "react-native";
-import { useEffect } from "react";
+import { View, Text, Image, ScrollView, BackHandler } from "react-native";
+import { useLayoutEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+
 import useAuth from "../hooks/useAuth";
+
+import { useWalletConnectModal } from "@walletconnect/modal-react-native";
+
 import GoBackButton from "../components/buttons/GoBackButton";
 import ConnectWalletButton from "../components/buttons/ConnectWalletButton";
+import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
+import NFTcard from "../components/NFTcard";
+
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
-import NFTcard from "../components/NFTcard";
 import ArrowTopRight from "../assets/icons/arrowTopRight";
 import ArrowBottom from "../assets/icons/arrowBottom";
-
-import { useWeb3Modal } from "@web3modal/react-native";
-import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
+import LoadingScreen from "./LoadingScreen";
 
 const Wallet = ({ navigation }: any) => {
-  const { isOpen, open, close, provider, isConnected, address } = useWeb3Modal();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useLayoutEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      setIsLoading(true);
+    });
+
+    return () => {
+      setIsLoading(false);
+      unsubscribe();
+    };
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
+
+  const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
 
   const { user } = useAuth();
 
-  return (
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <View className="h-full bg-[#E0E0E0]">
       <LinearGradient
         colors={["#9F87FF", "#3A13D6"]}

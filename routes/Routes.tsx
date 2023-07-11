@@ -62,7 +62,7 @@ const LoginStack = () => (
 const HomeStack = () => (
   <Drawer.Navigator
     initialRouteName="Recipes"
-    useLegacyImplementation
+    // useLegacyImplementation
     drawerContent={(props: any) => <Sidebar {...props} />}
     screenOptions={{
       headerShown: false,

@@ -1,11 +1,23 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, BackHandler } from "react-native";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
+import { useFocusEffect } from "@react-navigation/native";
 
 const HomeTopBar = ({ navigation }) => {
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
+
   const [coins1, setCoins1] = useState<Float>(0.0);
   const [coins2, setCoins2] = useState<Float>(0.0);
 

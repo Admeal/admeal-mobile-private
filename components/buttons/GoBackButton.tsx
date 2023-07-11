@@ -6,16 +6,23 @@ import { StackActions } from "@react-navigation/native";
 
 const GoBackButton = ({ navigation, color }: any) => {
   const press = () => {
-    if (navigation.getState().routes.find((route) => route.name === "Wallet")) {
-      navigation.navigate("Home");
-    } else if (
-      navigation.getState().routes.find((route) => route.name === "CheckStatus")
-    ) {
-      navigation.goBack();
-      // navigation.dispatch(StackActions.push("My Meals"));
-    } else {
-      navigation.goBack();
-    }
+    navigation.getState().routes.find((route: any) => {
+      switch (route.name) {
+        case "Wallet":
+          return navigation.navigate("Home");
+        case "RecipeDetails":
+          return navigation.navigate("Home");
+        case "CheckStatus":
+          return navigation.navigate("My Meals");
+        case "CameraUpload":
+          console.log("camera upload");
+          return navigation.navigate("CheckStatus");
+        case "ImageVerification":
+          return navigation.dispatch(StackActions.push("CameraUpload"));
+        default:
+          console.log("wtf is this screen", route.name);
+      }
+    });
   };
 
   return (

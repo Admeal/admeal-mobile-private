@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import { View, Text, Image, TouchableOpacity, BackHandler } from "react-native";
+import { useCallback, useLayoutEffect, useState } from "react";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import {
   dishImageState,
@@ -8,6 +8,8 @@ import {
   isReadyDishState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
+import { useFocusEffect } from "@react-navigation/native";
+import LoadingScreen from "./LoadingScreen";
 
 const ImageVerification = ({ navigation }) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -17,6 +19,30 @@ const ImageVerification = ({ navigation }) => {
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useLayoutEffect(() => {
+    const unsubscribe = navigation.addListener("beforeRemove", () => {
+      setIsLoading(true);
+    });
+
+    return () => {
+      setIsLoading(false);
+      unsubscribe();
+    };
+  }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
+
   const handleTakeAnotherShot = () => {
     ingredientsImage && setIngredientsImage("");
     dishImage && setDishImage("");
@@ -24,11 +50,13 @@ const ImageVerification = ({ navigation }) => {
     setIsReadyDish(false);
     navigation.reset({
       index: 0,
-      routes: [{ name: "CheckStatus" }]
+      routes: [{ name: "CameraUpload" }]
     });
   };
 
-  return (
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <View className="flex-1 flex-col items-center justify-between">
       <View className="pt-[80px]"></View>
       {!isIngredientsSumbitted && ingredientsImage !== "" ? (
