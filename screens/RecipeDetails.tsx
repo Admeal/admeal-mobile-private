@@ -21,8 +21,8 @@ import {
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import useAuth from "../hooks/useAuth";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+// import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+// import { db } from "../firebaseConfig";
 import LoadingScreen from "./LoadingScreen";
 
 const RecipeDetails = ({ navigation }: any) => {

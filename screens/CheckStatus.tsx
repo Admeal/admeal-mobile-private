@@ -2,8 +2,8 @@ import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { View, Text, TouchableOpacity, BackHandler, Image } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { db } from "../firebaseConfig";
-import { doc, onSnapshot } from "firebase/firestore";
+// import { db } from "../firebaseConfig";
+// import { doc, onSnapshot } from "firebase/firestore";
 import { useRecoilState } from "recoil";
 
 import {
@@ -66,16 +66,15 @@ const CheckStatus = ({ navigation }: any) => {
   );
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "my_meals", mealId), (snapshot) => {
-      console.log("snapshot", snapshot.data());
-      setMeal(snapshot.data());
-    });
-
-    return () => {
-      setMeal(null);
-      unsubscribe();
-      console.log("unsubscribed");
-    };
+    // const unsubscribe = onSnapshot(doc(db, "my_meals", mealId), (snapshot) => {
+    //   console.log("snapshot", snapshot.data());
+    //   setMeal(snapshot.data());
+    // });
+    // return () => {
+    //   setMeal(null);
+    //   unsubscribe();
+    //   console.log("unsubscribed");
+    // };
   }, [mealId]);
 
   useEffect(() => {
@@ -94,7 +93,7 @@ const CheckStatus = ({ navigation }: any) => {
       }
       setMealStatus(meal?.current_state);
     }
-  });
+  }, [meal]);
 
   useEffect(() => {
     setTextStatus(handleMealStatus());
