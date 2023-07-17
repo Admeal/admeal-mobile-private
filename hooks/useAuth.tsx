@@ -15,7 +15,7 @@ const config = {
   iosClientId: "830854626619-mtvvvmboi9jlcapq41kinrtuu8s5vuu9.apps.googleusercontent.com",
   expoClientId:
     "830854626619-khnen5os8dcjb7j1viq0t02djision2a.apps.googleusercontent.com",
-  webClientId: "830854626619-abahvf95ravv8fcovu4adtvs7pc4fr32.apps.googleusercontent.com",
+  webClientId: "830854626619-8tpal2893jtodq4daugsmm6rmsj3lrsb.apps.googleusercontent.com",
   scopes: ["profile", "email"],
   permissions: ["public_profile", "email", "gender", "location"]
 };

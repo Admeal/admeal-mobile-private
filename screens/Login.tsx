@@ -12,7 +12,7 @@ const Login = () => {
   const onGoogleButtonPress = async () => {
     GoogleSignin.configure({
       webClientId:
-        "830854626619-abahvf95ravv8fcovu4adtvs7pc4fr32.apps.googleusercontent.com"
+        "830854626619-8tpal2893jtodq4daugsmm6rmsj3lrsb.apps.googleusercontent.com"
     });
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
