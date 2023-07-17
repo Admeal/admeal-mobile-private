@@ -8,42 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:830854626619:android:f76cc848659ab4187f0b1e",
-        "android_client_info": {
-          "package_name": "com.flutterflow.homeU"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "830854626619-abahvf95ravv8fcovu4adtvs7pc4fr32.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB1fuHSgCF8WXpnz1b23Cvf66WsjEL5iFs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "830854626619-8tpal2893jtodq4daugsmm6rmsj3lrsb.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "830854626619-4npptv6og31a7to3inp8l5uuhnqf9gej.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.mycompany.adminpanel"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:830854626619:android:2a6df4dc4a819a7b7f0b1e",
         "android_client_info": {
           "package_name": "com.mycompany.adminpanel"
@@ -87,11 +51,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "830854626619-ngo8mmt726er8eb3kn8ql47tijf1h7ob.apps.googleusercontent.com",
+          "client_id": "830854626619-jnvmeuk23g17ls7ifn16aachglelo9np.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "host.exp.exponent",
-            "certificate_hash": "6ead49e174e4c1fcc4ee49fc33f3edc544b2587b"
+            "certificate_hash": "b0c96a1b38e8c284006187ff6798cfd67e76f26d"
           }
         },
         {
