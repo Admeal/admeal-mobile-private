@@ -7,8 +7,10 @@ import GoogleLogo from "../assets/icons/googleLogo";
 
 import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-
+import { useRecoilState } from "recoil";
+import { userState } from "../atoms/dataAtom";
 const Login = () => {
+  const [userItem, setUserItem] = useRecoilState(userState);
   const onGoogleButtonPress = async () => {
     GoogleSignin.configure({
       webClientId:
@@ -23,15 +25,16 @@ const Login = () => {
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
     // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
-    // const user_sign_in = auth().signInWithCredential(googleCredential);
-    // user_sign_in
-    //   .then((user) => {
-    //     console.log(user);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    // return auth().signInWithCredential(googleCredential);
+    const user_sign_in = auth().signInWithCredential(googleCredential);
+    user_sign_in
+      .then((user) => {
+        console.log(typeof user);
+        setUserItem(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // const { request, promptAsync, user }: any = useAuth();

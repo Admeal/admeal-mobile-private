@@ -21,16 +21,17 @@ import { useEffect } from "react";
 // import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 // import { db } from "../firebaseConfig";
 import { useRecoilState } from "recoil";
-import { myMealsListState, recipeListState } from "../atoms/dataAtom";
+import { myMealsListState, recipeListState, userState } from "../atoms/dataAtom";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const StackLogin = createStackNavigator();
 
 const RecipeStack = () => {
+  const [user, setUser] = useRecoilState(userState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   useEffect(() => {
     // const fetchRecipes = async () => {
@@ -154,8 +155,7 @@ const HomeStack = () => (
   </Drawer.Navigator>
 );
 const Routes = () => {
-  const { user } = useAuth();
-  console.log("user", user);
+  const [user, setUser] = useRecoilState(userState);
   return (
     <NavigationContainer>{user ? <HomeStack /> : <LoginStack />}</NavigationContainer>
   );
