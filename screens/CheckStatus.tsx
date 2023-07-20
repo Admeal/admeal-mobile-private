@@ -2,11 +2,11 @@ import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { View, Text, TouchableOpacity, BackHandler, Image } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
-import { db } from "../firebaseConfig";
-import { doc, onSnapshot } from "firebase/firestore";
+import firestore from "@react-native-firebase/firestore";
 import { useRecoilState } from "recoil";
 
 import {
+  userState,
   isIngredientsSumbittedState,
   isReadyDishState,
   ingredientsImageState,
@@ -27,6 +27,7 @@ import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import LoadingScreen from "./LoadingScreen";
 
 const CheckStatus = ({ navigation }: any) => {
+  const [user, setUser] = useRecoilState(userState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
@@ -66,10 +67,15 @@ const CheckStatus = ({ navigation }: any) => {
   );
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(doc(db, "my_meals", mealId), (snapshot) => {
-      console.log("snapshot", snapshot.data());
-      setMeal(snapshot.data());
-    });
+    const unsubscribe = firestore()
+      .collection("user_meals")
+      .doc(user?.user.uid)
+      .collection("meals")
+      .doc(mealId)
+      .onSnapshot((snapshot) => {
+        console.log("snapshot", snapshot.data());
+        setMeal(snapshot.data());
+      });
 
     return () => {
       setMeal(null);
@@ -94,7 +100,7 @@ const CheckStatus = ({ navigation }: any) => {
       }
       setMealStatus(meal?.current_state);
     }
-  });
+  }, [meal]);
 
   useEffect(() => {
     setTextStatus(handleMealStatus());
@@ -256,7 +262,7 @@ const CheckStatus = ({ navigation }: any) => {
                   Submitted
                 </Text>
               </View>
-              <View className="px-8 ">
+              <View className="px-8 pb-8">
                 <Text className="text-center font-[Poppins-600] text-sm text-[#6D6D6D]">
                   {textStatus}
                 </Text>

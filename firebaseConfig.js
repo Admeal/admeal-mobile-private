@@ -1,12 +1,12 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-import { getAuth } from 'firebase/auth';
-import { getDatabase } from "firebase/database";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp, getApps, getApp } from '@react-native-firebase/app';
+import { getFirestore } from '@react-native-firebase/firestore';
+import { getStorage } from '@react-native-firebase/storage';
+// import { getAuth } from '@react-native-firebase/auth';
+// import { getFirestore } from 'firebase/firestore';
+// import { getStorage } from 'firebase/storage';
+// import { getAuth } from 'firebase/auth';
+// import { getDatabase } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -23,10 +23,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-const auth = getAuth();
+// const auth = getAuth();
 
 const db = getFirestore(app);
 const storage = getStorage(app);
-const realtimeDB = getDatabase();
+// const realtimeDB = getDatabase();
 
-export { app, db, storage, auth, realtimeDB };
+export { app, db, storage };

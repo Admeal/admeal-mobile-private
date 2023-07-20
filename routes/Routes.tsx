@@ -18,55 +18,52 @@ import ImageVerification from "../screens/ImageVerification";
 import Login from "../screens/Login";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../firebaseConfig";
 import { useRecoilState } from "recoil";
-import { myMealsListState, recipeListState } from "../atoms/dataAtom";
+import { myMealsListState, recipeListState, userState } from "../atoms/dataAtom";
+import firestore from "@react-native-firebase/firestore";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const StackLogin = createStackNavigator();
 
 const RecipeStack = () => {
+  const [user, setUser] = useRecoilState(userState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
-  const { user } = useAuth();
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      const query = await getDocs(collection(db, "recipes"));
-      const array = query.docs.map((doc) => {
-        return doc.data();
+    const unsubscribe = firestore()
+      .collection("recipes")
+      // .where("enabled", "==", 'true')
+      .orderBy("createdAt", "desc")
+      .onSnapshot((querySnapshot) => {
+        const array = querySnapshot.docs.map((doc) => doc.data());
+        setRecipeList(array as []);
+        console.log("recipes sub");
       });
-      setRecipeList(array);
-      console.log("get recipes");
-    };
-    // const unsubscribe = onSnapshot(collection(db, "recipes"), (snapshot) => {
-    //   const array = snapshot.docs.map((doc) => {
-    //     return doc.data();
-    //   });
-    //   setRecipeList(array);
-    // });
-    fetchRecipes();
+
     return () => {
-      // unsubscribe();
+      unsubscribe();
       console.log("unsubscribed recipes");
     };
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      query(collection(db, "my_meals"), where("user_id", "==", user?.id)),
-      (snapshot) => {
-        console.log("sub meals");
-
-        const array = snapshot.docs.map((doc) => {
-          return doc.data();
+    const unsubscribe = firestore()
+      .collection(`user_meals`)
+      .doc(user?.user.uid)
+      .collection("meals")
+      // .orderBy("createdAt", "desc")
+      .onSnapshot((querySnapshot) => {
+        const array = querySnapshot.docs.map((doc) => doc.data());
+        console.log("array", array);
+        // make arrayr order created at desc
+        array.sort((a, b) => {
+          return b.createdAt - a.createdAt;
         });
+        setMyMealsList(array as []);
+      });
 
-        setMyMealsList(array);
-      }
-    );
     return () => {
       unsubscribe();
       console.log("unsubscribed meals");
@@ -155,8 +152,7 @@ const HomeStack = () => (
   </Drawer.Navigator>
 );
 const Routes = () => {
-  const { user } = useAuth();
-  console.log("user", user);
+  const [user, setUser] = useRecoilState(userState);
   return (
     <NavigationContainer>{user ? <HomeStack /> : <LoginStack />}</NavigationContainer>
   );

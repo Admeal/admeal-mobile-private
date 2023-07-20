@@ -7,8 +7,8 @@ import MyMealsCard from "./MyMealsCard";
 import { recipeListState, myMealsListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import { useEffect } from "react";
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+// import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+// import { db } from "../firebaseConfig";
 import useAuth from "../hooks/useAuth";
 
 type RecipeTabsProps = {

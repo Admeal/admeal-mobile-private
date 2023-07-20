@@ -18,7 +18,11 @@ import ArrowTopRight from "../assets/icons/arrowTopRight";
 import ArrowBottom from "../assets/icons/arrowBottom";
 import LoadingScreen from "./LoadingScreen";
 
+import { useRecoilState } from "recoil";
+import { userState } from "../atoms/dataAtom";
+
 const Wallet = ({ navigation }: any) => {
+  const [userItem, setUserItem] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {
@@ -45,7 +49,7 @@ const Wallet = ({ navigation }: any) => {
 
   const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
 
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   return isLoading ? (
     <LoadingScreen />
@@ -79,14 +83,14 @@ const Wallet = ({ navigation }: any) => {
           <Image
             className="rounded-full"
             style={{ width: 50, height: 50 }}
-            source={{ uri: user?.picture }}
+            source={{ uri: userItem.additionalUserInfo.profile.picture }}
           />
           <View className="h-[50px]">
             <Text className="font-[Poppins-600] text-base font-semibold text-white">
-              Hello, {user?.given_name}
+              Hello, {userItem.additionalUserInfo.profile.given_name}
             </Text>
             <Text className="pt-2 font-[Poppins-400] text-xs font-semibold text-white">
-              {user?.email}
+              {userItem.additionalUserInfo.profile.email}
             </Text>
           </View>
         </View>
