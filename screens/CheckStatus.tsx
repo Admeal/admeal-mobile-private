@@ -69,17 +69,14 @@ const CheckStatus = ({ navigation }: any) => {
   useEffect(() => {
     const unsubscribe = firestore()
       .collection("user_meals")
-      .doc(user.user.uid)
+      .doc(user?.user.uid)
       .collection("meals")
       .doc(mealId)
       .onSnapshot((snapshot) => {
         console.log("snapshot", snapshot.data());
         setMeal(snapshot.data());
       });
-    // const unsubscribe = onSnapshot(doc(db, "my_meals", mealId), (snapshot) => {
-    //   console.log("snapshot", snapshot.data());
-    //   setMeal(snapshot.data());
-    // });
+
     return () => {
       setMeal(null);
       unsubscribe();
@@ -265,7 +262,7 @@ const CheckStatus = ({ navigation }: any) => {
                   Submitted
                 </Text>
               </View>
-              <View className="px-8 ">
+              <View className="px-8 pb-8">
                 <Text className="text-center font-[Poppins-600] text-sm text-[#6D6D6D]">
                   {textStatus}
                 </Text>

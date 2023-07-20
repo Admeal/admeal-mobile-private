@@ -13,7 +13,6 @@ import {
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import { AntDesign } from "@expo/vector-icons";
-import useAuth from "../../hooks/useAuth";
 import getBlobFromUri from "../../hooks/getBlobFromUri";
 
 type RecipeStatusButtonProps = {
@@ -96,52 +95,45 @@ const RecipeStatusButton = ({
             });
           console.log("ingredients Image uploaded");
         });
-        //     if (docRef.exists()) {
-        //       console.log("Document data:", docRef.data());
-        //       const imageRef = ref(
-        //         storage,
-        //         `meals/${mealId}/${user?.id}/ingredientsImage.jpg`
-        //       );
-        //       console.log("upload 1id", mealId);
-        //       const imageBlob = await getBlobFromUri(ingredientsImage);
-        //       await uploadBytesResumable(imageRef, imageBlob).then(async () => {
-        //         console.log("upload 2id", mealId);
-        //         const downLoadUrl = await getDownloadURL(imageRef);
-        //         await updateDoc(doc(db, "my_meals", mealId), {
-        //           ingredients_photos: [downLoadUrl],
-        //           my_meals_id: mealId
-        //         });
-        //         console.log("ingredients Image uploaded");
-        //       });
+
         setIsIngredientsSumbitted(true);
         setIsLoading(false);
         navigation.navigate("CheckStatus");
-        //     }
       }
     }
     if (dishImage !== "" && ingredientsImage !== "" && isIngredientsSumbitted) {
-      //   setIsLoading(true);
-      //   const docRef = await getDoc(doc(db, "my_meals", mealId));
-      //   console.log("docRef", docRef);
-      //   if (docRef.exists()) {
-      //     console.log("Document data:", docRef.data());
-      //     const imageRef = ref(storage, `meals/${mealId}/${user?.id}/dishImage.jpg`);
-      //     console.log("upload 1id", mealId);
-      //     const imageBlob = await getBlobFromUri(dishImage);
-      //     await uploadBytesResumable(imageRef, imageBlob).then(async () => {
-      //       console.log("upload 2id", mealId);
-      //       const downLoadUrl = await getDownloadURL(imageRef);
-      //       await updateDoc(doc(db, "my_meals", mealId), {
-      //         dish_photos: [downLoadUrl],
-      //         my_meals_id: mealId,
-      //         current_state: "AWAITING_VALIDATION"
-      //       });
-      //       console.log("ingredients Image uploaded", downLoadUrl);
-      //     });
-      //     setIsReadyDish(true);
-      //     setIsLoading(false);
-      //     navigation.navigate("CheckStatus");
-      //   }
+      setIsLoading(true);
+      const docRef = await firestore()
+        .collection("user_meals")
+        .doc(user?.user.uid)
+        .collection("meals")
+        .doc(mealId)
+        .get();
+
+      docRef.exists && console.log("Document data:", docRef.data());
+      const imageRef = storage().ref(
+        `user_photos/${user?.user.uid}/meals/${mealId}/dishImage.jpg`
+      );
+      console.log("upload 1id", mealId);
+      const imageBlob = await getBlobFromUri(dishImage);
+      await imageRef.put(imageBlob).then(async () => {
+        console.log("upload 2id", mealId);
+        const downLoadUrl = await imageRef.getDownloadURL();
+        await firestore()
+          .collection("user_meals")
+          .doc(user?.user.uid)
+          .collection("meals")
+          .doc(mealId)
+          .update({
+            dish_photos: [downLoadUrl],
+            my_meals_id: mealId,
+            current_state: "AWAITING_VALIDATION"
+          });
+        console.log("ingredients Image uploaded", downLoadUrl);
+      });
+      setIsReadyDish(true);
+      setIsLoading(false);
+      navigation.navigate("CheckStatus");
     }
   };
 

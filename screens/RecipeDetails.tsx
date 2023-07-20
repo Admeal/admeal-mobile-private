@@ -90,6 +90,7 @@ const RecipeDetails = ({ navigation }: any) => {
             current_state: "INCOMPLETE",
             created_at: firestore.FieldValue.serverTimestamp()
           });
+
         await firestore()
           .collection(`user_meals`)
           .doc(user?.user.uid)
