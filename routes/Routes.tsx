@@ -17,12 +17,59 @@ import CameraUpload from "../screens/CameraUpload";
 import ImageVerification from "../screens/ImageVerification";
 import Login from "../screens/Login";
 import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { myMealsListState, recipeListState, userState } from "../atoms/dataAtom";
+import firestore from "@react-native-firebase/firestore";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const StackLogin = createStackNavigator();
 
 const RecipeStack = () => {
+  const [user, setUser] = useRecoilState(userState);
+  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
+  const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection("recipes")
+      // .where("enabled", "==", 'true')
+      .orderBy("createdAt", "desc")
+      .onSnapshot((querySnapshot) => {
+        const array = querySnapshot.docs.map((doc) => doc.data());
+        setRecipeList(array as []);
+        console.log("recipes sub");
+      });
+
+    return () => {
+      unsubscribe();
+      console.log("unsubscribed recipes");
+    };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection(`user_meals`)
+      .doc(user?.user.uid)
+      .collection("meals")
+      // .orderBy("createdAt", "desc")
+      .onSnapshot((querySnapshot) => {
+        const array = querySnapshot.docs.map((doc) => doc.data());
+        console.log("array", array);
+        // make arrayr order created at desc
+        array.sort((a, b) => {
+          return b.createdAt - a.createdAt;
+        });
+        setMyMealsList(array as []);
+      });
+
+    return () => {
+      unsubscribe();
+      console.log("unsubscribed meals");
+    };
+  }, []);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -105,8 +152,7 @@ const HomeStack = () => (
   </Drawer.Navigator>
 );
 const Routes = () => {
-  const { user } = useAuth();
-  console.log("user", user);
+  const [user, setUser] = useRecoilState(userState);
   return (
     <NavigationContainer>{user ? <HomeStack /> : <LoginStack />}</NavigationContainer>
   );

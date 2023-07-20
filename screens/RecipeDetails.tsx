@@ -12,6 +12,7 @@ import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
 import GoBackButton from "../components/buttons/GoBackButton";
 import {
+  userState,
   recipeItemState,
   isIngredientsSumbittedState,
   isReadyDishState,
@@ -20,12 +21,12 @@ import {
   mealIdState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
-import useAuth from "../hooks/useAuth";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import firestore from "@react-native-firebase/firestore";
+
 import LoadingScreen from "./LoadingScreen";
 
 const RecipeDetails = ({ navigation }: any) => {
+  const [user, setUser] = useRecoilState(userState);
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
@@ -49,12 +50,13 @@ const RecipeDetails = ({ navigation }: any) => {
     };
   }, [navigation]);
 
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   const handleCookButton = async () => {
     if (myMealsList) {
       const meal = myMealsList.find(
-        (meal) => meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.id
+        (meal) =>
+          meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.user.uid
       );
 
       if (meal) {
@@ -74,18 +76,29 @@ const RecipeDetails = ({ navigation }: any) => {
         setMealStatus(meal.current_state);
       } else {
         console.log("create new meal");
-        const docRef = await addDoc(collection(db, "my_meals"), {
-          user_id: user?.id,
-          tokens_earned: 0,
-          recipe_id: recipeItem.recipeId,
-          my_meals_id: myMealsList?.length,
-          ingredients_photos: [""],
-          dish_photos: [""],
-          current_state: "INCOMPLETE"
-        });
-        await updateDoc(doc(db, "my_meals", docRef.id), {
-          my_meals_id: docRef.id
-        });
+        const docRef = await firestore()
+          .collection(`user_meals`)
+          .doc(user?.user.uid)
+          .collection("meals")
+          .add({
+            user_id: user?.user.uid,
+            tokens_earned: 0,
+            recipe_id: recipeItem.recipeId,
+            my_meals_id: myMealsList?.length,
+            ingredients_photos: [""],
+            dish_photos: [""],
+            current_state: "INCOMPLETE",
+            created_at: firestore.FieldValue.serverTimestamp()
+          });
+
+        await firestore()
+          .collection(`user_meals`)
+          .doc(user?.user.uid)
+          .collection("meals")
+          .doc(docRef.id)
+          .update({
+            my_meals_id: docRef.id
+          });
 
         console.log("Document written with ID: ", docRef.id);
         setMealId(docRef.id);
@@ -120,6 +133,7 @@ const RecipeDetails = ({ navigation }: any) => {
           <View className="flex-row items-center space-x-2">
             <Text className="mt-1 font-[Poppins-400] text-xs">Total:</Text>
             <Text className="font-[Poppins-700] text-2xl">{recipeItem.price}</Text>
+            {/* this needs to change to svg */}
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
