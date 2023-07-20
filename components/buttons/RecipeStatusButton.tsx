@@ -1,11 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
-// import { storage, realtimeDB, db } from "../../firebaseConfig";
-// import { ref, getDownloadURL, uploadBytesResumable } from "@firebase/storage";
-// import { doc, updateDoc, getDoc } from "@firebase/firestore";
-import { AntDesign } from "@expo/vector-icons";
 import {
+  userState,
   isIngredientsSumbittedState,
   isReadyDishState,
   ingredientsImageState,
@@ -13,6 +10,9 @@ import {
   mealIdState,
   mealStatusState
 } from "../../atoms/dataAtom";
+import firestore from "@react-native-firebase/firestore";
+import storage from "@react-native-firebase/storage";
+import { AntDesign } from "@expo/vector-icons";
 import useAuth from "../../hooks/useAuth";
 import getBlobFromUri from "../../hooks/getBlobFromUri";
 
@@ -27,6 +27,7 @@ const RecipeStatusButton = ({
   disabled,
   label = "TAKE A PHOTO"
 }: RecipeStatusButtonProps) => {
+  const [user, setUser] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useState(false);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
@@ -37,84 +38,111 @@ const RecipeStatusButton = ({
   const [mealId, setMealId] = useRecoilState(mealIdState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
 
-  const { user } = useAuth();
-
   useEffect(() => {}, []);
 
   const handleUpload = async () => {
-    // disabled ? null : console.log(label);
-    // if (!disabled) {
-    //   console.log("upload id", mealId, typeof mealId);
-    //   if (mealStatus === "COMPLETE" && ingredientsImage !== "" && dishImage !== "") {
-    //     navigation.reset({
-    //       index: 0,
-    //       routes: [{ name: "Home" }]
-    //     });
-    //     return;
-    //   }
-    //   if (ingredientsImage === "" && !isIngredientsSumbitted) {
-    //     navigation.reset({
-    //       index: 0,
-    //       routes: [{ name: "CameraUpload" }]
-    //     });
-    //   }
-    //   if (ingredientsImage !== "" && isIngredientsSumbitted && dishImage === "") {
-    //     navigation.reset({
-    //       index: 0,
-    //       routes: [{ name: "CameraUpload" }]
-    //     });
-    //   }
-    //   if (ingredientsImage !== "" && !isIngredientsSumbitted && mealId) {
-    //     setIsLoading(true);
-    //     const docRef = await getDoc(doc(db, "my_meals", mealId));
-    //     console.log("docRef", docRef);
-    //     if (docRef.exists()) {
-    //       console.log("Document data:", docRef.data());
-    //       const imageRef = ref(
-    //         storage,
-    //         `meals/${mealId}/${user?.id}/ingredientsImage.jpg`
-    //       );
-    //       console.log("upload 1id", mealId);
-    //       const imageBlob = await getBlobFromUri(ingredientsImage);
-    //       await uploadBytesResumable(imageRef, imageBlob).then(async () => {
-    //         console.log("upload 2id", mealId);
-    //         const downLoadUrl = await getDownloadURL(imageRef);
-    //         await updateDoc(doc(db, "my_meals", mealId), {
-    //           ingredients_photos: [downLoadUrl],
-    //           my_meals_id: mealId
-    //         });
-    //         console.log("ingredients Image uploaded");
-    //       });
-    //       setIsIngredientsSumbitted(true);
-    //       setIsLoading(false);
-    //       navigation.navigate("CheckStatus");
-    //     }
-    //   }
-    // }
-    // if (dishImage !== "" && ingredientsImage !== "" && isIngredientsSumbitted) {
-    //   setIsLoading(true);
-    //   const docRef = await getDoc(doc(db, "my_meals", mealId));
-    //   console.log("docRef", docRef);
-    //   if (docRef.exists()) {
-    //     console.log("Document data:", docRef.data());
-    //     const imageRef = ref(storage, `meals/${mealId}/${user?.id}/dishImage.jpg`);
-    //     console.log("upload 1id", mealId);
-    //     const imageBlob = await getBlobFromUri(dishImage);
-    //     await uploadBytesResumable(imageRef, imageBlob).then(async () => {
-    //       console.log("upload 2id", mealId);
-    //       const downLoadUrl = await getDownloadURL(imageRef);
-    //       await updateDoc(doc(db, "my_meals", mealId), {
-    //         dish_photos: [downLoadUrl],
-    //         my_meals_id: mealId,
-    //         current_state: "AWAITING_VALIDATION"
-    //       });
-    //       console.log("ingredients Image uploaded", downLoadUrl);
-    //     });
-    //     setIsReadyDish(true);
-    //     setIsLoading(false);
-    //     navigation.navigate("CheckStatus");
-    //   }
-    // }
+    disabled ? null : console.log(label);
+    if (!disabled) {
+      console.log("upload id", mealId, typeof mealId);
+
+      if (mealStatus === "COMPLETE" && ingredientsImage !== "" && dishImage !== "") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Home" }]
+        });
+        return;
+      }
+
+      if (ingredientsImage === "" && !isIngredientsSumbitted) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "CameraUpload" }]
+        });
+      }
+
+      if (ingredientsImage !== "" && isIngredientsSumbitted && dishImage === "") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "CameraUpload" }]
+        });
+      }
+
+      if (ingredientsImage !== "" && !isIngredientsSumbitted && mealId) {
+        setIsLoading(true);
+        const docRef = await firestore()
+          .collection("user_meals")
+          .doc(user?.user.uid)
+          .collection("meals")
+          .doc(mealId)
+          .get();
+
+        docRef.exists && console.log("Document data:", docRef.data());
+        const imageRef = storage().ref(
+          `user_photos/${user?.user.uid}/meals/${mealId}/ingredientsImage.jpg`
+        );
+        console.log("upload 1id", mealId);
+        const imageBlob = await getBlobFromUri(ingredientsImage);
+        await imageRef.put(imageBlob).then(async () => {
+          console.log("upload 2id", mealId);
+          const downLoadUrl = await imageRef.getDownloadURL();
+          await firestore()
+            .collection("user_meals")
+            .doc(user?.user.uid)
+            .collection("meals")
+            .doc(mealId)
+            .update({
+              ingredients_photos: [downLoadUrl],
+              my_meals_id: mealId
+            });
+          console.log("ingredients Image uploaded");
+        });
+        //     if (docRef.exists()) {
+        //       console.log("Document data:", docRef.data());
+        //       const imageRef = ref(
+        //         storage,
+        //         `meals/${mealId}/${user?.id}/ingredientsImage.jpg`
+        //       );
+        //       console.log("upload 1id", mealId);
+        //       const imageBlob = await getBlobFromUri(ingredientsImage);
+        //       await uploadBytesResumable(imageRef, imageBlob).then(async () => {
+        //         console.log("upload 2id", mealId);
+        //         const downLoadUrl = await getDownloadURL(imageRef);
+        //         await updateDoc(doc(db, "my_meals", mealId), {
+        //           ingredients_photos: [downLoadUrl],
+        //           my_meals_id: mealId
+        //         });
+        //         console.log("ingredients Image uploaded");
+        //       });
+        setIsIngredientsSumbitted(true);
+        setIsLoading(false);
+        navigation.navigate("CheckStatus");
+        //     }
+      }
+    }
+    if (dishImage !== "" && ingredientsImage !== "" && isIngredientsSumbitted) {
+      //   setIsLoading(true);
+      //   const docRef = await getDoc(doc(db, "my_meals", mealId));
+      //   console.log("docRef", docRef);
+      //   if (docRef.exists()) {
+      //     console.log("Document data:", docRef.data());
+      //     const imageRef = ref(storage, `meals/${mealId}/${user?.id}/dishImage.jpg`);
+      //     console.log("upload 1id", mealId);
+      //     const imageBlob = await getBlobFromUri(dishImage);
+      //     await uploadBytesResumable(imageRef, imageBlob).then(async () => {
+      //       console.log("upload 2id", mealId);
+      //       const downLoadUrl = await getDownloadURL(imageRef);
+      //       await updateDoc(doc(db, "my_meals", mealId), {
+      //         dish_photos: [downLoadUrl],
+      //         my_meals_id: mealId,
+      //         current_state: "AWAITING_VALIDATION"
+      //       });
+      //       console.log("ingredients Image uploaded", downLoadUrl);
+      //     });
+      //     setIsReadyDish(true);
+      //     setIsLoading(false);
+      //     navigation.navigate("CheckStatus");
+      //   }
+    }
   };
 
   return (

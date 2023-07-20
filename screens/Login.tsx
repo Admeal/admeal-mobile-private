@@ -9,8 +9,10 @@ import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/dataAtom";
+
 const Login = () => {
   const [userItem, setUserItem] = useRecoilState(userState);
+
   const onGoogleButtonPress = async () => {
     GoogleSignin.configure({
       webClientId:
@@ -25,7 +27,6 @@ const Login = () => {
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
     // Sign-in the user with the credential
-    // return auth().signInWithCredential(googleCredential);
     const user_sign_in = auth().signInWithCredential(googleCredential);
     user_sign_in
       .then((user) => {
@@ -37,13 +38,12 @@ const Login = () => {
       });
   };
 
-  // const { request, promptAsync, user }: any = useAuth();
   return (
     <View className="h-screen items-center space-y-4 bg-white">
       <AdmealLogoBig className="my-28" />
       <TouchableOpacity
         onPress={() =>
-          onGoogleButtonPress().then(() => console.log("Signed in with Google!"))
+          onGoogleButtonPress().then(() => console.log("Await google auth!"))
         }
         // disabled={!request}
         className="h-[44px] w-[300px] flex-row items-center justify-between rounded-full border border-[#DBE2E9] px-5">

@@ -18,10 +18,9 @@ import ImageVerification from "../screens/ImageVerification";
 import Login from "../screens/Login";
 import useAuth from "../hooks/useAuth";
 import { useEffect } from "react";
-// import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
-// import { db } from "../firebaseConfig";
 import { useRecoilState } from "recoil";
 import { myMealsListState, recipeListState, userState } from "../atoms/dataAtom";
+import firestore from "@react-native-firebase/firestore";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -31,46 +30,44 @@ const RecipeStack = () => {
   const [user, setUser] = useRecoilState(userState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
-  // const { user } = useAuth();
 
   useEffect(() => {
-    // const fetchRecipes = async () => {
-    //   const query = await getDocs(collection(db, "recipes"));
-    //   const array = query.docs.map((doc) => {
-    //     return doc.data();
-    //   });
-    //   setRecipeList(array);
-    //   console.log("get recipes");
-    // };
-    // // const unsubscribe = onSnapshot(collection(db, "recipes"), (snapshot) => {
-    // //   const array = snapshot.docs.map((doc) => {
-    // //     return doc.data();
-    // //   });
-    // //   setRecipeList(array);
-    // // });
-    // fetchRecipes();
-    // return () => {
-    //   // unsubscribe();
-    //   console.log("unsubscribed recipes");
-    // };
+    const unsubscribe = firestore()
+      .collection("recipes")
+      // .where("enabled", "==", 'true')
+      .orderBy("createdAt", "desc")
+      .onSnapshot((querySnapshot) => {
+        const array = querySnapshot.docs.map((doc) => doc.data());
+        setRecipeList(array as []);
+        console.log("recipes sub");
+      });
+
+    return () => {
+      unsubscribe();
+      console.log("unsubscribed recipes");
+    };
   }, []);
 
   useEffect(() => {
-    // // refactor to the new db structure where my meals is a collection with the user id as the doc id and the meals of each user are the docs
-    // const unsubscribe = onSnapshot(
-    //   query(collection(db, "my_meals"), where("user_id", "==", user?.id)),
-    //   (snapshot) => {
-    //     console.log("sub meals");
-    //     const array = snapshot.docs.map((doc) => {
-    //       return doc.data();
-    //     });
-    //     setMyMealsList(array);
-    //   }
-    // );
-    // return () => {
-    //   unsubscribe();
-    //   console.log("unsubscribed meals");
-    // };
+    const unsubscribe = firestore()
+      .collection(`user_meals`)
+      .doc(user?.user.uid)
+      .collection("meals")
+      // .orderBy("createdAt", "desc")
+      .onSnapshot((querySnapshot) => {
+        const array = querySnapshot.docs.map((doc) => doc.data());
+        console.log("array", array);
+        // make arrayr order created at desc
+        array.sort((a, b) => {
+          return b.createdAt - a.createdAt;
+        });
+        setMyMealsList(array as []);
+      });
+
+    return () => {
+      unsubscribe();
+      console.log("unsubscribed meals");
+    };
   }, []);
 
   return (
