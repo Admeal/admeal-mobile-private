@@ -50,7 +50,7 @@ const RecipeStack = () => {
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection(`user_meals`)
+      .collection(`user_data`)
       .doc(user?.user.uid)
       .collection("meals")
       // .orderBy("createdAt", "desc")

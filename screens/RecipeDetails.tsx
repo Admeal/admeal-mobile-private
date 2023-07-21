@@ -77,7 +77,7 @@ const RecipeDetails = ({ navigation }: any) => {
       } else {
         console.log("create new meal");
         const docRef = await firestore()
-          .collection(`user_meals`)
+          .collection(`user_data`)
           .doc(user?.user.uid)
           .collection("meals")
           .add({
@@ -92,7 +92,7 @@ const RecipeDetails = ({ navigation }: any) => {
           });
 
         await firestore()
-          .collection(`user_meals`)
+          .collection(`user_data`)
           .doc(user?.user.uid)
           .collection("meals")
           .doc(docRef.id)
