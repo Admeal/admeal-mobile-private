@@ -5,6 +5,14 @@ export const userState = atom({
   default: null,
 });
 
+export const userCreditsState = atom({
+  key: 'userCreditsState',
+  default: {
+    admealCoins: 0,
+    dishCoins: 0,
+  },
+});
+
 export const userListState = atom({
   key: 'userListState',
   default: [],

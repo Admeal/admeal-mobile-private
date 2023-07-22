@@ -1,26 +1,30 @@
+import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import Home from "../screens/Home";
 import Sidebar from "../screens/Sidebar";
-
 import Wallet from "../screens/Wallet";
 import Meals from "../screens/Meals";
-
-import WalletIcon from "../assets/icons/walletIcon";
-import RecipeIcon from "../assets/icons/recipeIcon";
-import MealsIcon from "../assets/icons/mealsIcon";
 import RecipeDetails from "../screens/RecipeDetails";
 import CheckStatus from "../screens/CheckStatus";
 import CameraUpload from "../screens/CameraUpload";
 import ImageVerification from "../screens/ImageVerification";
 import Login from "../screens/Login";
-import useAuth from "../hooks/useAuth";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { myMealsListState, recipeListState, userState } from "../atoms/dataAtom";
+
+import WalletIcon from "../assets/icons/walletIcon";
+import RecipeIcon from "../assets/icons/recipeIcon";
+import MealsIcon from "../assets/icons/mealsIcon";
+
 import firestore from "@react-native-firebase/firestore";
+import { useRecoilState } from "recoil";
+import {
+  myMealsListState,
+  recipeListState,
+  userState,
+  userCreditsState
+} from "../atoms/dataAtom";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -28,14 +32,15 @@ const StackLogin = createStackNavigator();
 
 const RecipeStack = () => {
   const [user, setUser] = useRecoilState(userState);
+  const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
 
   useEffect(() => {
     const unsubscribe = firestore()
       .collection("recipes")
-      // .where("enabled", "==", 'true')
-      .orderBy("createdAt", "desc")
+      // .where("enabled", "==", true)
+      .orderBy("created_at", "desc")
       .onSnapshot((querySnapshot) => {
         const array = querySnapshot.docs.map((doc) => doc.data());
         setRecipeList(array as []);
@@ -53,20 +58,38 @@ const RecipeStack = () => {
       .collection(`user_data`)
       .doc(user?.user.uid)
       .collection("meals")
-      // .orderBy("createdAt", "desc")
+      .orderBy("created_at", "desc")
       .onSnapshot((querySnapshot) => {
         const array = querySnapshot.docs.map((doc) => doc.data());
-        console.log("array", array);
-        // make arrayr order created at desc
-        array.sort((a, b) => {
-          return b.createdAt - a.createdAt;
-        });
         setMyMealsList(array as []);
+        console.log("meals sub");
       });
 
     return () => {
       unsubscribe();
       console.log("unsubscribed meals");
+    };
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection(`user_data`)
+      .doc(user?.user.uid)
+      .collection("user_info")
+      .doc("credits")
+      .onSnapshot((doc) => {
+        const data = doc.data();
+        console.log("credits sub");
+        setUserCredits({
+          admealCoins: data?.admeal_token,
+          dishCoins: data?.dish_token
+        });
+      });
+    // console.log("aaaa", userCredits);
+
+    return () => {
+      unsubscribe();
+      console.log("unsubscribed credits");
     };
   }, []);
 

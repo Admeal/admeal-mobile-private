@@ -3,14 +3,14 @@ import PriceTag from "./PriceTag";
 
 function NFTcard({
   nft_name = "test",
-  recipe_images = ["a"],
+  recipe_images = ["https://picsum.photos/200/300"],
   token_reward = 40,
   description = "lorem ipsum"
 }) {
   const handleItemPress = () => {};
 
   return (
-    <TouchableOpacity className="mr-2 shadow-2xl rounded-2xl" onPress={handleItemPress}>
+    <TouchableOpacity className="mr-2 rounded-2xl shadow-2xl" onPress={handleItemPress}>
       <ImageBackground
         style={[
           {

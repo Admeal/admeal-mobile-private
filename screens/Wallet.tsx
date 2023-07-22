@@ -3,8 +3,6 @@ import { useLayoutEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import useAuth from "../hooks/useAuth";
-
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 
 import GoBackButton from "../components/buttons/GoBackButton";
@@ -19,10 +17,13 @@ import ArrowBottom from "../assets/icons/arrowBottom";
 import LoadingScreen from "./LoadingScreen";
 
 import { useRecoilState } from "recoil";
-import { userState } from "../atoms/dataAtom";
+import { userCreditsState, userState } from "../atoms/dataAtom";
 
 const Wallet = ({ navigation }: any) => {
   const [userItem, setUserItem] = useRecoilState(userState);
+  const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
+  const [dishCoins, setDishCoins] = useState(userCredits.dishCoins);
+  const [admealCoins, setAdmealCoins] = useState(userCredits.admealCoins);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {
@@ -49,8 +50,7 @@ const Wallet = ({ navigation }: any) => {
 
   const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
 
-  // const { user } = useAuth();
-
+  console.log(provider);
   return isLoading ? (
     <LoadingScreen />
   ) : (
@@ -83,14 +83,14 @@ const Wallet = ({ navigation }: any) => {
           <Image
             className="rounded-full"
             style={{ width: 50, height: 50 }}
-            source={{ uri: userItem.additionalUserInfo.profile.picture }}
+            source={{ uri: userItem?.additionalUserInfo.profile.picture }}
           />
           <View className="h-[50px]">
             <Text className="font-[Poppins-600] text-base font-semibold text-white">
-              Hello, {userItem.additionalUserInfo.profile.given_name}
+              Hello, {userItem?.additionalUserInfo.profile.given_name}
             </Text>
             <Text className="pt-2 font-[Poppins-400] text-xs font-semibold text-white">
-              {userItem.additionalUserInfo.profile.email}
+              {userItem?.additionalUserInfo.profile.email}
             </Text>
           </View>
         </View>
@@ -108,7 +108,7 @@ const Wallet = ({ navigation }: any) => {
             <DishCoinLogo size={20} scale={0.85} />
             <View className="flex-row items-baseline ">
               <Text className="font-[Poppins-700] text-[32px] font-semibold leading-[48px] text-white">
-                {isConnected ? "115" : "0"}
+                {isConnected ? dishCoins : "0"}
               </Text>
               <Text className="font-[Poppins-700] text-xl font-semibold text-white">
                 .00
@@ -144,7 +144,7 @@ const Wallet = ({ navigation }: any) => {
               DISH
             </Text>
             <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
-              115.00
+              {dishCoins}.00
             </Text>
           </View>
           <View className="mt-2 h-[56px] flex-row items-center justify-between rounded-xl bg-white px-4">
@@ -153,7 +153,7 @@ const Wallet = ({ navigation }: any) => {
               ADM
             </Text>
             <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
-              0.00
+              {admealCoins}.00
             </Text>
           </View>
         </View>
