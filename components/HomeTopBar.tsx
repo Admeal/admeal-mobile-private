@@ -1,12 +1,24 @@
 import { View, Text, TouchableOpacity, Image, BackHandler } from "react-native";
+import { useState, useCallback, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
-import { useState, useCallback } from "react";
+import { useRecoilState } from "recoil";
+import { userCreditsState } from "../atoms/dataAtom";
+
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
-import { useFocusEffect } from "@react-navigation/native";
 
-const HomeTopBar = ({ navigation }) => {
+const HomeTopBar = ({ navigation }: any) => {
+  const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
+  const [dishCoins, setDishCoins] = useState(Number);
+  const [admealCoins, setAdmealCoins] = useState(Number);
+
+  useEffect(() => {
+    setAdmealCoins(userCredits.admealCoins);
+    setDishCoins(userCredits.dishCoins);
+  }, [userCredits]);
+
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
@@ -18,22 +30,20 @@ const HomeTopBar = ({ navigation }) => {
     }, [])
   );
 
-  const [coins1, setCoins1] = useState<Float>(0.0);
-  const [coins2, setCoins2] = useState<Float>(0.0);
-
   return (
     <View className="z-1 w-full flex-row items-center justify-between bg-white px-5 pb-6 pt-[33px]">
       <TouchableOpacity onPress={() => navigation.openDrawer()} className="">
+        {/* image to change to svg */}
         <Image source={require("../assets/png/sidemenu.png")} />
       </TouchableOpacity>
       <View className="flex-row space-x-6">
         <TouchableOpacity className="flex-row items-center space-x-2">
           <DishCoinLogo size={16} scale={0.7} />
-          <Text>{coins1}.00</Text>
+          <Text>{dishCoins}.00</Text>
         </TouchableOpacity>
         <TouchableOpacity className="flex-row items-center space-x-2">
           <AdmealCoinLogo size={16} scale={0.7} />
-          <Text>{coins2}.00</Text>
+          <Text>{admealCoins}.00</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -68,7 +68,7 @@ const CheckStatus = ({ navigation }: any) => {
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection("user_meals")
+      .collection("user_data")
       .doc(user?.user.uid)
       .collection("meals")
       .doc(mealId)

@@ -69,7 +69,7 @@ const RecipeStatusButton = ({
       if (ingredientsImage !== "" && !isIngredientsSumbitted && mealId) {
         setIsLoading(true);
         const docRef = await firestore()
-          .collection("user_meals")
+          .collection("user_data")
           .doc(user?.user.uid)
           .collection("meals")
           .doc(mealId)
@@ -85,7 +85,7 @@ const RecipeStatusButton = ({
           console.log("upload 2id", mealId);
           const downLoadUrl = await imageRef.getDownloadURL();
           await firestore()
-            .collection("user_meals")
+            .collection("user_data")
             .doc(user?.user.uid)
             .collection("meals")
             .doc(mealId)
@@ -104,7 +104,7 @@ const RecipeStatusButton = ({
     if (dishImage !== "" && ingredientsImage !== "" && isIngredientsSumbitted) {
       setIsLoading(true);
       const docRef = await firestore()
-        .collection("user_meals")
+        .collection("user_data")
         .doc(user?.user.uid)
         .collection("meals")
         .doc(mealId)
@@ -120,7 +120,7 @@ const RecipeStatusButton = ({
         console.log("upload 2id", mealId);
         const downLoadUrl = await imageRef.getDownloadURL();
         await firestore()
-          .collection("user_meals")
+          .collection("user_data")
           .doc(user?.user.uid)
           .collection("meals")
           .doc(mealId)
