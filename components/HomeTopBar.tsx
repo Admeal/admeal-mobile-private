@@ -8,7 +8,7 @@ import { userCreditsState } from "../atoms/dataAtom";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 
-const HomeTopBar = ({ navigation }: any) => {
+const HomeTopBar = ({ navigation }: GroupMealProps) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [dishCoins, setDishCoins] = useState(Number);
   const [admealCoins, setAdmealCoins] = useState(Number);

@@ -5,7 +5,7 @@ import RecipesBar from "../components/RecipesBar";
 import RecipeTabs from "../components/RecipeTabs";
 import LoadingScreen from "./LoadingScreen";
 
-export default function Home({ navigation }: any) {
+export default function Home({ navigation }: GroupMealProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {

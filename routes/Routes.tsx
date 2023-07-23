@@ -26,15 +26,27 @@ import {
   userCreditsState
 } from "../atoms/dataAtom";
 
+type RootStackParamList = {
+  Home: undefined;
+  "My Meals": undefined;
+  Wallet: undefined;
+  Meals: undefined;
+  RecipeDetails: undefined;
+  CheckStatus: undefined;
+  CameraUpload: undefined;
+  ImageVerification: undefined;
+  Login: undefined;
+};
+
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
-const StackLogin = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
+const StackLogin = createStackNavigator<RootStackParamList>();
 
 const RecipeStack = () => {
   const [user, setUser] = useRecoilState(userState);
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
 
   useEffect(() => {
     const unsubscribe = firestore()

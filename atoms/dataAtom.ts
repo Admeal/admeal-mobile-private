@@ -15,12 +15,12 @@ export const userCreditsState = atom<CreditsProps>({
 
 export const userListState = atom({
   key: "userListState",
-  default: []
+  default: [] as UserProps[]
 });
 
 export const recipeListState = atom({
   key: "recipeListState",
-  default: []
+  default: [] as RecipeProps[]
 });
 
 export const mealIdState = atom({
@@ -30,7 +30,7 @@ export const mealIdState = atom({
 
 export const myMealsListState = atom({
   key: "myMealsListState",
-  default: []
+  default: [] as MealProps[]
 });
 
 export const mealStatusState = atom({

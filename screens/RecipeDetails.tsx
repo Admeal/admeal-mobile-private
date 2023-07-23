@@ -25,7 +25,7 @@ import firestore from "@react-native-firebase/firestore";
 
 import LoadingScreen from "./LoadingScreen";
 
-const RecipeDetails = ({ navigation }: any) => {
+const RecipeDetails = ({ navigation }: GroupMealProps) => {
   const [userItem, setUserItem] = useRecoilState(userState);
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -38,6 +38,7 @@ const RecipeDetails = ({ navigation }: any) => {
 
   const [toggle, setToggle] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [mealItem, setMealItem] = useState<MealProps | undefined>(undefined);
 
   useLayoutEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
@@ -50,33 +51,30 @@ const RecipeDetails = ({ navigation }: any) => {
     };
   }, [navigation]);
 
-  // const { user }: UserProps = userItem;
-
   const handleCookButton = async () => {
     if (myMealsList) {
-      const meal = myMealsList.find(
-        (meal: MealProps) =>
-          meal.recipe_id === recipeItem.recipe_id && meal.user_id === userItem?.user.uid
+      setMealItem(
+        myMealsList.find(
+          (meal: MealProps) =>
+            meal.recipe_id === recipeItem.recipe_id && meal.user_id === userItem?.user.uid
+        )
       );
 
-      const { my_meals_id, dish_photos, ingredients_photos, current_state }: MealProps =
-        meal;
+      if (mealItem) {
+        setMealId(mealItem.my_meals_id);
 
-      if (meal) {
-        setMealId(my_meals_id);
-
-        console.log("meal found", my_meals_id);
-        if (dish_photos[0] === "") {
+        console.log("meal found", mealItem.my_meals_id);
+        if (mealItem.dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
           setIsReadyDish(true);
         }
-        if (ingredients_photos[0] === "") {
+        if (mealItem.ingredients_photos[0] === "") {
           setIsIngredientsSumbitted(false);
         } else {
           setIsIngredientsSumbitted(true);
         }
-        setMealStatus(current_state);
+        setMealStatus(mealItem.current_state);
       } else {
         console.log("create new meal");
         const docRef = await firestore()

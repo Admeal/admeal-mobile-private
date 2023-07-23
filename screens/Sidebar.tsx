@@ -34,8 +34,6 @@ const Sidebar = (props: any) => {
     );
   };
 
-  // const { additionalUserInfo }: ProfileUserInfoProps = userItem;
-
   return (
     <View className="relative h-full flex-col justify-between">
       <DrawerContentScrollView className="relative h-full" {...props}>

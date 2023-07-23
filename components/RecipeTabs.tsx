@@ -8,7 +8,7 @@ import { recipeListState, myMealsListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 
 type RecipeTabsProps = {
-  navigation: any;
+  navigation: NavigationNavigateProp;
   routeName: string;
 };
 

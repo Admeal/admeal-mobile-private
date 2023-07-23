@@ -30,8 +30,8 @@ const Login = () => {
     const user_sign_in = auth().signInWithCredential(googleCredential);
     user_sign_in
       .then((user) => {
-        console.log(typeof user);
-        setUserItem(user);
+        console.log(user);
+        setUserItem(user as any);
       })
       .catch((error) => {
         console.log(error);

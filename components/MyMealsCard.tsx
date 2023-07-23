@@ -26,7 +26,7 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
   const [mealId, setMealId] = useRecoilState(mealIdState);
 
   const handleStatusButtonUI = () => {
-    switch (meal.current_state) {
+    switch (meal?.current_state) {
       case "Finished":
       case "COMPLETE":
       case "COMPLETED":
@@ -45,7 +45,7 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
   };
 
   const handleStatusText = () => {
-    switch (meal.current_state) {
+    switch (meal?.current_state) {
       case "Finished":
       case "COMPLETE":
       case "COMPLETED":
@@ -67,30 +67,30 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
 
   const getRecipeName = () => {
     const recipe = recipeList.find(
-      (recipe: RecipeProps) => recipe.recipe_id === meal.recipe_id
+      (recipe: RecipeProps) => recipe.recipe_id === meal?.recipe_id
     );
     return recipe?.recipe_name;
   };
 
   const getRecipeImage = () => {
     const recipe = recipeList.find(
-      (recipe: RecipeProps) => recipe.recipe_id === meal.recipe_id
+      (recipe: RecipeProps) => recipe.recipe_id === meal?.recipe_id
     );
     return recipe?.recipe_images[0];
   };
 
   const handleItemPress = () => {
-    setMealId(meal?.my_meals_id);
+    setMealId(meal?.my_meals_id as string);
     setIsIngredientsSumbitted(false);
     setIngredientsImage("");
     setIsReadyDish(false);
     setDishImage("");
     setTimeout(() => {
       if (meal !== undefined || meal !== null) {
-        setMealId(meal?.my_meals_id);
-        console.log("meal found222", meal.my_meals_id, mealId);
-        setMealId(meal?.my_meals_id);
-        console.log("meal found333", meal.my_meals_id, mealId);
+        setMealId(meal?.my_meals_id as string);
+        console.log("meal found222", meal?.my_meals_id, mealId);
+        setMealId(meal?.my_meals_id as string);
+        console.log("meal found333", meal?.my_meals_id, mealId);
 
         if (meal?.dish_photos[0] === "") {
           setIsReadyDish(false);
@@ -102,7 +102,7 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
         } else {
           setIsIngredientsSumbitted(true);
         }
-        setMealStatus(meal.current_state);
+        setMealStatus(meal?.current_state as string);
       }
     }, 50);
     // }
@@ -162,7 +162,7 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
           <Text className="font-[Poppins-400] text-sm text-[#637381]">Earned:</Text>
           <View className="flex-row items-center space-x-4">
             <View className="flex-row items-center space-x-2">
-              <Text className="font-[Poppins-700] text-lg">{meal.tokens_earned}</Text>
+              <Text className="font-[Poppins-700] text-lg">{meal?.tokens_earned}</Text>
               <View>
                 <DishCoinLogo size={16} scale={0.7} />
               </View>

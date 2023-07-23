@@ -11,7 +11,7 @@ import { useRecoilState } from "recoil";
 import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 
-const ImageVerification = ({ navigation }) => {
+const ImageVerification = ({ navigation } :GroupMealProps) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );

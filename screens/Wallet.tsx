@@ -30,7 +30,7 @@ import { userCreditsState, userState } from "../atoms/dataAtom";
 import GearIcon from "../assets/icons/gearIcon";
 import FileIcon from "../assets/icons/fileIcon";
 
-const Wallet = ({ navigation }: any) => {
+const Wallet = ({ navigation }: GroupMealProps) => {
   const [userItem, setUserItem] = useRecoilState(userState);
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [dishCoins, setDishCoins] = useState(userCredits.dish_token);

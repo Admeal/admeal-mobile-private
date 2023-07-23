@@ -26,7 +26,7 @@ import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import LoadingScreen from "./LoadingScreen";
 
-const CheckStatus = ({ navigation }: any) => {
+const CheckStatus = ({ navigation }: GroupMealProps) => {
   const [user, setUser] = useRecoilState(userState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState

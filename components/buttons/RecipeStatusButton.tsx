@@ -16,7 +16,7 @@ import { AntDesign } from "@expo/vector-icons";
 import getBlobFromUri from "../../hooks/getBlobFromUri";
 
 type RecipeStatusButtonProps = {
-  navigation: any;
+  navigation: NavigationNavigateProp;
   disabled?: boolean;
   label?: string;
 };

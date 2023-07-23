@@ -7,13 +7,14 @@ import {
   ingredientsImageState,
   dishImageState
 } from "../atoms/dataAtom";
-import { Camera } from "expo-camera";
-import GoBackButton from "../components/buttons/GoBackButton";
+import { Camera, CameraProps } from "expo-camera";
 import { useFocusEffect } from "@react-navigation/native";
-import * as SplashScreen from "expo-splash-screen";
+
+import GoBackButton from "../components/buttons/GoBackButton";
+
 import LoadingScreen from "./LoadingScreen";
 
-const CameraUpload = ({ navigation }: any) => {
+const CameraUpload = ({ navigation }: GroupMealProps) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
@@ -72,6 +73,7 @@ const CameraUpload = ({ navigation }: any) => {
   };
 
   const handlePictureButton = () => {
+    Camera.Constants.AutoFocus.on;
     const picture = takePicture();
   };
 

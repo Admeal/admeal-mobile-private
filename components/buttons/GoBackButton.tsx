@@ -4,7 +4,19 @@ import BackIcon from "../../assets/icons/backIcon";
 
 import { StackActions } from "@react-navigation/native";
 
-const GoBackButton = ({ navigation, color }: any) => {
+type NavigationProp = {
+  navigate: (screen: string, params?: any) => void;
+  getState: () => { routes: { name: string }[] };
+  reset: (arg0: { index: number; routes: { name: string }[] }) => void;
+  dispatch: (arg0: any) => void;
+};
+
+type GoBackButtonProps = {
+  navigation: NavigationProp;
+  color?: string;
+};
+
+const GoBackButton = ({ navigation, color }: GoBackButtonProps) => {
   const press = () => {
     navigation.getState().routes.find((route: any) => {
       switch (route.name) {

@@ -1,6 +1,6 @@
 type GroupRecipesProps = {
   recipe: RecipeProps;
-  navigation: any;
+  navigation: NavigationProp<Record<string, object | undefined>, string, any, any, any>;
 };
 
 type RecipeProps = {
@@ -31,9 +31,24 @@ type RecipeProps = {
   token_reward: number;
 };
 
+type NavigationNavigateProp = {
+  navigate: (screen: string, params?: any) => void;
+  reset: (arg0: { index: number; routes: { name: string }[] }) => void;
+};
+
+type NavigationResetProp = {
+  reset: (arg0: { index: number; routes: { name: string }[] }) => void;
+};
+
 type GroupMealProps = {
-  meal: MealProps;
-  navigation: any;
+  meal?: MealProps;
+  navigation: NavigationNavigateProp<
+    Record<string, object | undefined>,
+    string,
+    any,
+    any,
+    any
+  >;
 };
 
 type MealProps = {
@@ -84,5 +99,6 @@ type UserProps = {
     uid: string;
     email: string;
   };
+  profile: ProfileUserInfoProps;
   additionalUserInfo: AdditionalUserInfoProps;
 };
