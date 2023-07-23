@@ -4,10 +4,10 @@ type GroupRecipesProps = {
 };
 
 type RecipeProps = {
-  cooking_instructions: string;
-  cook_time_in_mins: number;
   cook_count: number;
-  created_at: timestamp;
+  cook_time_in_mins: number;
+  cooking_instructions: string;
+  created_at: string;
   description: string;
   difficulty: string;
   enabled: boolean;

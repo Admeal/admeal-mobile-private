@@ -25,7 +25,7 @@ export const recipeListState = atom({
 
 export const mealIdState = atom({
   key: "mealIdState",
-  default: ""
+  default: "" as string
 });
 
 export const myMealsListState = atom({
@@ -35,48 +35,51 @@ export const myMealsListState = atom({
 
 export const mealStatusState = atom({
   key: "mealStatusState",
-  default: ""
+  default: "" as string
 });
 
-export const recipeItemState = atom({
+export const recipeItemState = atom<RecipeProps>({
   key: "recipeItemState",
   default: {
-    recipeName: "",
-    price: 0,
-    recipeImages: "",
-    recipeId: 0,
-    nutritionalInformation: {
+    cook_count: 0,
+    cook_time_in_mins: 0,
+    cooking_instructions: "",
+    created_at: "",
+    description: "",
+    difficulty: "",
+    enabled: false,
+    ingredients: [{ measurement_units: "", measurement_value: 0, name: "" }],
+    number_of_servings: 0,
+    nutritional_information: {
       calories_in_cal: 0,
       carbs_in_grams: 0,
       protein_in_grams: 0,
       fat_in_grams: 0
     },
-    numberOfServings: 0,
-    ingredients: [{ measurement_units: "", measurement_value: 0, name: "" }],
-    difficulty: "",
-    description: "",
-    cookingInstructions: "",
-    cookTimeInMins: 0,
-    cookCount: 0
+
+    recipe_id: 0,
+    recipe_name: "",
+    recipe_images: [""],
+    token_reward: 0
   }
 });
 
 export const isIngredientsSumbittedState = atom({
   key: "isIngredientsSumbittedState",
-  default: false
+  default: false as boolean
 });
 
 export const isReadyDishState = atom({
   key: "isReadyDishState",
-  default: false
+  default: false as boolean
 });
 
 export const ingredientsImageState = atom({
   key: "ingredientsImageState",
-  default: ""
+  default: "" as string
 });
 
 export const dishImageState = atom({
   key: "dishImageState",
-  default: ""
+  default: "" as string
 });

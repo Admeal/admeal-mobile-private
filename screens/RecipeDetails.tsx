@@ -56,7 +56,7 @@ const RecipeDetails = ({ navigation }: any) => {
     if (myMealsList) {
       const meal = myMealsList.find(
         (meal: MealProps) =>
-          meal.recipe_id === recipeItem.recipeId && meal.user_id === userItem?.user.uid
+          meal.recipe_id === recipeItem.recipe_id && meal.user_id === userItem?.user.uid
       );
 
       const { my_meals_id, dish_photos, ingredients_photos, current_state }: MealProps =
@@ -86,7 +86,7 @@ const RecipeDetails = ({ navigation }: any) => {
           .add({
             user_id: userItem?.user.uid,
             tokens_earned: 0,
-            recipe_id: recipeItem.recipeId,
+            recipe_id: recipeItem.recipe_id,
             my_meals_id: myMealsList?.length,
             ingredients_photos: [""],
             dish_photos: [""],
@@ -123,7 +123,7 @@ const RecipeDetails = ({ navigation }: any) => {
     <ImageBackground
       className="relative flex-1 flex-col justify-between bg-gray-500"
       source={{
-        uri: recipeItem.recipeImages
+        uri: recipeItem.recipe_images[0]
       }}
       resizeMode="cover">
       <GoBackButton color="white" navigation={navigation} />
@@ -131,11 +131,11 @@ const RecipeDetails = ({ navigation }: any) => {
       <View className="absolute bottom-0 h-2/3 flex-col justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
         <View className="flex-row items-end justify-between">
           <Text className="w-[50%] font-[Poppins-700] text-2xl">
-            {recipeItem.recipeName}
+            {recipeItem.recipe_name}
           </Text>
           <View className="flex-row items-center space-x-2">
             <Text className="mt-1 font-[Poppins-400] text-xs">Total:</Text>
-            <Text className="font-[Poppins-700] text-2xl">{recipeItem.price}</Text>
+            <Text className="font-[Poppins-700] text-2xl">{recipeItem.token_reward}</Text>
             {/* this needs to change to svg */}
             <Image source={require("../assets/png/coin1.png")} />
           </View>
@@ -157,14 +157,14 @@ const RecipeDetails = ({ navigation }: any) => {
               <View className="flex-row items-center space-x-2 ">
                 <ClockIcon />
                 <Text className="font-[Poppins-500] text-xs">
-                  {recipeItem.cookTimeInMins}
+                  {recipeItem.cook_time_in_mins}
                 </Text>
                 <Text className="font-[Poppins-500] text-xs">mins</Text>
               </View>
               <View className="flex-row items-center space-x-2 ">
                 <ServingsIcon />
                 <Text className="font-[Poppins-500] text-xs">
-                  {recipeItem.numberOfServings}
+                  {recipeItem.number_of_servings}
                 </Text>
                 <Text className="font-[Poppins-500] text-xs">servings</Text>
               </View>
@@ -179,13 +179,13 @@ const RecipeDetails = ({ navigation }: any) => {
                     Cal.:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#FC7800]">
-                    {recipeItem.nutritionalInformation.calories_in_cal}kcal
+                    {recipeItem.nutritional_information.calories_in_cal}kcal
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DBF7E0] px-4 py-2">
                   <Text className="font-[Poppins-400] text-xs  text-[#2BD449]">Fat:</Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#2BD449]">
-                    {recipeItem.nutritionalInformation.fat_in_grams}g
+                    {recipeItem.nutritional_information.fat_in_grams}g
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#E4E2F8] px-4 py-2">
@@ -193,7 +193,7 @@ const RecipeDetails = ({ navigation }: any) => {
                     Protein:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#7264FB]">
-                    {recipeItem.nutritionalInformation.protein_in_grams}g
+                    {recipeItem.nutritional_information.protein_in_grams}g
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DDF9F5] px-4 py-2">
@@ -201,7 +201,7 @@ const RecipeDetails = ({ navigation }: any) => {
                     Carbs:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#23D8BE]">
-                    {recipeItem.nutritionalInformation.carbs_in_grams}g
+                    {recipeItem.nutritional_information.carbs_in_grams}g
                   </Text>
                 </View>
               </View>
@@ -251,7 +251,7 @@ const RecipeDetails = ({ navigation }: any) => {
             ) : (
               <View className="pt-2">
                 <Text className="font-[Poppins-400] text-xs leading-6  text-[#637381]">
-                  {recipeItem.cookingInstructions}
+                  {recipeItem.cook_time_in_mins}
                 </Text>
               </View>
             )}

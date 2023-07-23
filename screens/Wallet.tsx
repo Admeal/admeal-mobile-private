@@ -4,7 +4,8 @@ import {
   Image,
   ScrollView,
   BackHandler,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from "react-native";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -79,9 +80,8 @@ const Wallet = ({ navigation }: any) => {
 
   const handleDeleteAccount = () => {};
 
-  // const { additionalUserInfo }: AdditionalUserInfoProps | null = userItem;
-
   console.log(provider);
+
   return isLoading ? (
     <LoadingScreen />
   ) : (

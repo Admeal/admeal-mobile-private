@@ -111,18 +111,20 @@ const CheckStatus = ({ navigation }: any) => {
       if (recipe.recipe_id === meal?.recipe_id) {
         setTokenReward(recipe.token_reward);
         setRecipeItem({
-          recipeName: recipe.recipe_name,
-          price: recipe.token_reward,
-          recipeImages: recipe.recipe_images[0],
-          recipeId: recipe.recipe_id,
-          nutritionalInformation: recipe.nutritional_information,
-          numberOfServings: recipe.number_of_servings,
+          recipe_name: recipe.recipe_name,
+          token_reward: recipe.token_reward,
+          recipe_images: recipe.recipe_images,
+          recipe_id: recipe.recipe_id,
+          nutritional_information: recipe.nutritional_information,
+          number_of_servings: recipe.number_of_servings,
           ingredients: recipe.ingredients,
           difficulty: recipe.difficulty,
           description: recipe.description,
-          cookingInstructions: recipe.cooking_instructions,
-          cookTimeInMins: recipe.cook_time_in_mins,
-          cookCount: recipe.cook_count
+          cooking_instructions: recipe.cooking_instructions,
+          cook_time_in_mins: recipe.cook_time_in_mins,
+          cook_count: recipe.cook_count,
+          created_at: recipe.created_at,
+          enabled: recipe.enabled
         });
       }
     });
