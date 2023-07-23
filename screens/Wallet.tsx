@@ -1,7 +1,15 @@
-import { View, Text, Image, ScrollView, BackHandler } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  BackHandler,
+  TouchableOpacity
+} from "react-native";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Clipboard from "expo-clipboard";
 
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 
@@ -18,12 +26,14 @@ import LoadingScreen from "./LoadingScreen";
 
 import { useRecoilState } from "recoil";
 import { userCreditsState, userState } from "../atoms/dataAtom";
+import GearIcon from "../assets/icons/gearIcon";
+import FileIcon from "../assets/icons/fileIcon";
 
 const Wallet = ({ navigation }: any) => {
   const [userItem, setUserItem] = useRecoilState(userState);
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
-  const [dishCoins, setDishCoins] = useState(userCredits.dishCoins);
-  const [admealCoins, setAdmealCoins] = useState(userCredits.admealCoins);
+  const [dishCoins, setDishCoins] = useState(userCredits.dish_token);
+  const [admealCoins, setAdmealCoins] = useState(userCredits.admeal_token);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {
@@ -47,8 +57,29 @@ const Wallet = ({ navigation }: any) => {
       return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
     }, [])
   );
-
   const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
+
+  const trancuateWalletAddress = () => {
+    return `${address?.slice(0, 9)}...${address?.slice(-9)}`;
+  };
+
+  const copyWalletAddress = async () => {
+    await Clipboard.setStringAsync("hello world");
+  };
+
+  const handleSend = () => {};
+
+  const handleReceive = () => {};
+
+  const openAccountModal = () => {};
+
+  const handleDisconnect = () => {
+    setUserItem(null);
+  };
+
+  const handleDeleteAccount = () => {};
+
+  // const { additionalUserInfo }: AdditionalUserInfoProps | null = userItem;
 
   console.log(provider);
   return isLoading ? (
@@ -98,10 +129,13 @@ const Wallet = ({ navigation }: any) => {
           <Text className="font-[Poppins-400] text-base font-semibold text-white">
             {isConnected ? "Wallet Address" : "Wallet not Connected"}
           </Text>
-          <View className="flex-row items-center space-x-4">
-            <Text className="font-[Poppins-400] text-xs font-semibold text-white">
-              {address ? address : ""}
+          <View className="flex-row items-center">
+            <Text className="pr-2.5 font-[Poppins-400] text-xs font-semibold text-white">
+              {address ? trancuateWalletAddress() : ""}
             </Text>
+            <TouchableOpacity onPress={copyWalletAddress}>
+              <FileIcon />
+            </TouchableOpacity>
           </View>
           <View className="flex-row items-center space-x-2">
             {/* balance */}
@@ -115,20 +149,37 @@ const Wallet = ({ navigation }: any) => {
               </Text>
             </View>
           </View>
-          <View className="flex-row items-center space-x-10 pt-8">
-            <View className="flex-col items-center justify-center">
-              <View className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
-                <ArrowTopRight />
+          <View className="flex-row items-center justify-between">
+            <View className="flex-row items-center space-x-10 pt-8">
+              {/* Buttons */}
+              <View className="flex-col items-center justify-center">
+                <TouchableOpacity
+                  onPress={handleSend}
+                  className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
+                  <ArrowTopRight />
+                </TouchableOpacity>
+                <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">
+                  Send
+                </Text>
               </View>
-              <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">Send</Text>
+              <View className="flex-col items-center justify-center">
+                <TouchableOpacity
+                  onPress={handleReceive}
+                  className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
+                  <ArrowBottom className="opacity-30" />
+                </TouchableOpacity>
+                <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">
+                  Receive
+                </Text>
+              </View>
             </View>
-            <View className="flex-col items-center justify-center">
-              <View className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
-                <ArrowBottom className="opacity-30" />
-              </View>
-              <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">
-                Receive
-              </Text>
+            <View className="flex-col items-center justify-center pt-8">
+              <TouchableOpacity
+                onPress={openAccountModal}
+                className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-white/50">
+                <GearIcon />
+              </TouchableOpacity>
+              <Text className="pt-2 font-[Poppins-400] text-xs text-white">Account</Text>
             </View>
           </View>
         </View>
@@ -168,11 +219,11 @@ const Wallet = ({ navigation }: any) => {
             <NFTcard />
             <NFTcard />
           </View>
-          <View className="absolute top-0 h-full w-full flex-row items-center justify-center bg-slate-400/50 ">
+          {/* <View className="absolute top-0 h-full w-full flex-row items-center justify-center bg-slate-400/50 ">
             <Text className="font-[Poppins-600] text-3xl text-[#212B36]">
               Coming Soon...
             </Text>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </View>

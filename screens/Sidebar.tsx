@@ -34,6 +34,8 @@ const Sidebar = (props: any) => {
     );
   };
 
+  // const { additionalUserInfo }: ProfileUserInfoProps = userItem;
+
   return (
     <View className="relative h-full flex-col justify-between">
       <DrawerContentScrollView className="relative h-full" {...props}>
@@ -52,16 +54,16 @@ const Sidebar = (props: any) => {
       <View className="h-[72px] w-full flex-row items-center justify-between bg-[#F8F8F8] p-4">
         <View>
           <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
-            {userItem.additionalUserInfo.profile?.given_name}
+            {userItem?.additionalUserInfo.profile?.given_name}
           </Text>
           <Text className="font-[Poppins-400] text-xs font-semibold text-[#6D6D6D]">
-            {userItem.additionalUserInfo.profile?.email}
+            {userItem?.additionalUserInfo.profile?.email}
           </Text>
         </View>
         <Image
           className="rounded-full"
           style={{ width: 50, height: 50 }}
-          source={{ uri: userItem.additionalUserInfo.profile?.picture }}
+          source={{ uri: userItem?.additionalUserInfo.profile?.picture }}
         />
       </View>
     </View>

@@ -12,9 +12,8 @@ import {
   mealStatusState,
   mealIdState
 } from "../atoms/dataAtom";
-import useAuth from "../hooks/useAuth";
 
-const MyMealsCard = ({ meal, navigation }: MealProps) => {
+const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -67,12 +66,16 @@ const MyMealsCard = ({ meal, navigation }: MealProps) => {
   };
 
   const getRecipeName = () => {
-    const recipe = recipeList.find((recipe) => recipe.recipe_id === meal.recipe_id);
+    const recipe = recipeList.find(
+      (recipe: RecipeProps) => recipe.recipe_id === meal.recipe_id
+    );
     return recipe?.recipe_name;
   };
 
   const getRecipeImage = () => {
-    const recipe = recipeList.find((recipe) => recipe.recipe_id === meal.recipe_id);
+    const recipe = recipeList.find(
+      (recipe: RecipeProps) => recipe.recipe_id === meal.recipe_id
+    );
     return recipe?.recipe_images[0];
   };
 

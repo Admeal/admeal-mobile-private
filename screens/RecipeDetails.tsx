@@ -26,7 +26,7 @@ import firestore from "@react-native-firebase/firestore";
 import LoadingScreen from "./LoadingScreen";
 
 const RecipeDetails = ({ navigation }: any) => {
-  const [user, setUser] = useRecoilState(userState);
+  const [userItem, setUserItem] = useRecoilState(userState);
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
@@ -50,38 +50,41 @@ const RecipeDetails = ({ navigation }: any) => {
     };
   }, [navigation]);
 
-  // const { user } = useAuth();
+  // const { user }: UserProps = userItem;
 
   const handleCookButton = async () => {
     if (myMealsList) {
       const meal = myMealsList.find(
-        (meal) =>
-          meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.user.uid
+        (meal: MealProps) =>
+          meal.recipe_id === recipeItem.recipeId && meal.user_id === userItem?.user.uid
       );
 
-      if (meal) {
-        setMealId(meal?.my_meals_id);
+      const { my_meals_id, dish_photos, ingredients_photos, current_state }: MealProps =
+        meal;
 
-        console.log("meal found", meal.my_meals_id);
-        if (meal?.dish_photos[0] === "") {
+      if (meal) {
+        setMealId(my_meals_id);
+
+        console.log("meal found", my_meals_id);
+        if (dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
           setIsReadyDish(true);
         }
-        if (meal?.ingredients_photos[0] === "") {
+        if (ingredients_photos[0] === "") {
           setIsIngredientsSumbitted(false);
         } else {
           setIsIngredientsSumbitted(true);
         }
-        setMealStatus(meal.current_state);
+        setMealStatus(current_state);
       } else {
         console.log("create new meal");
         const docRef = await firestore()
           .collection(`user_data`)
-          .doc(user?.user.uid)
+          .doc(userItem?.user.uid)
           .collection("meals")
           .add({
-            user_id: user?.user.uid,
+            user_id: userItem?.user.uid,
             tokens_earned: 0,
             recipe_id: recipeItem.recipeId,
             my_meals_id: myMealsList?.length,
@@ -93,7 +96,7 @@ const RecipeDetails = ({ navigation }: any) => {
 
         await firestore()
           .collection(`user_data`)
-          .doc(user?.user.uid)
+          .doc(userItem?.user.uid)
           .collection("meals")
           .doc(docRef.id)
           .update({

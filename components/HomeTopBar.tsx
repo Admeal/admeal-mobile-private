@@ -5,7 +5,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useRecoilState } from "recoil";
 import { userCreditsState } from "../atoms/dataAtom";
 
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 
@@ -15,8 +14,8 @@ const HomeTopBar = ({ navigation }: any) => {
   const [admealCoins, setAdmealCoins] = useState(Number);
 
   useEffect(() => {
-    setAdmealCoins(userCredits.admealCoins);
-    setDishCoins(userCredits.dishCoins);
+    setAdmealCoins(userCredits.admeal_token);
+    setDishCoins(userCredits.dish_token);
   }, [userCredits]);
 
   useFocusEffect(

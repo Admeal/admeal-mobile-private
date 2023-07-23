@@ -7,7 +7,7 @@ import { useRecoilState } from "recoil";
 import { recipeItemState } from "../atoms/dataAtom";
 import CookCountIcon from "../assets/icons/cookCountIcon";
 
-const TopEarningsCard = ({ recipe, navigation }: RecipeProps) => {
+const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
 
   const handleItemPress = () => {

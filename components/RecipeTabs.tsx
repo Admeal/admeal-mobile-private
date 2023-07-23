@@ -6,10 +6,6 @@ import MyMealsCard from "./MyMealsCard";
 
 import { recipeListState, myMealsListState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
-import { useEffect } from "react";
-// import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
-// import { db } from "../firebaseConfig";
-import useAuth from "../hooks/useAuth";
 
 type RecipeTabsProps = {
   navigation: any;
@@ -18,9 +14,7 @@ type RecipeTabsProps = {
 
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
-
-  
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
 
   return (
     <View className="px-5 ">

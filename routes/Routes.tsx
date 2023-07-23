@@ -81,8 +81,8 @@ const RecipeStack = () => {
         const data = doc.data();
         console.log("credits sub");
         setUserCredits({
-          admealCoins: data?.admeal_token,
-          dishCoins: data?.dish_token
+          admeal_token: data?.admeal_token,
+          dish_token: data?.dish_token
         });
       });
     // console.log("aaaa", userCredits);

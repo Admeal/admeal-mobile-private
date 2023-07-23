@@ -8,7 +8,7 @@ import { LogBox } from "react-native";
 
 LogBox.ignoreLogs(["Non-serializable values were found in the navigation state"]);
 
-const PopularCard = ({ recipe, navigation }: RecipeProps) => {
+const PopularCard = ({ recipe, navigation }: GroupRecipesProps) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
 
   const handleItemPress = () => {

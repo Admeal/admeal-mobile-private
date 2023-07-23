@@ -81,7 +81,7 @@ const RecipeStatusButton = ({
         );
         console.log("upload 1id", mealId);
         const imageBlob = await getBlobFromUri(ingredientsImage);
-        await imageRef.put(imageBlob).then(async () => {
+        await imageRef.put(imageBlob as Blob).then(async () => {
           console.log("upload 2id", mealId);
           const downLoadUrl = await imageRef.getDownloadURL();
           await firestore()
@@ -116,7 +116,7 @@ const RecipeStatusButton = ({
       );
       console.log("upload 1id", mealId);
       const imageBlob = await getBlobFromUri(dishImage);
-      await imageRef.put(imageBlob).then(async () => {
+      await imageRef.put(imageBlob as Blob).then(async () => {
         console.log("upload 2id", mealId);
         const downLoadUrl = await imageRef.getDownloadURL();
         await firestore()

@@ -40,7 +40,7 @@ const CheckStatus = ({ navigation }: any) => {
 
   const [mealId, setMealId] = useRecoilState<string>(mealIdState);
   const [textStatus, setTextStatus] = useState<string>("");
-  const [meal, setMeal] = useState<object | null>(null);
+  const [meal, setMeal] = useState<MealProps | null>(null);
   const [tokenReward, setTokenReward] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -74,7 +74,7 @@ const CheckStatus = ({ navigation }: any) => {
       .doc(mealId)
       .onSnapshot((snapshot) => {
         console.log("snapshot", snapshot.data());
-        setMeal(snapshot.data());
+        setMeal(snapshot.data() as MealProps);
       });
 
     return () => {
@@ -107,7 +107,7 @@ const CheckStatus = ({ navigation }: any) => {
   }, [meal?.current_state]);
 
   useEffect(() => {
-    recipeList.map((recipe) => {
+    recipeList.map((recipe: RecipeProps) => {
       if (recipe.recipe_id === meal?.recipe_id) {
         setTokenReward(recipe.token_reward);
         setRecipeItem({

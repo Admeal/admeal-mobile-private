@@ -8,6 +8,7 @@ const RecipesBar = () => {
       <View className="flex-row items-center space-x-4">
         <Search />
         <TouchableOpacity className="">
+          {/* change this image to svg */}
           <Image source={require("../assets/png/menuicon.png")} />
         </TouchableOpacity>
       </View>
