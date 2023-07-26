@@ -2,40 +2,42 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
-  userState,
+  dishImageState,
+  ingredientsImageState,
   isIngredientsSumbittedState,
   isReadyDishState,
-  ingredientsImageState,
-  dishImageState,
   mealIdState,
-  mealStatusState
+  mealStatusState,
+  userState,
 } from "../../atoms/dataAtom";
+
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import { AntDesign } from "@expo/vector-icons";
 import getBlobFromUri from "../../hooks/getBlobFromUri";
 
 type RecipeStatusButtonProps = {
-  navigation: any;
   disabled?: boolean;
   label?: string;
+  navigation: NavigationNavigateProp;
 };
 
 const RecipeStatusButton = ({
-  navigation,
   disabled,
-  label = "TAKE A PHOTO"
+  label = "TAKE A PHOTO",
+  navigation,
 }: RecipeStatusButtonProps) => {
-  const [user, setUser] = useRecoilState(userState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
+  const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
+  const [mealId, setMealId] = useRecoilState(mealIdState);
+  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
-  const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
-  const [dishImage, setDishImage] = useRecoilState(dishImageState);
-  const [mealId, setMealId] = useRecoilState(mealIdState);
-  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [user, setUser] = useRecoilState(userState);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -81,7 +83,7 @@ const RecipeStatusButton = ({
         );
         console.log("upload 1id", mealId);
         const imageBlob = await getBlobFromUri(ingredientsImage);
-        await imageRef.put(imageBlob).then(async () => {
+        await imageRef.put(imageBlob as Blob).then(async () => {
           console.log("upload 2id", mealId);
           const downLoadUrl = await imageRef.getDownloadURL();
           await firestore()
@@ -116,7 +118,7 @@ const RecipeStatusButton = ({
       );
       console.log("upload 1id", mealId);
       const imageBlob = await getBlobFromUri(dishImage);
-      await imageRef.put(imageBlob).then(async () => {
+      await imageRef.put(imageBlob as Blob).then(async () => {
         console.log("upload 2id", mealId);
         const downLoadUrl = await imageRef.getDownloadURL();
         await firestore()
@@ -145,7 +147,7 @@ const RecipeStatusButton = ({
         disabled ? "bg-[#919EAB]/20 shadow-[#919EAB]/20" : "bg-[#FF1E00] shadow-[#FF1E00]"
       }`}>
       {isLoading ? (
-        <View className="animate-spin flex-row items-center justify-center">
+        <View className="flex-row items-center justify-center animate-spin">
           {/* <AntDesign name="reload1" size={24} color="white" /> */}
         </View>
       ) : (

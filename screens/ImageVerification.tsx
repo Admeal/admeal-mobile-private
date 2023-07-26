@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, BackHandler } from "react-native";
+import { BackHandler, Image, Text, TouchableOpacity, View } from "react-native";
 import { useCallback, useLayoutEffect, useState } from "react";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import {
@@ -11,13 +11,13 @@ import { useRecoilState } from "recoil";
 import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 
-const ImageVerification = ({ navigation }) => {
+const ImageVerification = ({ navigation }: GroupMealProps) => {
+  const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
-  const [dishImage, setDishImage] = useRecoilState(dishImageState);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -57,7 +57,7 @@ const ImageVerification = ({ navigation }) => {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <View className="flex-1 flex-col items-center justify-between">
+    <View className="flex-col items-center justify-between flex-1">
       <View className="pt-[80px]"></View>
       {!isIngredientsSumbitted && ingredientsImage !== "" ? (
         <Image

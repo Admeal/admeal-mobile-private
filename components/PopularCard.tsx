@@ -8,23 +8,27 @@ import { LogBox } from "react-native";
 
 LogBox.ignoreLogs(["Non-serializable values were found in the navigation state"]);
 
-const PopularCard = ({ recipe, navigation }: RecipeProps) => {
+const PopularCard = ({ recipe, navigation }: GroupRecipesProps) => {
   const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
 
   const handleItemPress = () => {
     setRecipeItem({
-      recipeName: recipe.recipe_name,
-      price: recipe.token_reward,
-      recipeImages: recipe.recipe_images[0],
-      recipeId: recipe.recipe_id,
-      nutritionalInformation: recipe.nutritional_information,
-      numberOfServings: recipe.number_of_servings,
-      ingredients: recipe.ingredients,
-      difficulty: recipe.difficulty,
+      cook_count: recipe.cook_count,
+      cook_time_in_mins: recipe.cook_time_in_mins,
+      cooking_instructions: recipe.cooking_instructions,
+      created_at: recipe.created_at,
+      creator_name: recipe.creator_name,
+      creator_photo: recipe.creator_photo,
       description: recipe.description,
-      cookingInstructions: recipe.cooking_instructions,
-      cookTimeInMins: recipe.cook_time_in_mins,
-      cookCount: recipe.cook_count
+      difficulty: recipe.difficulty,
+      enabled: recipe.enabled,
+      ingredients: recipe.ingredients,
+      number_of_servings: recipe.number_of_servings,
+      nutritional_information: recipe.nutritional_information,
+      recipe_id: recipe.recipe_id,
+      recipe_images: recipe.recipe_images,
+      recipe_name: recipe.recipe_name,
+      token_reward: recipe.token_reward,
     });
     navigation.navigate("RecipeDetails");
   };

@@ -3,38 +3,65 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import Home from "../screens/Home";
-import Sidebar from "../screens/Sidebar";
-import Wallet from "../screens/Wallet";
-import Meals from "../screens/Meals";
-import RecipeDetails from "../screens/RecipeDetails";
-import CheckStatus from "../screens/CheckStatus";
 import CameraUpload from "../screens/CameraUpload";
+import CheckStatus from "../screens/CheckStatus";
+import Home from "../screens/Home";
 import ImageVerification from "../screens/ImageVerification";
 import Login from "../screens/Login";
+import Meals from "../screens/Meals";
+import RecipeDetails from "../screens/RecipeDetails";
+import Sidebar from "../screens/Sidebar";
+import Wallet from "../screens/Wallet";
 
-import WalletIcon from "../assets/icons/walletIcon";
-import RecipeIcon from "../assets/icons/recipeIcon";
 import MealsIcon from "../assets/icons/mealsIcon";
+import RecipeIcon from "../assets/icons/recipeIcon";
+import WalletIcon from "../assets/icons/walletIcon";
 
 import firestore from "@react-native-firebase/firestore";
 import { useRecoilState } from "recoil";
 import {
   myMealsListState,
   recipeListState,
-  userState,
-  userCreditsState
+  userCreditsState,
+  userState
 } from "../atoms/dataAtom";
 
-const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
-const StackLogin = createStackNavigator();
+type RootStackParamList = {
+  Home: undefined;
+  "My Meals": undefined;
+  Wallet: undefined;
+  Meals: undefined;
+  RecipeDetails: undefined;
+  CheckStatus: undefined;
+  CameraUpload: undefined;
+  ImageVerification: undefined;
+  Login: undefined;
+};
+
+type RootStackParamListLogin = {
+  Login: undefined;
+};
+
+type DrawerParamList = {
+  Recipes: undefined;
+  "My Meals": undefined;
+  Wallet: undefined;
+  Meals: undefined;
+  RecipeDetails: undefined;
+  CheckStatus: undefined;
+  CameraUpload: undefined;
+  ImageVerification: undefined;
+};
+
+const Drawer = createDrawerNavigator<DrawerParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
+const StackLogin = createStackNavigator<RootStackParamList>();
 
 const RecipeStack = () => {
   const [user, setUser] = useRecoilState(userState);
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [myMealsList, setMyMealsList] = useRecoilState<any>(myMealsListState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -81,8 +108,8 @@ const RecipeStack = () => {
         const data = doc.data();
         console.log("credits sub");
         setUserCredits({
-          admealCoins: data?.admeal_token,
-          dishCoins: data?.dish_token
+          admeal_token: data?.admeal_token,
+          dish_token: data?.dish_token
         });
       });
     // console.log("aaaa", userCredits);

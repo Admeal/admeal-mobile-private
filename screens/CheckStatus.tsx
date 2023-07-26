@@ -26,7 +26,7 @@ import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import LoadingScreen from "./LoadingScreen";
 
-const CheckStatus = ({ navigation }: any) => {
+const CheckStatus = ({ navigation }: GroupMealProps) => {
   const [user, setUser] = useRecoilState(userState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
@@ -40,7 +40,7 @@ const CheckStatus = ({ navigation }: any) => {
 
   const [mealId, setMealId] = useRecoilState<string>(mealIdState);
   const [textStatus, setTextStatus] = useState<string>("");
-  const [meal, setMeal] = useState<object | null>(null);
+  const [meal, setMeal] = useState<MealProps | null>(null);
   const [tokenReward, setTokenReward] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -74,7 +74,7 @@ const CheckStatus = ({ navigation }: any) => {
       .doc(mealId)
       .onSnapshot((snapshot) => {
         console.log("snapshot", snapshot.data());
-        setMeal(snapshot.data());
+        setMeal(snapshot.data() as MealProps);
       });
 
     return () => {
@@ -107,22 +107,26 @@ const CheckStatus = ({ navigation }: any) => {
   }, [meal?.current_state]);
 
   useEffect(() => {
-    recipeList.map((recipe) => {
+    recipeList.map((recipe: RecipeProps) => {
       if (recipe.recipe_id === meal?.recipe_id) {
         setTokenReward(recipe.token_reward);
         setRecipeItem({
-          recipeName: recipe.recipe_name,
-          price: recipe.token_reward,
-          recipeImages: recipe.recipe_images[0],
-          recipeId: recipe.recipe_id,
-          nutritionalInformation: recipe.nutritional_information,
-          numberOfServings: recipe.number_of_servings,
+          recipe_name: recipe.recipe_name,
+          token_reward: recipe.token_reward,
+          recipe_images: recipe.recipe_images,
+          recipe_id: recipe.recipe_id,
+          nutritional_information: recipe.nutritional_information,
+          number_of_servings: recipe.number_of_servings,
           ingredients: recipe.ingredients,
           difficulty: recipe.difficulty,
           description: recipe.description,
-          cookingInstructions: recipe.cooking_instructions,
-          cookTimeInMins: recipe.cook_time_in_mins,
-          cookCount: recipe.cook_count
+          cooking_instructions: recipe.cooking_instructions,
+          cook_time_in_mins: recipe.cook_time_in_mins,
+          cook_count: recipe.cook_count,
+          created_at: recipe.created_at,
+          creator_name: recipe.creator_name,
+          creator_photo: recipe.creator_photo,
+          enabled: recipe.enabled
         });
       }
     });

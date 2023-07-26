@@ -1,22 +1,25 @@
-import { View, Text, TouchableOpacity, Image, BackHandler } from "react-native";
-import { useState, useCallback, useEffect } from "react";
+import { BackHandler, Image, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { useRecoilState } from "recoil";
-import { userCreditsState } from "../atoms/dataAtom";
+import { userCreditsState, userState } from "../atoms/dataAtom";
 
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
-import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
+import DishCoinLogo from "../assets/icons/dishCoinLogo";
 
-const HomeTopBar = ({ navigation }: any) => {
+const HomeTopBar = ({ navigation }: GroupMealProps) => {
+  const [user, setUser] = useRecoilState(userState);
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
-  const [dishCoins, setDishCoins] = useState(Number);
-  const [admealCoins, setAdmealCoins] = useState(Number);
+
+  const [admealCoins, setAdmealCoins] = useState(0);
+  const [dishCoins, setDishCoins] = useState(0);
 
   useEffect(() => {
-    setAdmealCoins(userCredits.admealCoins);
-    setDishCoins(userCredits.dishCoins);
+    if (userCredits) {
+      setAdmealCoins(userCredits.admeal_token);
+      setDishCoins(userCredits.dish_token);
+    }
   }, [userCredits]);
 
   useFocusEffect(

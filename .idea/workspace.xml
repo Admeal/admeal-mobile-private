@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2f5ada1-8780-4421-8501-e9f5973766e5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atoms/dataAtom.ts" beforeDir="false" afterPath="$PROJECT_DIR$/atoms/dataAtom.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/MyMealsCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/MyMealsCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/PopularCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/PopularCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/TopEarningsCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/TopEarningsCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/CheckStatus.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/CheckStatus.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/RecipeDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/RecipeDetails.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/Sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/Wallet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Wallet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/typings.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/typings.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,15 +33,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true",
-    "settings.editor.selected.configurable": "device.mirroring"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;device.mirroring&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

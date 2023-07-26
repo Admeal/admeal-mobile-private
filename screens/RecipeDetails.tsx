@@ -1,10 +1,10 @@
 import {
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
   Image,
-  ScrollView
+  ImageBackground,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { useLayoutEffect, useState } from "react";
 import ClockIcon from "../assets/icons/clockIcon";
@@ -12,32 +12,34 @@ import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
 import GoBackButton from "../components/buttons/GoBackButton";
 import {
-  userState,
-  recipeItemState,
   isIngredientsSumbittedState,
   isReadyDishState,
+  mealIdState,
   mealStatusState,
   myMealsListState,
-  mealIdState
+  recipeItemState,
+  userState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import firestore from "@react-native-firebase/firestore";
 
 import LoadingScreen from "./LoadingScreen";
 
-const RecipeDetails = ({ navigation }: any) => {
-  const [user, setUser] = useRecoilState(userState);
-  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+const RecipeDetails = ({ navigation }: GroupMealProps) => {
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
-  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
+  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
+  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+  const [userItem, setUserItem] = useRecoilState(userState);
 
-  const [toggle, setToggle] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [mealItem, setMealItem] = useState<MealProps | undefined>(undefined);
+  const [mealLocalItem, setMealLocalItem] = useState<MealProps | undefined>(undefined);
+  const [toggle, setToggle] = useState(false);
 
   useLayoutEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
@@ -50,50 +52,52 @@ const RecipeDetails = ({ navigation }: any) => {
     };
   }, [navigation]);
 
-  // const { user } = useAuth();
-
   const handleCookButton = async () => {
+    console.log(myMealsList);
     if (myMealsList) {
-      const meal = myMealsList.find(
-        (meal) =>
-          meal.recipe_id === recipeItem.recipeId && meal.user_id === user?.user.uid
+      const localMeal = myMealsList.find(
+        (meal: MealProps) =>
+          meal.recipe_id === recipeItem.recipe_id && meal.user_id === userItem!.user.uid
       );
+      console.log("localMeal", localMeal);
+      setMealLocalItem(localMeal);
+      setMealItem(mealLocalItem);
+      console.log("mealLocalItem", mealLocalItem, mealItem);
+      if (mealLocalItem) {
+        setMealId(mealLocalItem.my_meals_id);
 
-      if (meal) {
-        setMealId(meal?.my_meals_id);
-
-        console.log("meal found", meal.my_meals_id);
-        if (meal?.dish_photos[0] === "") {
+        console.log("meal found", mealLocalItem.my_meals_id);
+        if (mealLocalItem.dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
           setIsReadyDish(true);
         }
-        if (meal?.ingredients_photos[0] === "") {
+        if (mealLocalItem.ingredients_photos[0] === "") {
           setIsIngredientsSumbitted(false);
         } else {
           setIsIngredientsSumbitted(true);
         }
-        setMealStatus(meal.current_state);
+        setMealStatus(mealLocalItem.current_state);
       } else {
         console.log("create new meal");
         const docRef = await firestore()
           .collection(`user_data`)
-          .doc(user?.user.uid)
+          .doc(userItem?.user.uid)
           .collection("meals")
           .add({
-            user_id: user?.user.uid,
-            tokens_earned: 0,
-            recipe_id: recipeItem.recipeId,
-            my_meals_id: myMealsList?.length,
-            ingredients_photos: [""],
-            dish_photos: [""],
+            created_at: firestore.FieldValue.serverTimestamp(),
             current_state: "INCOMPLETE",
-            created_at: firestore.FieldValue.serverTimestamp()
+            dish_photos: [""],
+            ingredients_photos: [""],
+            my_meals_id: myMealsList?.length,
+            recipe_id: recipeItem.recipe_id,
+            tokens_earned: 0,
+            user_id: userItem?.user.uid
           });
 
         await firestore()
           .collection(`user_data`)
-          .doc(user?.user.uid)
+          .doc(userItem?.user.uid)
           .collection("meals")
           .doc(docRef.id)
           .update({
@@ -118,9 +122,9 @@ const RecipeDetails = ({ navigation }: any) => {
     <LoadingScreen />
   ) : (
     <ImageBackground
-      className="relative flex-1 flex-col justify-between bg-gray-500"
+      className="relative flex-col justify-between flex-1 bg-gray-500"
       source={{
-        uri: recipeItem.recipeImages
+        uri: recipeItem.recipe_images[0]
       }}
       resizeMode="cover">
       <GoBackButton color="white" navigation={navigation} />
@@ -128,40 +132,40 @@ const RecipeDetails = ({ navigation }: any) => {
       <View className="absolute bottom-0 h-2/3 flex-col justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
         <View className="flex-row items-end justify-between">
           <Text className="w-[50%] font-[Poppins-700] text-2xl">
-            {recipeItem.recipeName}
+            {recipeItem.recipe_name}
           </Text>
           <View className="flex-row items-center space-x-2">
             <Text className="mt-1 font-[Poppins-400] text-xs">Total:</Text>
-            <Text className="font-[Poppins-700] text-2xl">{recipeItem.price}</Text>
+            <Text className="font-[Poppins-700] text-2xl">{recipeItem.token_reward}</Text>
             {/* this needs to change to svg */}
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
-        <ScrollView className="flex-1 pb-5 pt-3">
+        <ScrollView className="flex-1 pt-3 pb-5">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
             {recipeItem.description}
           </Text>
           <ScrollView
             horizontal={true}
             contentContainerStyle={{
-              flexGrow: 1,
+              alignItems: "center",
               flexDirection: "row",
-              alignItems: "center"
+              flexGrow: 1
             }}
-            className="space-x-2 pt-4 ">
+            className="pt-4 space-x-2 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
                 <ClockIcon />
                 <Text className="font-[Poppins-500] text-xs">
-                  {recipeItem.cookTimeInMins}
+                  {recipeItem.cook_time_in_mins}
                 </Text>
                 <Text className="font-[Poppins-500] text-xs">mins</Text>
               </View>
               <View className="flex-row items-center space-x-2 ">
                 <ServingsIcon />
                 <Text className="font-[Poppins-500] text-xs">
-                  {recipeItem.numberOfServings}
+                  {recipeItem.number_of_servings}
                 </Text>
                 <Text className="font-[Poppins-500] text-xs">servings</Text>
               </View>
@@ -176,13 +180,13 @@ const RecipeDetails = ({ navigation }: any) => {
                     Cal.:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#FC7800]">
-                    {recipeItem.nutritionalInformation.calories_in_cal}kcal
+                    {recipeItem.nutritional_information.calories_in_cal}kcal
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DBF7E0] px-4 py-2">
                   <Text className="font-[Poppins-400] text-xs  text-[#2BD449]">Fat:</Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#2BD449]">
-                    {recipeItem.nutritionalInformation.fat_in_grams}g
+                    {recipeItem.nutritional_information.fat_in_grams}g
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#E4E2F8] px-4 py-2">
@@ -190,7 +194,7 @@ const RecipeDetails = ({ navigation }: any) => {
                     Protein:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#7264FB]">
-                    {recipeItem.nutritionalInformation.protein_in_grams}g
+                    {recipeItem.nutritional_information.protein_in_grams}g
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DDF9F5] px-4 py-2">
@@ -198,7 +202,7 @@ const RecipeDetails = ({ navigation }: any) => {
                     Carbs:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#23D8BE]">
-                    {recipeItem.nutritionalInformation.carbs_in_grams}g
+                    {recipeItem.nutritional_information.carbs_in_grams}g
                   </Text>
                 </View>
               </View>
@@ -248,7 +252,7 @@ const RecipeDetails = ({ navigation }: any) => {
             ) : (
               <View className="pt-2">
                 <Text className="font-[Poppins-400] text-xs leading-6  text-[#637381]">
-                  {recipeItem.cookingInstructions}
+                  {recipeItem.cook_time_in_mins}
                 </Text>
               </View>
             )}
