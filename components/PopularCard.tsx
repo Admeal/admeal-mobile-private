@@ -13,20 +13,22 @@ const PopularCard = ({ recipe, navigation }: GroupRecipesProps) => {
 
   const handleItemPress = () => {
     setRecipeItem({
+      cook_count: recipe.cook_count,
+      cook_time_in_mins: recipe.cook_time_in_mins,
+      cooking_instructions: recipe.cooking_instructions,
+      created_at: recipe.created_at,
+      creator_name: recipe.creator_name,
+      creator_photo: recipe.creator_photo,
+      description: recipe.description,
+      difficulty: recipe.difficulty,
+      enabled: recipe.enabled,
+      ingredients: recipe.ingredients,
+      number_of_servings: recipe.number_of_servings,
+      nutritional_information: recipe.nutritional_information,
+      recipe_id: recipe.recipe_id,
+      recipe_images: recipe.recipe_images,
       recipe_name: recipe.recipe_name,
       token_reward: recipe.token_reward,
-      recipe_images: recipe.recipe_images,
-      recipe_id: recipe.recipe_id,
-      nutritional_information: recipe.nutritional_information,
-      number_of_servings: recipe.number_of_servings,
-      ingredients: recipe.ingredients,
-      difficulty: recipe.difficulty,
-      description: recipe.description,
-      cooking_instructions: recipe.cooking_instructions,
-      cook_time_in_mins: recipe.cook_time_in_mins,
-      cook_count: recipe.cook_count,
-      created_at: recipe.created_at,
-      enabled: recipe.enabled
     });
     navigation.navigate("RecipeDetails");
   };

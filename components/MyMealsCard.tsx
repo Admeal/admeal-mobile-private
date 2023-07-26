@@ -1,29 +1,34 @@
-import { View, Text, ImageBackground, Image, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
+
 import { useRecoilState } from "recoil";
-import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
-import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import {
-  recipeListState,
-  recipeItemState,
+  dishImageState,
+  ingredientsImageState,
   isIngredientsSumbittedState,
   isReadyDishState,
-  ingredientsImageState,
-  dishImageState,
+  mealIdState,
   mealStatusState,
-  mealIdState
+  recipeItemState,
+  recipeListState
 } from "../atoms/dataAtom";
 
+import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
+import DishCoinLogo from "../assets/icons/dishCoinLogo";
+
 const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
-  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+  const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
-  const [dishImage, setDishImage] = useRecoilState(dishImageState);
-  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
+  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
+
+  const [mealLocalId, setMealLocalId] = useState<string>("");
 
   const handleStatusButtonUI = () => {
     switch (meal?.current_state) {
@@ -79,32 +84,37 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
     return recipe?.recipe_images[0];
   };
 
+  useEffect(() => {
+    setMealId(meal?.my_meals_id!);
+    setMealLocalId(meal?.my_meals_id!);
+  }, [meal?.my_meals_id]);
+
   const handleItemPress = () => {
-    setMealId(meal?.my_meals_id as string);
+    setMealId(meal?.my_meals_id!);
     setIsIngredientsSumbitted(false);
     setIngredientsImage("");
     setIsReadyDish(false);
     setDishImage("");
-    setTimeout(() => {
-      if (meal !== undefined || meal !== null) {
-        setMealId(meal?.my_meals_id as string);
-        console.log("meal found222", meal?.my_meals_id, mealId);
-        setMealId(meal?.my_meals_id as string);
-        console.log("meal found333", meal?.my_meals_id, mealId);
+    // setTimeout(() => {
+    //   if (meal !== undefined || meal !== null) {
+    //     setMealId(meal?.my_meals_id!);
+    //     console.log("meal found222", meal?.my_meals_id, mealId);
+    //     setMealId(meal?.my_meals_id as string);
+    console.log("meal found333", meal?.my_meals_id, mealId, mealLocalId);
 
-        if (meal?.dish_photos[0] === "") {
-          setIsReadyDish(false);
-        } else {
-          setIsReadyDish(true);
-        }
-        if (meal?.ingredients_photos[0] === "") {
-          setIsIngredientsSumbitted(false);
-        } else {
-          setIsIngredientsSumbitted(true);
-        }
-        setMealStatus(meal?.current_state as string);
-      }
-    }, 50);
+    if (meal?.dish_photos[0] === "") {
+      setIsReadyDish(false);
+    } else {
+      setIsReadyDish(true);
+    }
+    if (meal?.ingredients_photos[0] === "") {
+      setIsIngredientsSumbitted(false);
+    } else {
+      setIsIngredientsSumbitted(true);
+    }
+    setMealStatus(meal?.current_state as string);
+    // }
+    // }, 50);
     // }
     setTimeout(() => {
       navigation.navigate("CheckStatus");

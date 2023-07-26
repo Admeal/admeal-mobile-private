@@ -1,5 +1,5 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native";
+
 import HomeTopBar from "../components/HomeTopBar";
 import RecipesBar from "../components/RecipesBar";
 import RecipeTabs from "../components/RecipeTabs";

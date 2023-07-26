@@ -5,12 +5,9 @@ export const userState = atom({
   default: null as null | UserProps
 });
 
-export const userCreditsState = atom<CreditsProps>({
+export const userCreditsState = atom({
   key: "userCreditsState",
-  default: {
-    admeal_token: 0,
-    dish_token: 0
-  }
+  default: null as null | CreditsProps
 });
 
 export const userListState = atom({
@@ -45,6 +42,8 @@ export const recipeItemState = atom<RecipeProps>({
     cook_time_in_mins: 0,
     cooking_instructions: "",
     created_at: "",
+    creator_name: "",
+    creator_photo: "",
     description: "",
     difficulty: "",
     enabled: false,
@@ -53,10 +52,9 @@ export const recipeItemState = atom<RecipeProps>({
     nutritional_information: {
       calories_in_cal: 0,
       carbs_in_grams: 0,
-      protein_in_grams: 0,
-      fat_in_grams: 0
+      fat_in_grams: 0,
+      protein_in_grams: 0
     },
-
     recipe_id: 0,
     recipe_name: "",
     recipe_images: [""],

@@ -1,10 +1,10 @@
-import { View, Text, ImageBackground, Image, TouchableOpacity } from "react-native";
-import React from "react";
-import PriceTag from "./PriceTag";
-import TimeTag from "./TimeTag";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { useRecoilState } from "recoil";
 import { recipeItemState } from "../atoms/dataAtom";
+
+import PriceTag from "./PriceTag";
+import TimeTag from "./TimeTag";
 import CookCountIcon from "../assets/icons/cookCountIcon";
 
 const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
@@ -12,20 +12,22 @@ const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
 
   const handleItemPress = () => {
     setRecipeItem({
-      recipe_name: recipe.recipe_name,
-      token_reward: recipe.token_reward,
-      recipe_images: recipe.recipe_images,
-      recipe_id: recipe.recipe_id,
-      nutritional_information: recipe.nutritional_information,
-      number_of_servings: recipe.number_of_servings,
-      ingredients: recipe.ingredients,
-      difficulty: recipe.difficulty,
-      description: recipe.description,
-      cooking_instructions: recipe.cooking_instructions,
-      cook_time_in_mins: recipe.cook_time_in_mins,
       cook_count: recipe.cook_count,
+      cook_time_in_mins: recipe.cook_time_in_mins,
+      cooking_instructions: recipe.cooking_instructions,
       created_at: recipe.created_at,
-      enabled: recipe.enabled
+      creator_name: recipe.creator_name,
+      creator_photo: recipe.creator_photo,
+      description: recipe.description,
+      difficulty: recipe.difficulty,
+      enabled: recipe.enabled,
+      ingredients: recipe.ingredients,
+      number_of_servings: recipe.number_of_servings,
+      nutritional_information: recipe.nutritional_information,
+      recipe_id: recipe.recipe_id,
+      recipe_images: recipe.recipe_images,
+      recipe_name: recipe.recipe_name,
+      token_reward: recipe.token_reward
     });
     navigation.navigate("RecipeDetails");
   };
@@ -51,10 +53,10 @@ const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
         borderRadius={16}
         source={{ uri: recipe.recipe_images[0] }}
         resizeMode="cover"
-        className="absolute h-full w-full rounded-xl"
+        className="absolute w-full h-full rounded-xl"
       />
       <PriceTag tokenName="DISH" price={recipe.token_reward} />
-      <View className="absolute bottom-0 h-2/5 w-full rounded-b-xl bg-white p-2">
+      <View className="absolute bottom-0 w-full p-2 bg-white h-2/5 rounded-b-xl">
         <Text className="h-10 font-[Poppins-600] text-base leading-5 text-[#1D1D1D]">
           {recipe.recipe_name}
         </Text>

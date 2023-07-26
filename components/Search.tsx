@@ -4,8 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome } from "@expo/vector-icons";
 
 const Search = () => {
-  const [searchSubmitValue, setSearchSubmitValue] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+  const [searchSubmitValue, setSearchSubmitValue] = useState<string>("");
 
   const handleEndEditing = () => {
     setSearchSubmitValue(search);

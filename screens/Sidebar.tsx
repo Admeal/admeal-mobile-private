@@ -1,21 +1,23 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import {
   DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem
+  DrawerItem,
+  DrawerItemList
 } from "@react-navigation/drawer";
 import LogoutIcon from "../assets/icons/logoutIcon";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/dataAtom";
+import AdmealLogoSmall from "../assets/icons/admealLogoSmall";
 
 const Sidebar = (props: any) => {
   const [userItem, setUserItem] = useRecoilState(userState);
 
   const handleLogout = () => {
-    // logout();
-    console.log("logout needs fixing");
-    props.navigation.closeDrawer();
+    setUserItem(null);
+    setTimeout(() => {
+      props.navigation.closeDrawer();
+    }, 200);
   };
 
   const getLabel = (focused: boolean, color: string, label: string) => {
@@ -35,10 +37,11 @@ const Sidebar = (props: any) => {
   };
 
   return (
-    <View className="relative h-full flex-col justify-between">
+    <View className="relative flex-col justify-between h-full">
       <DrawerContentScrollView className="relative h-full" {...props}>
         <View className="flex-1">
-          <View className="px-5 pb-12 pt-20">
+          <View className="px-5 pt-20 pb-12">
+            {/* <AdmealLogoSmall /> */}
             <Image source={require("../assets/png/Logo.png")} />
           </View>
 

@@ -1,31 +1,34 @@
-import { View, Text, TouchableOpacity, BackHandler } from "react-native";
+import { BackHandler, Text, TouchableOpacity, View } from "react-native";
 import { useEffect, useState, useCallback, useLayoutEffect } from "react";
 import { useRecoilState } from "recoil";
 import {
-  isIngredientsSumbittedState,
-  isReadyDishState,
+  dishImageState,
   ingredientsImageState,
-  dishImageState
+  isIngredientsSumbittedState
 } from "../atoms/dataAtom";
-import { Camera, CameraProps } from "expo-camera";
+
+import { Camera, CameraProps, CameraType, ConstantsType, FlashMode } from "expo-camera";
 import { useFocusEffect } from "@react-navigation/native";
 
 import GoBackButton from "../components/buttons/GoBackButton";
+import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 import LoadingScreen from "./LoadingScreen";
 
 const CameraUpload = ({ navigation }: GroupMealProps) => {
+  const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
-  const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
-  const [dishImage, setDishImage] = useRecoilState(dishImageState);
 
-  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [camera, setCamera] = useState<Camera | null>(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [type, setType] = useState(CameraType.back);
+  const [flashMode, setFlashMode] = useState<boolean>(false);
+  const [flashText, setFlashText] = useState<string>(FlashMode.off);
 
   useLayoutEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
@@ -72,19 +75,6 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
     }
   };
 
-  const handlePictureButton = () => {
-    Camera.Constants.AutoFocus.on;
-    const picture = takePicture();
-  };
-
-  const handleFlashButton = () => {
-    if (Camera.Constants.FlashMode.off) {
-      Camera.Constants.FlashMode.on;
-    } else {
-      Camera.Constants.FlashMode.off;
-    }
-  };
-
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
@@ -94,6 +84,7 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
   ) : (
     <Camera
       className="flex-1 flex-col items-center justify-center"
+      flashMode={flashText as FlashMode}
       type={type}
       ref={(ref) => {
         setCamera(ref);
@@ -102,17 +93,25 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
       <View className="w-full flex-row items-center justify-end self-start">
         {/* flash button */}
         <TouchableOpacity
-          className="mr-8 mt-10 h-[40px] w-[40px] self-end rounded-full bg-[#919EAB]/50"
-          style={{}}
-          onPress={handleFlashButton}>
-          <Text>11</Text>
+          className="mr-8 mt-10 h-[40px] w-[40px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
+          onPress={() => {
+            setFlashMode(!flashMode);
+            setFlashText(FlashMode.on ? "on" : "off");
+          }}>
+          {flashMode ? (
+            <Ionicons name="flash-outline" size={24} color="white" />
+          ) : (
+            <Ionicons name="flash-off-outline" size={24} color="white" />
+          )}
         </TouchableOpacity>
       </View>
       <View className="flex-1 flex-row bg-transparent">
         <TouchableOpacity
-          className="mb-8 h-[60px] w-[60px] self-end rounded-full bg-[#919EAB]/50"
+          className="mb-8 h-[60px] w-[60px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
           style={{}}
-          onPress={handlePictureButton}></TouchableOpacity>
+          onPress={takePicture}>
+          <AntDesign name="camerao" size={24} color="white" />
+        </TouchableOpacity>
       </View>
     </Camera>
   );

@@ -4,9 +4,9 @@ import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 
 type PriceTagProps = {
+  coinNo?: number;
   price: number;
   tokenName: string;
-  coinNo?: number;
 };
 
 const PriceTag = ({ price, tokenName }: PriceTagProps) => {

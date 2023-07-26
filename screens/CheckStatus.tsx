@@ -124,6 +124,8 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
           cook_time_in_mins: recipe.cook_time_in_mins,
           cook_count: recipe.cook_count,
           created_at: recipe.created_at,
+          creator_name: recipe.creator_name,
+          creator_photo: recipe.creator_photo,
           enabled: recipe.enabled
         });
       }

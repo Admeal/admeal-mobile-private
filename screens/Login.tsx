@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
-import useAuth from "../hooks/useAuth";
+
 import AdmealLogoBig from "../assets/icons/admealLogoBig";
 import AppleLogo from "../assets/icons/appleLogo";
 import GoogleLogo from "../assets/icons/googleLogo";
@@ -9,6 +8,7 @@ import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/dataAtom";
+import LoadingScreen from "./LoadingScreen";
 
 const Login = () => {
   const [userItem, setUserItem] = useRecoilState(userState);
@@ -30,16 +30,20 @@ const Login = () => {
     const user_sign_in = auth().signInWithCredential(googleCredential);
     user_sign_in
       .then((user) => {
-        console.log(user);
-        setUserItem(user as any);
+        console.log(user, "delay 1 second");
+        setTimeout(() => {
+          setUserItem(user as any);
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  return (
-    <View className="h-screen items-center space-y-4 bg-white">
+  return userItem ? (
+    <LoadingScreen />
+  ) : (
+    <View className="items-center h-screen space-y-4 bg-white">
       <AdmealLogoBig className="my-28" />
       <TouchableOpacity
         onPress={() =>

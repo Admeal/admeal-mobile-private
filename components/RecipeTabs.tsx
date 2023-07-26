@@ -13,8 +13,8 @@ type RecipeTabsProps = {
 };
 
 const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
-  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
+  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
 
   return (
     <View className="px-5 ">

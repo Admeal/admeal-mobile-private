@@ -1,16 +1,17 @@
-import { Text, ImageBackground, View, TouchableOpacity, Image } from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+
 import PriceTag from "./PriceTag";
 
 function NFTcard({
+  description = "lorem ipsum",
   nft_name = "test",
   recipe_images = ["https://picsum.photos/200/300"],
-  token_reward = 40,
-  description = "lorem ipsum"
+  token_reward = 40
 }) {
   const handleItemPress = () => {};
 
   return (
-    <TouchableOpacity className="mr-2 rounded-2xl shadow-2xl" onPress={handleItemPress}>
+    <TouchableOpacity className="mr-2 shadow-2xl rounded-2xl" onPress={handleItemPress}>
       <ImageBackground
         style={[
           {

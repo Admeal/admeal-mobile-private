@@ -1,8 +1,10 @@
 import { useLayoutEffect, useState } from "react";
 import { View } from "react-native";
+
 import HomeTopBar from "../components/HomeTopBar";
 import RecipesBar from "../components/RecipesBar";
 import RecipeTabs from "../components/RecipeTabs";
+
 import LoadingScreen from "./LoadingScreen";
 
 export default function Home({ navigation }: GroupMealProps) {

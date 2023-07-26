@@ -1,10 +1,10 @@
 import {
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
   Image,
-  ScrollView
+  ImageBackground,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { useLayoutEffect, useState } from "react";
 import ClockIcon from "../assets/icons/clockIcon";
@@ -12,13 +12,13 @@ import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
 import GoBackButton from "../components/buttons/GoBackButton";
 import {
-  userState,
-  recipeItemState,
   isIngredientsSumbittedState,
   isReadyDishState,
+  mealIdState,
   mealStatusState,
   myMealsListState,
-  mealIdState
+  recipeItemState,
+  userState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import firestore from "@react-native-firebase/firestore";
@@ -26,19 +26,20 @@ import firestore from "@react-native-firebase/firestore";
 import LoadingScreen from "./LoadingScreen";
 
 const RecipeDetails = ({ navigation }: GroupMealProps) => {
-  const [userItem, setUserItem] = useRecoilState(userState);
-  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
-  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
-  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
+  const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
+  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
+  const [userItem, setUserItem] = useRecoilState(userState);
 
-  const [toggle, setToggle] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [mealItem, setMealItem] = useState<MealProps | undefined>(undefined);
+  const [mealLocalItem, setMealLocalItem] = useState<MealProps | undefined>(undefined);
+  const [toggle, setToggle] = useState(false);
 
   useLayoutEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", () => {
@@ -52,29 +53,31 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
   }, [navigation]);
 
   const handleCookButton = async () => {
+    console.log(myMealsList);
     if (myMealsList) {
-      setMealItem(
-        myMealsList.find(
-          (meal: MealProps) =>
-            meal.recipe_id === recipeItem.recipe_id && meal.user_id === userItem?.user.uid
-        )
+      const localMeal = myMealsList.find(
+        (meal: MealProps) =>
+          meal.recipe_id === recipeItem.recipe_id && meal.user_id === userItem!.user.uid
       );
+      console.log("localMeal", localMeal);
+      setMealLocalItem(localMeal);
+      setMealItem(mealLocalItem);
+      console.log("mealLocalItem", mealLocalItem, mealItem);
+      if (mealLocalItem) {
+        setMealId(mealLocalItem.my_meals_id);
 
-      if (mealItem) {
-        setMealId(mealItem.my_meals_id);
-
-        console.log("meal found", mealItem.my_meals_id);
-        if (mealItem.dish_photos[0] === "") {
+        console.log("meal found", mealLocalItem.my_meals_id);
+        if (mealLocalItem.dish_photos[0] === "") {
           setIsReadyDish(false);
         } else {
           setIsReadyDish(true);
         }
-        if (mealItem.ingredients_photos[0] === "") {
+        if (mealLocalItem.ingredients_photos[0] === "") {
           setIsIngredientsSumbitted(false);
         } else {
           setIsIngredientsSumbitted(true);
         }
-        setMealStatus(mealItem.current_state);
+        setMealStatus(mealLocalItem.current_state);
       } else {
         console.log("create new meal");
         const docRef = await firestore()
@@ -82,14 +85,14 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
           .doc(userItem?.user.uid)
           .collection("meals")
           .add({
-            user_id: userItem?.user.uid,
-            tokens_earned: 0,
-            recipe_id: recipeItem.recipe_id,
-            my_meals_id: myMealsList?.length,
-            ingredients_photos: [""],
-            dish_photos: [""],
+            created_at: firestore.FieldValue.serverTimestamp(),
             current_state: "INCOMPLETE",
-            created_at: firestore.FieldValue.serverTimestamp()
+            dish_photos: [""],
+            ingredients_photos: [""],
+            my_meals_id: myMealsList?.length,
+            recipe_id: recipeItem.recipe_id,
+            tokens_earned: 0,
+            user_id: userItem?.user.uid
           });
 
         await firestore()
@@ -119,7 +122,7 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
     <LoadingScreen />
   ) : (
     <ImageBackground
-      className="relative flex-1 flex-col justify-between bg-gray-500"
+      className="relative flex-col justify-between flex-1 bg-gray-500"
       source={{
         uri: recipeItem.recipe_images[0]
       }}
@@ -138,18 +141,18 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
-        <ScrollView className="flex-1 pb-5 pt-3">
+        <ScrollView className="flex-1 pt-3 pb-5">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
             {recipeItem.description}
           </Text>
           <ScrollView
             horizontal={true}
             contentContainerStyle={{
-              flexGrow: 1,
+              alignItems: "center",
               flexDirection: "row",
-              alignItems: "center"
+              flexGrow: 1
             }}
-            className="space-x-2 pt-4 ">
+            className="pt-4 space-x-2 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">

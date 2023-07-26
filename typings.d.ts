@@ -1,16 +1,18 @@
 type GroupRecipesProps = {
   recipe: RecipeProps;
-  navigation: NavigationProp<Record<string, object | undefined>, string, any, any, any>;
+  navigation?: NavigationProp<Record<string, object | undefined>, string, any, any, any>;
 };
 
 type RecipeProps = {
   cook_count: number;
   cook_time_in_mins: number;
   cooking_instructions: string;
+  enabled: boolean;
   created_at: string;
+  creator_name: string;
+  creator_photo: string;
   description: string;
   difficulty: string;
-  enabled: boolean;
   ingredients: [
     {
       measurement_units: string;
@@ -29,6 +31,13 @@ type RecipeProps = {
   recipe_images: string[];
   recipe_name: string;
   token_reward: number;
+};
+
+type NavigationProp = {
+  navigate: (screen: string, params?: any) => void;
+  getState: () => { routes: { name: string }[] };
+  reset: (arg0: { index: number; routes: { name: string }[] }) => void;
+  dispatch: (arg0: any) => void;
 };
 
 type NavigationNavigateProp = {
@@ -61,6 +70,7 @@ type MealProps = {
   tokens_earned: number;
   user_id: string;
 };
+
 type timestamp = {
   nanoseconds: number;
   seconds: number;
@@ -69,9 +79,10 @@ type timestamp = {
 type AuthProps = {
   admin: boolean;
   black_listed: boolean;
-  created_at?: timestamp;
+  created_at: timestamp;
   creator: boolean;
-  email?: string;
+  device_id: string;
+  email: string;
 };
 
 type CreditsProps = {
@@ -95,10 +106,10 @@ type AdditionalUserInfoProps = {
 };
 
 type UserProps = {
-  user: {
-    uid: string;
-    email: string;
-  };
-  profile: ProfileUserInfoProps;
   additionalUserInfo: AdditionalUserInfoProps;
+  profile: ProfileUserInfoProps;
+  user: {
+    email: string;
+    uid: string;
+  };
 };
