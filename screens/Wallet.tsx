@@ -101,7 +101,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
   };
 
   useEffect(() => {
-    if (userCredits === null || userCredits === undefined) {
+    if (userCredits?.admeal_token === null || userCredits?.admeal_token === undefined) {
       console.log("user", userCredits);
       createUser();
     } else {
@@ -117,6 +117,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
   };
 
   const copyWalletAddress = async () => {
+    // console.log(address);
     await Clipboard.setStringAsync(address?.toString()!);
     await Clipboard.getStringAsync().then((res) => {
       console.log(res);
@@ -127,11 +128,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
 
   const handleReceive = () => {};
 
-  const openAccountModal = () => {
-    setIsAccountModalVisible(!isAccountModalVisible);
-  };
-
-  console.log(provider);
+  // console.log(provider);
 
   return isLoading ? (
     <LoadingScreen />
@@ -184,7 +181,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
             <Text className="pr-2.5 font-[Poppins-400] text-xs font-semibold text-white">
               {address ? trancuateWalletAddress() : ""}
             </Text>
-            <TouchableOpacity onPress={() => copyWalletAddress}>
+            <TouchableOpacity onPress={copyWalletAddress}>
               {address && <FileIcon />}
             </TouchableOpacity>
           </View>
@@ -226,7 +223,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
             </View>
             <View className="flex-col items-center justify-center pt-8">
               <TouchableOpacity
-                onPress={openAccountModal}
+                onPress={() => setIsAccountModalVisible(!isAccountModalVisible)}
                 className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-white/50">
                 <GearIcon />
               </TouchableOpacity>
