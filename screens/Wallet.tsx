@@ -155,6 +155,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} color="white" />
           <View className="flex-row flex-1"></View>
+          {/* <ConnectWalletButton /> */}
           {isConnected ? <ReconnectWalletButton /> : <ConnectWalletButton />}
         </View>
         {/* // profile */}

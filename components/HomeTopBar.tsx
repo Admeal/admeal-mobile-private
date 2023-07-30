@@ -66,7 +66,7 @@ const HomeTopBar = ({ navigation }: GroupMealProps) => {
         </TouchableOpacity>
         <TouchableOpacity className="flex-row items-center space-x-2">
           <AdmealCoinLogo size={16} scale={0.7} />
-          <Text>{admealCoins}.00</Text>
+          <Text>{admealCoins ? admealCoins : 0}.00</Text>
         </TouchableOpacity>
       </View>
     </View>
