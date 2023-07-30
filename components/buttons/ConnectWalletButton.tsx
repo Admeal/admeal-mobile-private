@@ -11,7 +11,11 @@ const providerMetadata = {
   name: "admeal-mobile",
   description: "nft-cooking",
   url: "https://your-project-website.com/",
-  icons: ["https://your-project-logo.com/"]
+  icons: ["https://your-project-logo.com/"],
+  redirect: {
+    native: "yourproject://",
+    universal: "https://your-project-website.com/"
+  }
 };
 
 const ConnectWalletButton = ({ color }: any) => {
@@ -21,7 +25,7 @@ const ConnectWalletButton = ({ color }: any) => {
     <>
       <TouchableOpacity
         onPress={() => open()}
-        className="flex-row items-center space-x-2 px-7 pt-12">
+        className="flex-row items-center pt-12 space-x-2 px-7">
         <Text className={`font-[Poppins-400] text-base ${!color && "text-white"}`}>
           Connect Wallet
         </Text>
