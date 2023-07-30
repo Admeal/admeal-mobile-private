@@ -117,7 +117,10 @@ const Wallet = ({ navigation }: GroupMealProps) => {
   };
 
   const copyWalletAddress = async () => {
-    await Clipboard.setStringAsync("hello world");
+    await Clipboard.setStringAsync(address?.toString()!);
+    await Clipboard.getStringAsync().then((res) => {
+      console.log(res);
+    });
   };
 
   const handleSend = () => {};
@@ -181,7 +184,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
             <Text className="pr-2.5 font-[Poppins-400] text-xs font-semibold text-white">
               {address ? trancuateWalletAddress() : ""}
             </Text>
-            <TouchableOpacity onPress={copyWalletAddress}>
+            <TouchableOpacity onPress={() => copyWalletAddress}>
               {address && <FileIcon />}
             </TouchableOpacity>
           </View>
