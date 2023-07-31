@@ -326,7 +326,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
                 Leave the application, all data will be saved.
               </Text>
             </View>
-            <RedModalButton functionality="signOut" />
+            <RedModalButton navigation={navigation} functionality="signOut" />
           </View>
         </View>
       </Modal>
@@ -349,7 +349,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
                 with it will be permanently removed from our systems.
               </Text>
             </View>
-            <RedModalButton functionality="deleteAccount" />
+            <RedModalButton navigation={navigation} functionality="deleteAccount" />
           </View>
         </View>
       </Modal>

@@ -6,29 +6,45 @@ import { userState } from "../../atoms/dataAtom";
 
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
+import auth from "@react-native-firebase/auth";
 
 type RedModalButtonProps = {
   functionality: string;
+  navigation: NavigationNavigateProp;
 };
 
-const RedModalButton = ({ functionality }: RedModalButtonProps) => {
+const RedModalButton = ({ navigation, functionality }: RedModalButtonProps) => {
   const [userItem, setUserItem] = useRecoilState(userState);
 
   const handleDisconnect = () => {
     setUserItem(null);
   };
 
-  const handleDeleteAccount = () => {
-    firestore()
-      .collection("user_data")
-      .doc(userItem?.user.uid)
-      .delete()
-      .then(() => {
-        console.log("User deleted!");
-      });
-    storage().ref(`user_photos/${userItem?.user.uid}`).delete();
+  const handleDeleteAccount = async () => {
+    // todo cloud function to delete user data
+    // await firestore()
+    //   .collection(`user_data}`)
+    //   .doc(userItem?.user.uid)
+    //   .delete()
+    //   .then(() => {
+    //     console.log("User deleted!");
+    //   });
+    // await firestore()
+    //   .collection("user_credits")
+    //   .doc(userItem?.user.uid)
+    //   .delete()
+    //   .then(() => {
+    //     console.log("User credits deleted!");
+    //   });
 
-    setUserItem(null);
+    console.log(userItem?.user.uid);
+    // await storage()
+    //   .ref(`user_photos/${userItem?.user.uid}/`)
+    //   .delete()
+    //   .then(() => {
+    //     setUserItem(null);
+    //     navigation.navigate("Home");
+    //   });
   };
 
   const handlePress = () => {

@@ -64,7 +64,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
                 index: 0,
                 routes: [{ name: "My Meals" }]
               });
-            }, 200);
+            }, 250);
           }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
             routeName === "My Meals" ? "border-[#FF1E00]" : "border-[#919EAB]"
