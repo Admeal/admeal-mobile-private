@@ -3,7 +3,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { useRecoilState } from "recoil";
-import { userCreditsState, userState } from "../atoms/dataAtom";
+import {
+  defaultMyMealsListState,
+  defaultRecipeListState,
+  myMealsListState,
+  recipeListState,
+  userCreditsState,
+  userState
+} from "../atoms/dataAtom";
 
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
@@ -11,6 +18,13 @@ import DishCoinLogo from "../assets/icons/dishCoinLogo";
 const HomeTopBar = ({ navigation }: GroupMealProps) => {
   const [user, setUser] = useRecoilState(userState);
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
+  const [defaultMyMealsList, setDefaultMyMealsList] = useRecoilState(
+    defaultMyMealsListState
+  );
+  const [defaultRecipeList, setDefaultRecipeList] =
+    useRecoilState(defaultRecipeListState);
+  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
 
   const [admealCoins, setAdmealCoins] = useState(0);
   const [dishCoins, setDishCoins] = useState(0);
@@ -35,7 +49,13 @@ const HomeTopBar = ({ navigation }: GroupMealProps) => {
 
   return (
     <View className="z-1 w-full flex-row items-center justify-between bg-white px-5 pb-6 pt-[33px]">
-      <TouchableOpacity onPress={() => navigation.openDrawer()} className="">
+      <TouchableOpacity
+        onPress={() => {
+          setRecipeList(defaultRecipeList);
+          setMyMealsList(defaultMyMealsList);
+          navigation.openDrawer();
+        }}
+        className="">
         {/* image to change to svg */}
         <Image source={require("../assets/png/sidemenu.png")} />
       </TouchableOpacity>
@@ -46,7 +66,7 @@ const HomeTopBar = ({ navigation }: GroupMealProps) => {
         </TouchableOpacity>
         <TouchableOpacity className="flex-row items-center space-x-2">
           <AdmealCoinLogo size={16} scale={0.7} />
-          <Text>{admealCoins}.00</Text>
+          <Text>{admealCoins ? admealCoins : 0}.00</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2f5ada1-8780-4421-8501-e9f5973766e5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/atoms/dataAtom.ts" beforeDir="false" afterPath="$PROJECT_DIR$/atoms/dataAtom.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/MyMealsCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/MyMealsCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/PopularCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/PopularCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/TopEarningsCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/TopEarningsCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/CheckStatus.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/CheckStatus.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/RecipeDetails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/RecipeDetails.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/Sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/RecipesBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/RecipesBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Search.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/buttons/ConnectWalletButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/buttons/ConnectWalletButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/buttons/ReconnectWalletButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/buttons/ReconnectWalletButton.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/Wallet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Wallet.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/typings.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/typings.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -20,6 +20,8 @@ import WalletIcon from "../assets/icons/walletIcon";
 import firestore from "@react-native-firebase/firestore";
 import { useRecoilState } from "recoil";
 import {
+  defaultMyMealsListState,
+  defaultRecipeListState,
   myMealsListState,
   recipeListState,
   userCreditsState,
@@ -61,7 +63,12 @@ const RecipeStack = () => {
   const [user, setUser] = useRecoilState(userState);
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
+  const [defaultRecipeList, setDefaultRecipeList] =
+    useRecoilState(defaultRecipeListState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
+  const [defaultMyMealsList, setDefaultMyMealsList] = useRecoilState(
+    defaultMyMealsListState
+  );
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -71,6 +78,7 @@ const RecipeStack = () => {
       .onSnapshot((querySnapshot) => {
         const array = querySnapshot.docs.map((doc) => doc.data());
         setRecipeList(array as []);
+        setDefaultRecipeList(array as []);
         console.log("recipes sub");
       });
 
@@ -89,6 +97,7 @@ const RecipeStack = () => {
       .onSnapshot((querySnapshot) => {
         const array = querySnapshot.docs.map((doc) => doc.data());
         setMyMealsList(array as []);
+        setDefaultMyMealsList(array as []);
         console.log("meals sub");
       });
 

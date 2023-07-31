@@ -18,10 +18,7 @@ const GoBackButton = ({ navigation, color }: GoBackButtonProps) => {
         case "RecipeDetails":
           return navigation.navigate("Home");
         case "CheckStatus":
-          return navigation.reset({
-            index: 0,
-            routes: [{ name: "My Meals" }]
-          });
+          return navigation.navigate("My Meals");
         case "CameraUpload":
           console.log("camera upload");
           return navigation.navigate("CheckStatus");

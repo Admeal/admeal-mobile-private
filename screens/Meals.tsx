@@ -8,7 +8,7 @@ export default function Meals({ navigation }: GroupMealProps) {
   return (
     <View className="relative">
       <HomeTopBar navigation={navigation} />
-      <RecipesBar />
+      <RecipesBar title="My Meals" />
       <RecipeTabs navigation={navigation} routeName="My Meals" />
     </View>
   );

@@ -101,7 +101,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
   };
 
   useEffect(() => {
-    if (userCredits === null || userCredits === undefined) {
+    if (userCredits?.admeal_token === null || userCredits?.admeal_token === undefined) {
       console.log("user", userCredits);
       createUser();
     } else {
@@ -117,18 +117,18 @@ const Wallet = ({ navigation }: GroupMealProps) => {
   };
 
   const copyWalletAddress = async () => {
-    await Clipboard.setStringAsync("hello world");
+    // console.log(address);
+    await Clipboard.setStringAsync(address?.toString()!);
+    await Clipboard.getStringAsync().then((res) => {
+      console.log(res);
+    });
   };
 
   const handleSend = () => {};
 
   const handleReceive = () => {};
 
-  const openAccountModal = () => {
-    setIsAccountModalVisible(!isAccountModalVisible);
-  };
-
-  console.log(provider);
+  // console.log(provider);
 
   return isLoading ? (
     <LoadingScreen />
@@ -155,6 +155,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} color="white" />
           <View className="flex-row flex-1"></View>
+          {/* <ConnectWalletButton /> */}
           {isConnected ? <ReconnectWalletButton /> : <ConnectWalletButton />}
         </View>
         {/* // profile */}
@@ -223,7 +224,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
             </View>
             <View className="flex-col items-center justify-center pt-8">
               <TouchableOpacity
-                onPress={openAccountModal}
+                onPress={() => setIsAccountModalVisible(!isAccountModalVisible)}
                 className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-white/50">
                 <GearIcon />
               </TouchableOpacity>
@@ -325,7 +326,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
                 Leave the application, all data will be saved.
               </Text>
             </View>
-            <RedModalButton functionality="signOut" />
+            <RedModalButton navigation={navigation} functionality="signOut" />
           </View>
         </View>
       </Modal>
@@ -348,7 +349,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
                 with it will be permanently removed from our systems.
               </Text>
             </View>
-            <RedModalButton functionality="deleteAccount" />
+            <RedModalButton navigation={navigation} functionality="deleteAccount" />
           </View>
         </View>
       </Modal>

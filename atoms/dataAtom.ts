@@ -20,6 +20,16 @@ export const recipeListState = atom({
   default: [] as RecipeProps[]
 });
 
+export const defaultRecipeListState = atom({
+  key: "defaultRecipeListState",
+  default: [] as RecipeProps[]
+});
+
+export const defaultMyMealsListState = atom({
+  key: "defaultMyMealsListState",
+  default: [] as MealProps[]
+});
+
 export const mealIdState = atom({
   key: "mealIdState",
   default: "" as string
