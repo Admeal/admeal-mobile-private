@@ -36,7 +36,7 @@ const Search = () => {
     if (search.length > 0) {
       switch (routeName) {
         case "Home":
-          setRecipeList(filteredRecipeList as RecipeProps[]);
+          setDefaultRecipeList(filteredRecipeList as RecipeProps[]);
           break;
         case "My Meals":
           let list = [] as any;
@@ -49,8 +49,7 @@ const Search = () => {
             });
           });
 
-          setMyMealsList(list as MealProps[]);
-
+          setDefaultMyMealsList(list);
           break;
         default:
           break;
@@ -61,10 +60,10 @@ const Search = () => {
   const resetSubmitValue = () => {
     switch (navigation.getState().routes[0].name) {
       case "Home":
-        setRecipeList(defaultRecipeList as RecipeProps[]);
+        setDefaultRecipeList([]);
         break;
       case "My Meals":
-        setMyMealsList(defaultMyMealsList as MealProps[]);
+        setDefaultMyMealsList([]);
         break;
       default:
         break;

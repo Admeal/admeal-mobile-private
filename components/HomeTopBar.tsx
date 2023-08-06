@@ -23,8 +23,6 @@ const HomeTopBar = ({ navigation }: GroupMealProps) => {
   );
   const [defaultRecipeList, setDefaultRecipeList] =
     useRecoilState(defaultRecipeListState);
-  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
 
   const [admealCoins, setAdmealCoins] = useState(0);
   const [dishCoins, setDishCoins] = useState(0);
@@ -51,8 +49,8 @@ const HomeTopBar = ({ navigation }: GroupMealProps) => {
     <View className="z-1 w-full flex-row items-center justify-between bg-white px-5 pb-6 pt-[33px]">
       <TouchableOpacity
         onPress={() => {
-          setRecipeList(defaultRecipeList);
-          setMyMealsList(defaultMyMealsList);
+          setDefaultRecipeList([]);
+          setDefaultMyMealsList([]);
           navigation.openDrawer();
         }}
         className="">
