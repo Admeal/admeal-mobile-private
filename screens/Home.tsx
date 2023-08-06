@@ -7,7 +7,7 @@ import RecipeTabs from "../components/RecipeTabs";
 
 import LoadingScreen from "./LoadingScreen";
 
-export default function Home({ navigation }: GroupMealProps) {
+export default function Home({ navigation }: ScreensProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useLayoutEffect(() => {

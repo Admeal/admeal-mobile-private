@@ -1,37 +1,10 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
-import { useRecoilState } from "recoil";
-import { recipeItemState } from "../atoms/dataAtom";
-
 import PriceTag from "./PriceTag";
 import TimeTag from "./TimeTag";
 import CookCountIcon from "../assets/icons/cookCountIcon";
 
 const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
-  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
-
-  const handleItemPress = () => {
-    setRecipeItem({
-      cook_count: recipe.cook_count,
-      cook_time_in_mins: recipe.cook_time_in_mins,
-      cooking_instructions: recipe.cooking_instructions,
-      created_at: recipe.created_at,
-      creator_name: recipe.creator_name,
-      creator_photo: recipe.creator_photo,
-      description: recipe.description,
-      difficulty: recipe.difficulty,
-      enabled: recipe.enabled,
-      ingredients: recipe.ingredients,
-      number_of_servings: recipe.number_of_servings,
-      nutritional_information: recipe.nutritional_information,
-      recipe_id: recipe.recipe_id,
-      recipe_images: recipe.recipe_images,
-      recipe_name: recipe.recipe_name,
-      token_reward: recipe.token_reward
-    });
-    navigation.navigate("RecipeDetails");
-  };
-
   return (
     <TouchableOpacity
       style={[
@@ -47,12 +20,12 @@ const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
           elevation: 7
         }
       ]}
-      onPress={handleItemPress}
+      onPress={() => navigation.navigate("RecipeDetails", { recipe })}
       className="relative mb-4 h-[60vw] w-[47%] rounded-xl bg-gray-800 shadow-md">
-      {recipe.recipe_images[0] && (
+      {recipe.recipe_images[0] !== "" && (
         <Image
           borderRadius={16}
-          source={{ uri: recipe.recipe_images[0] }}
+          source={{ uri: recipe.recipe_images[0], method: "POST" }}
           resizeMode="cover"
           className="absolute w-full h-full rounded-xl"
         />

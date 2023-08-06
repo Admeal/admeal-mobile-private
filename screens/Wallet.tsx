@@ -37,7 +37,7 @@ import { useRecoilState } from "recoil";
 import { userCreditsState, userState } from "../atoms/dataAtom";
 import firestore from "@react-native-firebase/firestore";
 
-const Wallet = ({ navigation }: GroupMealProps) => {
+const Wallet = ({ navigation }: NavigationProp) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [userItem, setUserItem] = useRecoilState(userState);
 
@@ -163,7 +163,7 @@ const Wallet = ({ navigation }: GroupMealProps) => {
           <Image
             className="rounded-full"
             style={{ width: 50, height: 50 }}
-            source={{ uri: userItem?.additionalUserInfo.profile.picture }}
+            source={{ uri: userItem?.additionalUserInfo.profile.picture, method: "POST" }}
           />
           <View className="h-[50px]">
             <Text className="font-[Poppins-600] text-base font-semibold text-white">

@@ -25,7 +25,8 @@ import firestore from "@react-native-firebase/firestore";
 
 import LoadingScreen from "./LoadingScreen";
 
-const RecipeDetails = ({ navigation }: GroupMealProps) => {
+const RecipeDetails = ({ navigation, route }: ScreensProps) => {
+  const { recipe } = route.params;
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
@@ -33,12 +34,9 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
   const [mealId, setMealId] = useRecoilState(mealIdState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
-  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const [userItem, setUserItem] = useRecoilState(userState);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [mealItem, setMealItem] = useState<MealProps | undefined>(undefined);
-  const [mealLocalItem, setMealLocalItem] = useState<MealProps | undefined>(undefined);
   const [toggle, setToggle] = useState(false);
 
   useLayoutEffect(() => {
@@ -53,69 +51,44 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
   }, [navigation]);
 
   const handleCookButton = async () => {
-    console.log(myMealsList);
-    if (myMealsList) {
-      const localMeal = myMealsList.find(
-        (meal: MealProps) =>
-          meal.recipe_id === recipeItem.recipe_id && meal.user_id === userItem!.user.uid
-      );
-      console.log("localMeal", localMeal);
-      setMealLocalItem(localMeal);
-      setMealItem(mealLocalItem);
-      console.log("mealLocalItem", mealLocalItem, mealItem);
-      if (mealLocalItem) {
-        setMealId(mealLocalItem.my_meals_id);
+    console.log("create new meal");
+    const docRef = await firestore()
+      .collection(`user_data`)
+      .doc(userItem?.user.uid)
+      .collection("meals")
+      .add({
+        created_at: firestore.FieldValue.serverTimestamp(),
+        current_state: "INCOMPLETE",
+        dish_photos: [""],
+        ingredients_photos: [""],
+        my_meals_id: myMealsList?.length,
+        recipe_id: recipe.recipe_id,
+        submitted: false,
+        submitted_at: null,
+        tokens_earned: 0,
+        user_id: userItem?.user.uid
+      });
 
-        console.log("meal found", mealLocalItem.my_meals_id);
-        if (mealLocalItem.dish_photos[0] === "") {
-          setIsReadyDish(false);
-        } else {
-          setIsReadyDish(true);
-        }
-        if (mealLocalItem.ingredients_photos[0] === "") {
-          setIsIngredientsSumbitted(false);
-        } else {
-          setIsIngredientsSumbitted(true);
-        }
-        setMealStatus(mealLocalItem.current_state);
-      } else {
-        console.log("create new meal");
-        const docRef = await firestore()
-          .collection(`user_data`)
-          .doc(userItem?.user.uid)
-          .collection("meals")
-          .add({
-            created_at: firestore.FieldValue.serverTimestamp(),
-            current_state: "INCOMPLETE",
-            dish_photos: [""],
-            ingredients_photos: [""],
-            my_meals_id: myMealsList?.length,
-            recipe_id: recipeItem.recipe_id,
-            tokens_earned: 0,
-            user_id: userItem?.user.uid
-          });
+    await firestore()
+      .collection(`user_data`)
+      .doc(userItem?.user.uid)
+      .collection("meals")
+      .doc(docRef.id)
+      .update({
+        my_meals_id: docRef.id
+      });
 
-        await firestore()
-          .collection(`user_data`)
-          .doc(userItem?.user.uid)
-          .collection("meals")
-          .doc(docRef.id)
-          .update({
-            my_meals_id: docRef.id
-          });
+    console.log("Document written with ID: ", docRef.id);
+    setMealId(docRef.id);
 
-        console.log("Document written with ID: ", docRef.id);
-        setMealId(docRef.id);
+    setIsIngredientsSumbitted(false);
+    setIsReadyDish(false);
+    setMealStatus("INCOMPLETE");
 
-        setIsIngredientsSumbitted(false);
-        setIsReadyDish(false);
-        setMealStatus("INCOMPLETE");
-      }
-    }
-
-    setTimeout(() => {
-      navigation.navigate("CheckStatus");
-    }, 500);
+    navigation.navigate("CheckStatus", {
+      recipe,
+      mealId: docRef.id
+    });
   };
 
   return isLoading ? (
@@ -124,26 +97,27 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
     <ImageBackground
       className="relative flex-col justify-between flex-1 bg-gray-500"
       source={{
-        uri: recipeItem.recipe_images[0]
+        uri: recipe.recipe_images[0],
+        method: "POST"
       }}
       resizeMode="cover">
-      <GoBackButton color="white" navigation={navigation} />
+      <GoBackButton mealId={mealId} navigation={navigation} color="white" />
 
       <View className="absolute bottom-0 h-2/3 flex-col justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
         <View className="flex-row items-end justify-between">
           <Text className="w-[50%] font-[Poppins-700] text-2xl">
-            {recipeItem.recipe_name}
+            {recipe.recipe_name}
           </Text>
           <View className="flex-row items-center space-x-2">
             <Text className="mt-1 font-[Poppins-400] text-xs">Total:</Text>
-            <Text className="font-[Poppins-700] text-2xl">{recipeItem.token_reward}</Text>
+            <Text className="font-[Poppins-700] text-2xl">{recipe.token_reward}</Text>
             {/* this needs to change to svg */}
             <Image source={require("../assets/png/coin1.png")} />
           </View>
         </View>
         <ScrollView className="flex-1 pt-3 pb-5">
           <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">
-            {recipeItem.description}
+            {recipe.description}
           </Text>
           <ScrollView
             horizontal={true}
@@ -158,14 +132,14 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
               <View className="flex-row items-center space-x-2 ">
                 <ClockIcon />
                 <Text className="font-[Poppins-500] text-xs">
-                  {recipeItem.cook_time_in_mins}
+                  {recipe.cook_time_in_mins}
                 </Text>
                 <Text className="font-[Poppins-500] text-xs">mins</Text>
               </View>
               <View className="flex-row items-center space-x-2 ">
                 <ServingsIcon />
                 <Text className="font-[Poppins-500] text-xs">
-                  {recipeItem.number_of_servings}
+                  {recipe.number_of_servings}
                 </Text>
                 <Text className="font-[Poppins-500] text-xs">servings</Text>
               </View>
@@ -180,13 +154,13 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
                     Cal.:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#FC7800]">
-                    {recipeItem.nutritional_information.calories_in_cal}kcal
+                    {recipe.nutritional_information.calories_in_cal}kcal
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DBF7E0] px-4 py-2">
                   <Text className="font-[Poppins-400] text-xs  text-[#2BD449]">Fat:</Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#2BD449]">
-                    {recipeItem.nutritional_information.fat_in_grams}g
+                    {recipe.nutritional_information.fat_in_grams}g
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#E4E2F8] px-4 py-2">
@@ -194,7 +168,7 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
                     Protein:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#7264FB]">
-                    {recipeItem.nutritional_information.protein_in_grams}g
+                    {recipe.nutritional_information.protein_in_grams}g
                   </Text>
                 </View>
                 <View className="flex-row items-center space-x-2 self-center rounded-full bg-[#DDF9F5] px-4 py-2">
@@ -202,7 +176,7 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
                     Carbs:
                   </Text>
                   <Text className="font-[Poppins-600] text-xs  text-[#23D8BE]">
-                    {recipeItem.nutritional_information.carbs_in_grams}g
+                    {recipe.nutritional_information.carbs_in_grams}g
                   </Text>
                 </View>
               </View>
@@ -245,14 +219,14 @@ const RecipeDetails = ({ navigation }: GroupMealProps) => {
           <ScrollView className="pb-32">
             {!toggle ? (
               <View className="">
-                {recipeItem.ingredients.map((ingredient, index) => (
+                {recipe.ingredients.map((ingredient, index) => (
                   <IngredientsItem key={index} ingredient={ingredient} />
                 ))}
               </View>
             ) : (
               <View className="pt-2">
                 <Text className="font-[Poppins-400] text-xs leading-6  text-[#637381]">
-                  {recipeItem.cook_time_in_mins}
+                  {recipe.cook_time_in_mins}
                 </Text>
               </View>
             )}

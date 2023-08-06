@@ -16,7 +16,9 @@ import { AntDesign } from "@expo/vector-icons";
 
 import LoadingScreen from "./LoadingScreen";
 
-const CameraUpload = ({ navigation }: GroupMealProps) => {
+const CameraUpload = ({ navigation, route }: ScreensProps) => {
+  const { mealId } = route.params;
+  console.log("camera mealId", mealId);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -57,6 +59,10 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission((prevState) => status === "granted");
     })();
+    return () => {
+      setCamera(null);
+      setHasCameraPermission(null);
+    };
   }, []);
 
   const takePicture = async () => {
@@ -71,7 +77,7 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
       } else {
         setDishImage(data.uri);
       }
-      navigation.navigate("ImageVerification");
+      navigation.navigate("ImageVerification", { mealId, temporaryImage: data.uri });
     }
   };
 
@@ -89,7 +95,7 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
       ref={(ref) => {
         setCamera(ref);
       }}>
-      <GoBackButton navigation={navigation} color="white" />
+      <GoBackButton mealId={mealId} navigation={navigation} color="white" />
       <View className="w-full flex-row items-center justify-end self-start">
         {/* flash button */}
         <TouchableOpacity
