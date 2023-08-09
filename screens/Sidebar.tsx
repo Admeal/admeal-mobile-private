@@ -33,13 +33,13 @@ const Sidebar = (props: SidebarProps) => {
         className={`${
           focused ? "bg-[#FF1E00]" : ""
         }  h-6 w-full flex-row items-center space-x-4 rounded-lg `}>
-        <LogoutIcon stroke={props.color} className={`mt-2`} />
+        <LogoutIcon stroke={color} className={`mt-2 mr-1.5`} />
         <TouchableOpacity onPress={handleLogout}>
           <Text
             className={`-pb-4 text-lg font-semibold ${
               focused ? "text-white" : "text-[#6D6D6D]"
             }  `}>
-            Logout
+            {label}
           </Text>
         </TouchableOpacity>
       </View>
@@ -48,9 +48,9 @@ const Sidebar = (props: SidebarProps) => {
 
   return (
     <View className="relative flex-col justify-between h-full">
-      <DrawerContentScrollView className="relative h-full" {...props}>
+      <DrawerContentScrollView className="relative" {...props}>
         <View className="flex-1">
-          <View className="px-5 pt-20 pb-12">
+          <View className="px-5 pt-16 pb-12">
             <View className="h-16">
               <AdmealLogoSmall />
             </View>
