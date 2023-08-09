@@ -89,14 +89,15 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
     <LoadingScreen />
   ) : (
     <Camera
-      className="flex-1 flex-col items-center justify-center"
+      className="flex-col items-center justify-center flex-1"
       flashMode={flashText as FlashMode}
+      ratio="16:9"
       type={type}
       ref={(ref) => {
         setCamera(ref);
       }}>
       <GoBackButton mealId={mealId} navigation={navigation} color="white" />
-      <View className="w-full flex-row items-center justify-end self-start">
+      <View className="flex-row items-center self-start justify-end w-full">
         {/* flash button */}
         <TouchableOpacity
           className="mr-8 mt-10 h-[40px] w-[40px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
@@ -111,7 +112,7 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
           )}
         </TouchableOpacity>
       </View>
-      <View className="flex-1 flex-row bg-transparent">
+      <View className="flex-row flex-1 bg-transparent">
         <TouchableOpacity
           className="mb-8 h-[60px] w-[60px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
           style={{}}

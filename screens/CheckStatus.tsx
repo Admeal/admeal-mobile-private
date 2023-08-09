@@ -97,7 +97,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
     if (array.length > 0 && meal !== null && meal !== undefined) {
       array.map((item: MealProps) => {
         if (
-          firebaseTime < day + item?.submitted_at.seconds &&
+          firebaseTime < day + item?.submitted_at?.seconds &&
           meal?.current_state === "INCOMPLETE"
         ) {
           console.log("ballz mofo");
@@ -145,14 +145,14 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <View className="- h-screen w-full flex-col items-center justify-between">
+    <View className="flex-col items-center justify-between w-full h-screen -">
       <View className="w-full">
         <View className="pt-16 pr-8"></View>
         <GoBackButton mealId={mealId} navigation={navigation} color="white" />
       </View>
 
       {mealStatus === "COMPLETE" ? (
-        <View className="h-5/6 flex-col items-center justify-between">
+        <View className="flex-col items-center justify-between h-5/6">
           <View className="mt- h-[58%] w-[300px] rounded-xl bg-gray-300">
             {dishImage !== "" && (
               <Image
@@ -166,7 +166,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
           </Text>
           <View className="flex-col items-center justify-center">
             <Text className="font-[Poppins-500] text-lg text-[#6D6D6D]">You earned</Text>
-            <View className="w-full flex-row items-center">
+            <View className="flex-row items-center w-full">
               <Text className="pr-2 font-[Poppins-700] text-2xl text-[#212B36]">
                 {tokenReward}
               </Text>
@@ -183,7 +183,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <View className="h-full w-full flex-col items-center justify-between pb-16">
+        <View className="flex-col items-center justify-between w-full h-full pb-16">
           <Text className=" font-[Poppins-700] text-2xl">Excellent choice!</Text>
           <View>
             <Text className="px-4 text-center font-[Poppins-600] text-sm text-[#6D6D6D]">
