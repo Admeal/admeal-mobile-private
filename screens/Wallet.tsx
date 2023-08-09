@@ -49,16 +49,16 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
 
-  useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      setIsLoading(true);
-    });
+  // useLayoutEffect(() => {
+  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
+  //     setIsLoading(true);
+  //   });
 
-    return () => {
-      setIsLoading(false);
-      unsubscribe();
-    };
-  }, [navigation]);
+  //   return () => {
+  //     setIsLoading(false);
+  //     unsubscribe();
+  //   };
+  // }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
