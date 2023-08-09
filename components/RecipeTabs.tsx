@@ -51,10 +51,12 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       <View className="flex-row items-center justify-center">
         <TouchableOpacity
           onPress={() => {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Home" }]
-            });
+            routeName !== "Recipes" &&
+              // navigation.reset({
+              //   index: 0,
+              //   routes: [{ name: "Recipes" }]
+              // });
+              navigation.navigate("Home");
           }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
             routeName === "Recipes" ? "border-[#FF1E00]" : "border-[#919EAB]"
@@ -68,7 +70,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("My Meals");
+            routeName !== "My Meals" && navigation.navigate("My Meals");
           }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
             routeName === "My Meals" ? "border-[#FF1E00]" : "border-[#919EAB]"
