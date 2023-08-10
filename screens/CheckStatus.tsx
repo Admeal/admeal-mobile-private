@@ -23,6 +23,7 @@ import PreparedDishIcon from "../assets/icons/preparedDishIcon";
 import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import LoadingScreen from "./LoadingScreen";
+import CustomModal from "../components/CustomModal";
 
 const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const { mealId } = route.params;
@@ -41,6 +42,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const [meal, setMeal] = useState<MealProps | null>(null);
   const [tokenReward, setTokenReward] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   // useLayoutEffect(() => {
   //   const unsubscribe = navigation.addListener("beforeRemove", () => {
@@ -101,6 +103,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
           meal?.current_state === "INCOMPLETE"
         ) {
           console.log("ballz mofo");
+          setIsModalVisible(true);
         }
       });
     }
@@ -273,7 +276,17 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
       )}
 
       {/* submition modal */}
-      {/* {isModalVisible && ()} */}
+      {isModalVisible && (
+        <CustomModal
+          navigation={navigation}
+          isVisible={isModalVisible}
+          close={() => setIsModalVisible(false)}
+          title="Recipe submition limitation"
+          desc="You can submit this recipe once every 24 hours. Please try again tomorrow."
+          buttonLogic="limit"
+          height="h-[320px]"
+        />
+      )}
     </View>
   );
 };

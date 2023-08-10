@@ -16,11 +16,14 @@ type RedModalButtonProps = {
 const RedModalButton = ({ navigation, functionality }: RedModalButtonProps) => {
   const [userItem, setUserItem] = useRecoilState(userState);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleDisconnect = () => {
     setUserItem(null);
   };
 
   const handleDeleteAccount = async () => {
+    setIsLoading(true);
     // todo cloud function to delete user data
     // await firestore()
     //   .collection(`user_data}`)
@@ -45,9 +48,11 @@ const RedModalButton = ({ navigation, functionality }: RedModalButtonProps) => {
     //     setUserItem(null);
     //     navigation.navigate("Home");
     //   });
+    setIsLoading(false);
   };
 
   const handlePress = () => {
+    setIsLoading(true);
     switch (functionality) {
       case "signOut":
         handleDisconnect();
@@ -55,16 +60,22 @@ const RedModalButton = ({ navigation, functionality }: RedModalButtonProps) => {
       case "deleteAccount":
         handleDeleteAccount();
         break;
+      case "limit":
+        navigation.navigate("Home");
       default:
         break;
     }
+    setIsLoading(false);
   };
+
   const handleButtonText = () => {
     switch (functionality) {
       case "signOut":
         return "EXIT";
       case "deleteAccount":
         return "DELETION";
+      case "limit":
+        return "GO HOME";
       default:
         break;
     }
