@@ -1,14 +1,12 @@
 import {
   BackHandler,
   Image,
-  Modal,
-  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
   View
 } from "react-native";
-import { useLayoutEffect, useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from "expo-clipboard";
@@ -17,16 +15,11 @@ import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 
 import ConnectWalletButton from "../components/buttons/ConnectWalletButton";
 import GoBackButton from "../components/buttons/GoBackButton";
-import NextModalButton from "../components/buttons/NextModalButton";
 import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
-import RedModalButton from "../components/buttons/RedModalButton";
-import XCloseButton from "../components/buttons/XCloseButton";
 import NFTcard from "../components/NFTcard";
-
-import LoadingScreen from "./LoadingScreen";
+import CustomModal from "../components/CustomModal";
 
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
-import AdmealLogoSmall from "../assets/icons/admealLogoSmall";
 import ArrowBottom from "../assets/icons/arrowBottom";
 import ArrowTopRight from "../assets/icons/arrowTopRight";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
@@ -46,19 +39,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const [isAccountModalVisible, setIsAccountModalVisible] = useState<boolean>(false);
   const [isDeleteAccountModalVisible, setIsDeleteAccountModalVisible] =
     useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
-
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
-  //     setIsLoading(true);
-  //   });
-
-  //   return () => {
-  //     setIsLoading(false);
-  //     unsubscribe();
-  //   };
-  // }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -117,7 +98,6 @@ const Wallet = ({ navigation }: NavigationProp) => {
   };
 
   const copyWalletAddress = async () => {
-    // console.log(address);
     await Clipboard.setStringAsync(address?.toString()!);
     await Clipboard.getStringAsync().then((res) => {
       console.log(res);
@@ -128,11 +108,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
 
   const handleReceive = () => {};
 
-  // console.log(provider);
-
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <View className="h-full bg-[#E0E0E0]">
       <LinearGradient
         colors={["#9F87FF", "#3A13D6"]}
@@ -268,91 +244,47 @@ const Wallet = ({ navigation }: NavigationProp) => {
             <NFTcard />
             <NFTcard />
           </View>
-          {/* <View className="absolute top-0 flex-row items-center justify-center w-full h-full bg-slate-400/50 ">
-            <Text className="font-[Poppins-600] text-3xl text-[#212B36]">
-              Coming Soon...
-            </Text>
-          </View> */}
         </View>
       </ScrollView>
 
       {/* account modal */}
-      <Modal animationType="fade" transparent={true} visible={isAccountModalVisible}>
-        <View className="flex-col items-center justify-center h-full bg-black/30">
-          <View className="relative h-[228px] w-[90%] flex-col items-center justify-around rounded-2xl bg-white px-7">
-            <XCloseButton cloceProp={() => setIsAccountModalVisible(false)} />
-            <AdmealLogoSmall />
-            <View className="flex-col items-center justify-center w-full -mt-48 space-y-5">
-              <View className="flex-row items-center justify-between w-full">
-                <Text className="font-[Poppins-600] text-base font-semibold text-[#212B36]">
-                  Sign out
-                </Text>
-                <NextModalButton
-                  functionality="signOut"
-                  setIsLogoutModalVisible={() => {
-                    setIsLogoutModalVisible(!isLogoutModalVisible);
-                    setIsAccountModalVisible(!isAccountModalVisible);
-                  }}
-                />
-              </View>
-              <View className="flex-row items-center justify-between w-full">
-                <Text className="font-[Poppins-600] text-base font-semibold text-[#212B36]">
-                  Delete account
-                </Text>
-                <NextModalButton
-                  functionality="deleteAccount"
-                  setIsDeleteAccountModalVisible={() => {
-                    setIsDeleteAccountModalVisible(!isDeleteAccountModalVisible);
-                    setIsAccountModalVisible(!isAccountModalVisible);
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <CustomModal
+        navigation={navigation}
+        isVisible={isAccountModalVisible}
+        isAccountProfileModal={true}
+        close={() => setIsAccountModalVisible(false)}
+        height="h-[228px]"
+        setIsLogoutModalVisible={() => {
+          setIsLogoutModalVisible(!isLogoutModalVisible);
+          setIsAccountModalVisible(!isAccountModalVisible);
+        }}
+        setIsDeleteAccountModalVisible={() => {
+          setIsDeleteAccountModalVisible(!isDeleteAccountModalVisible);
+          setIsAccountModalVisible(!isAccountModalVisible);
+        }}
+      />
 
       {/* logout modal */}
-      <Modal animationType="fade" transparent={true} visible={isLogoutModalVisible}>
-        <View className="flex-col items-center justify-center h-full bg-black/30">
-          <View className="relative h-[274px] w-[90%] flex-col items-center justify-around rounded-2xl bg-white px-7">
-            <XCloseButton cloceProp={() => setIsLogoutModalVisible(false)} />
-            <AdmealLogoSmall />
-            <View className="space-y-4 -mt-52">
-              <Text className="font-[Poppins-600] text-base font-semibold text-[#1D1B20]">
-                Sign out
-              </Text>
-              <Text className="text-start font-[Poppins-400] text-base text-[#212B36]">
-                Leave the application, all data will be saved.
-              </Text>
-            </View>
-            <RedModalButton navigation={navigation} functionality="signOut" />
-          </View>
-        </View>
-      </Modal>
+      <CustomModal
+        navigation={navigation}
+        isVisible={isLogoutModalVisible}
+        title="Sign out"
+        desc="Leave the application, all data will be saved."
+        close={() => setIsLogoutModalVisible(false)}
+        buttonLogic="signOut"
+        height={"h-[274px]"}
+      />
 
       {/* delete account modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isDeleteAccountModalVisible}>
-        <View className="flex-col items-center justify-center h-full bg-black/30">
-          <View className="relative h-[346px] w-[90%] flex-col items-center justify-around rounded-2xl bg-white px-7">
-            <XCloseButton cloceProp={() => setIsDeleteAccountModalVisible} />
-            <AdmealLogoSmall />
-            <View className="space-y-4 -mt-72">
-              <Text className="font-[Poppins-600] text-base font-semibold text-[#1D1B20]">
-                Account Deletion Request
-              </Text>
-              <Text className="text-start font-[Poppins-400] text-base text-[#212B36]">
-                Please note that by deleting your account, all personal data associated
-                with it will be permanently removed from our systems.
-              </Text>
-            </View>
-            <RedModalButton navigation={navigation} functionality="deleteAccount" />
-          </View>
-        </View>
-      </Modal>
+      <CustomModal
+        navigation={navigation}
+        isVisible={isDeleteAccountModalVisible}
+        title="Account Deletion Request"
+        desc="Please note that by deleting your account, all personal data associated with it will be permanently removed from our systems."
+        close={() => setIsDeleteAccountModalVisible(false)}
+        buttonLogic="deleteAccount"
+        height={"h-[346px]"}
+      />
     </View>
   );
 };
