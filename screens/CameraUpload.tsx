@@ -16,7 +16,9 @@ import { AntDesign } from "@expo/vector-icons";
 
 import LoadingScreen from "./LoadingScreen";
 
-const CameraUpload = ({ navigation }: GroupMealProps) => {
+const CameraUpload = ({ navigation, route }: ScreensProps) => {
+  const { mealId } = route.params;
+  console.log("camera mealId", mealId);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -30,16 +32,16 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
   const [flashMode, setFlashMode] = useState<boolean>(false);
   const [flashText, setFlashText] = useState<string>(FlashMode.off);
 
-  useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      setIsLoading(true);
-    });
+  // useLayoutEffect(() => {
+  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
+  //     setIsLoading(true);
+  //   });
 
-    return () => {
-      setIsLoading(false);
-      unsubscribe();
-    };
-  }, [navigation]);
+  //   return () => {
+  //     setIsLoading(false);
+  //     unsubscribe();
+  //   };
+  // }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -57,6 +59,10 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission((prevState) => status === "granted");
     })();
+    return () => {
+      setCamera(null);
+      setHasCameraPermission(null);
+    };
   }, []);
 
   const takePicture = async () => {
@@ -71,7 +77,7 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
       } else {
         setDishImage(data.uri);
       }
-      navigation.navigate("ImageVerification");
+      navigation.navigate("ImageVerification", { mealId, temporaryImage: data.uri });
     }
   };
 
@@ -83,14 +89,15 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
     <LoadingScreen />
   ) : (
     <Camera
-      className="flex-1 flex-col items-center justify-center"
+      className="flex-col items-center justify-center flex-1"
       flashMode={flashText as FlashMode}
+      ratio="16:9"
       type={type}
       ref={(ref) => {
         setCamera(ref);
       }}>
-      <GoBackButton navigation={navigation} color="white" />
-      <View className="w-full flex-row items-center justify-end self-start">
+      <GoBackButton mealId={mealId} navigation={navigation} color="white" />
+      <View className="flex-row items-center self-start justify-end w-full">
         {/* flash button */}
         <TouchableOpacity
           className="mr-8 mt-10 h-[40px] w-[40px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
@@ -105,7 +112,7 @@ const CameraUpload = ({ navigation }: GroupMealProps) => {
           )}
         </TouchableOpacity>
       </View>
-      <View className="flex-1 flex-row bg-transparent">
+      <View className="flex-row flex-1 bg-transparent">
         <TouchableOpacity
           className="mb-8 h-[60px] w-[60px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
           style={{}}

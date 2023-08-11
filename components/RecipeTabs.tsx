@@ -14,7 +14,7 @@ import { useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 
 type RecipeTabsProps = {
-  navigation: NavigationNavigateProp;
+  navigation: NavigationProp;
   routeName: string;
 };
 
@@ -27,23 +27,36 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
 
+  const [myLocalRecipeList, setMyLocalRecipeList] = useState([] as RecipeProps[]);
   const [myLocalMealsList, setMyLocalMealsList] = useState([] as MealProps[]);
 
   useEffect(() => {
-    setMyLocalMealsList(myMealsList);
-  }, [myMealsList]);
+    if (defaultRecipeList.length > 0) {
+      setMyLocalRecipeList(defaultRecipeList);
+    } else {
+      setMyLocalRecipeList(recipeList);
+    }
+  }, [defaultRecipeList]);
+
+  useEffect(() => {
+    if (defaultMyMealsList.length > 0) {
+      setMyLocalMealsList(defaultMyMealsList);
+    } else {
+      setMyLocalMealsList(myMealsList);
+    }
+  }, [defaultMyMealsList]);
 
   return (
     <View className="px-5 ">
       <View className="flex-row items-center justify-center">
         <TouchableOpacity
           onPress={() => {
-            setRecipeList(defaultRecipeList);
-            setMyMealsList(defaultMyMealsList);
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Home" }]
-            });
+            routeName !== "Recipes" &&
+              // navigation.reset({
+              //   index: 0,
+              //   routes: [{ name: "Recipes" }]
+              // });
+              navigation.navigate("Home");
           }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
             routeName === "Recipes" ? "border-[#FF1E00]" : "border-[#919EAB]"
@@ -57,14 +70,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            setRecipeList(defaultRecipeList);
-            setMyMealsList(defaultMyMealsList);
-            setTimeout(() => {
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "My Meals" }]
-              });
-            }, 250);
+            routeName !== "My Meals" && navigation.navigate("My Meals");
           }}
           className={`col-span-1 h-[48px] w-1/2 flex-row items-center justify-center border-b ${
             routeName === "My Meals" ? "border-[#FF1E00]" : "border-[#919EAB]"
@@ -83,7 +89,7 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
             <View className="pb-60">
               <Text className="py-4 font-[Poppins-700] text-lg">All Recipes</Text>
               <View className="h-[100%] flex-row flex-wrap items-center justify-between ">
-                {recipeList?.map((recipe, index) => {
+                {myLocalRecipeList?.map((recipe, index) => {
                   return (
                     <TopEarningsCard
                       navigation={navigation}

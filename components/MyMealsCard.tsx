@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 import { useRecoilState } from "recoil";
 import {
@@ -25,10 +25,7 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
   const [mealId, setMealId] = useRecoilState(mealIdState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
-  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
   const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-
-  const [mealLocalId, setMealLocalId] = useState<string>("");
 
   const handleStatusButtonUI = () => {
     switch (meal?.current_state) {
@@ -70,37 +67,16 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
     }
   };
 
-  const getRecipeName = () => {
-    const recipe = recipeList.find(
-      (recipe: RecipeProps) => recipe.recipe_id === meal?.recipe_id
-    );
-    return recipe?.recipe_name;
-  };
-
-  const getRecipeImage = () => {
-    const recipe = recipeList.find(
-      (recipe: RecipeProps) => recipe.recipe_id === meal?.recipe_id
-    );
-    return recipe?.recipe_images[0];
-  };
-
-  useEffect(() => {
-    setMealId(meal?.my_meals_id!);
-    setMealLocalId(meal?.my_meals_id!);
-  }, [meal?.my_meals_id]);
+  const recipe = recipeList.find(
+    (recipe: RecipeProps) => recipe.recipe_id === meal?.recipe_id
+  );
 
   const handleItemPress = () => {
-    setMealId(meal?.my_meals_id!);
+    setMealId(meal!.my_meals_id);
     setIsIngredientsSumbitted(false);
     setIngredientsImage("");
     setIsReadyDish(false);
     setDishImage("");
-    // setTimeout(() => {
-    //   if (meal !== undefined || meal !== null) {
-    //     setMealId(meal?.my_meals_id!);
-    //     console.log("meal found222", meal?.my_meals_id, mealId);
-    //     setMealId(meal?.my_meals_id as string);
-    console.log("meal found333", meal?.my_meals_id, mealId, mealLocalId);
 
     if (meal?.dish_photos[0] === "") {
       setIsReadyDish(false);
@@ -113,12 +89,10 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
       setIsIngredientsSumbitted(true);
     }
     setMealStatus(meal?.current_state as string);
-    // }
-    // }, 50);
-    // }
-    setTimeout(() => {
-      navigation.navigate("CheckStatus");
-    }, 500);
+
+    navigation.navigate("CheckStatus", {
+      mealId: meal?.my_meals_id
+    });
   };
 
   return (
@@ -143,11 +117,12 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
         borderBottomLeftRadius={16}
         borderTopLeftRadius={16}
         source={{
-          uri: getRecipeImage()
+          uri: recipe?.recipe_images[0],
+          method: "POST"
         }}></ImageBackground>
       <View className="w-[100%] flex-col items-start justify-between">
         <Text className="pt-3 font-[Poppins-600] text-sm text-[#1D1D1D]">
-          {getRecipeName()}
+          {recipe?.recipe_name}
         </Text>
         <View className="flex-row items-center">
           <Text

@@ -1,31 +1,30 @@
 import { TouchableOpacity } from "react-native";
 
-import { StackActions } from "@react-navigation/native";
-
 import BackIcon from "../../assets/icons/backIcon";
 
 type GoBackButtonProps = {
   color?: string;
   navigation: NavigationProp;
+  mealId?: string;
 };
 
-const GoBackButton = ({ navigation, color }: GoBackButtonProps) => {
+const GoBackButton = ({ navigation, color, mealId }: GoBackButtonProps) => {
   const press = () => {
     navigation.getState().routes.find((route: any) => {
       switch (route.name) {
-        case "Wallet":
-          return navigation.navigate("Recipes");
-        case "RecipeDetails":
-          return navigation.navigate("Home");
-        case "CheckStatus":
-          return navigation.navigate("My Meals");
         case "CameraUpload":
           console.log("camera upload");
-          return navigation.navigate("CheckStatus");
+          return navigation.navigate("CheckStatus", { mealId });
+        case "CheckStatus":
+          return navigation.navigate("My Meals");
         case "ImageVerification":
-          return navigation.dispatch(StackActions.push("CameraUpload"));
+          return navigation.navigate("CameraUpload", { mealId });
+        case "RecipeDetails":
+          return navigation.navigate("Home");
+        case "Wallet":
+          return navigation.navigate("Recipes");
         default:
-          console.log("wtf is this screen", route.name);
+          console.log("this screen", route.name);
       }
     });
   };

@@ -29,7 +29,8 @@ function NFTcard({
         className=" h-[42vw] w-[42vw] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
         borderRadius={16}
         source={{
-          uri: recipe_images[0]
+          uri: recipe_images[0],
+          method: "POST"
         }}>
         <PriceTag tokenName="ADMEAL" price={token_reward} />
       </ImageBackground>

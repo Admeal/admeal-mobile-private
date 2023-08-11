@@ -7,19 +7,20 @@ import RecipeTabs from "../components/RecipeTabs";
 
 import LoadingScreen from "./LoadingScreen";
 
-export default function Home({ navigation }: GroupMealProps) {
+export default function Home({ navigation }: ScreensProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      setIsLoading(true);
-    });
+  // useLayoutEffect(() => {
+  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
+  //     setIsLoading(true);
+  //   });
 
-    return () => {
-      setIsLoading(false);
-      unsubscribe();
-    };
-  }, [navigation]);
+  //   return () => {
+  //     setIsLoading(false);
+  //     unsubscribe();
+  //   };
+  // }, [navigation]);
+
   return isLoading ? (
     <LoadingScreen />
   ) : (

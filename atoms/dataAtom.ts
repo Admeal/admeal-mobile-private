@@ -51,7 +51,7 @@ export const recipeItemState = atom<RecipeProps>({
     cook_count: 0,
     cook_time_in_mins: 0,
     cooking_instructions: "",
-    created_at: "",
+    created_at: { seconds: 0, nanoseconds: 0 },
     creator_name: "",
     creator_photo: "",
     description: "",
@@ -66,8 +66,8 @@ export const recipeItemState = atom<RecipeProps>({
       protein_in_grams: 0
     },
     recipe_id: 0,
-    recipe_name: "",
     recipe_images: [""],
+    recipe_name: "",
     token_reward: 0
   }
 });

@@ -10,7 +10,14 @@ import { useRecoilState } from "recoil";
 import { userState } from "../atoms/dataAtom";
 import AdmealLogoSmall from "../assets/icons/admealLogoSmall";
 
-const Sidebar = (props: any) => {
+type SidebarProps = {
+  navigation: NavigationProp;
+  color: string;
+  state: any;
+  descriptors: any;
+};
+
+const Sidebar = (props: SidebarProps) => {
   const [userItem, setUserItem] = useRecoilState(userState);
 
   const handleLogout = () => {
@@ -26,10 +33,13 @@ const Sidebar = (props: any) => {
         className={`${
           focused ? "bg-[#FF1E00]" : ""
         }  h-6 w-full flex-row items-center space-x-4 rounded-lg `}>
-        <LogoutIcon stroke={props.color} className={`mt-2`} />
+        <LogoutIcon stroke={color} className={`mt-2 mr-1.5`} />
         <TouchableOpacity onPress={handleLogout}>
-          <Text className={`text-lg ${focused ? "text-white" : "text-[#6D6D6D]"}  `}>
-            Logout
+          <Text
+            className={`-pb-4 text-lg font-semibold ${
+              focused ? "text-white" : "text-[#6D6D6D]"
+            }  `}>
+            {label}
           </Text>
         </TouchableOpacity>
       </View>
@@ -38,18 +48,21 @@ const Sidebar = (props: any) => {
 
   return (
     <View className="relative flex-col justify-between h-full">
-      <DrawerContentScrollView className="relative h-full" {...props}>
+      <DrawerContentScrollView className="relative" {...props}>
         <View className="flex-1">
-          <View className="px-5 pt-20 pb-12">
-            {/* <AdmealLogoSmall /> */}
-            <Image source={require("../assets/png/Logo.png")} />
+          <View className="px-5 pt-16 pb-12">
+            <View className="h-16">
+              <AdmealLogoSmall />
+            </View>
           </View>
 
           <DrawerItemList {...props} />
-          <DrawerItem
-            label={({ focused, color }) => getLabel(focused, color, "Logout")}
-            onPress={() => props.navigation.navigate("Home")}
-          />
+          <View className="pb-4">
+            <DrawerItem
+              label={({ focused, color }) => getLabel(focused, color, "Logout")}
+              onPress={() => handleLogout}
+            />
+          </View>
         </View>
       </DrawerContentScrollView>
       <View className="h-[72px] w-full flex-row items-center justify-between bg-[#F8F8F8] p-4">
@@ -64,7 +77,7 @@ const Sidebar = (props: any) => {
         <Image
           className="rounded-full"
           style={{ width: 50, height: 50 }}
-          source={{ uri: userItem?.additionalUserInfo.profile?.picture }}
+          source={{ uri: userItem?.additionalUserInfo.profile?.picture, method: "POST" }}
         />
       </View>
     </View>

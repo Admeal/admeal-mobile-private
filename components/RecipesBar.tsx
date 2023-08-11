@@ -1,17 +1,11 @@
 import { useEffect, useState } from "react";
 import { Image, View, Text, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import BackIcon from "../assets/icons/backIcon";
 import Search from "./Search";
 import BackArrowIcon from "../assets/icons/backArrowIcon";
 
 import { useRecoilState } from "recoil";
-import {
-  defaultMyMealsListState,
-  defaultRecipeListState,
-  myMealsListState,
-  recipeListState
-} from "../atoms/dataAtom";
+import { defaultMyMealsListState, defaultRecipeListState } from "../atoms/dataAtom";
 
 const RecipesBar = ({ title }: any) => {
   const [defaultMyMealsList, setDefaultMyMealsList] = useRecoilState(
@@ -19,15 +13,12 @@ const RecipesBar = ({ title }: any) => {
   );
   const [defaultRecipeList, setDefaultRecipeList] =
     useRecoilState(defaultRecipeListState);
-  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
-  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
-
   const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
 
   useEffect(() => {
     return () => {
-      setRecipeList(defaultRecipeList);
-      setMyMealsList(defaultMyMealsList);
+      setDefaultRecipeList([]);
+      setDefaultMyMealsList([]);
     };
   }, []);
 
@@ -41,8 +32,8 @@ const RecipesBar = ({ title }: any) => {
           <TouchableOpacity
             onPress={() => {
               setIsSearchVisible(!isSearchVisible);
-              setRecipeList(defaultRecipeList);
-              setMyMealsList(defaultMyMealsList);
+              setDefaultRecipeList([]);
+              setDefaultMyMealsList([]);
             }}
             className="w-6 h-6 mb-2 mr-3 rounded-full">
             <BackArrowIcon />

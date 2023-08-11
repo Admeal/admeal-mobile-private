@@ -7,12 +7,12 @@ type RecipeProps = {
   cook_count: number;
   cook_time_in_mins: number;
   cooking_instructions: string;
-  enabled: boolean;
-  created_at: string;
+  created_at: timestamp;
   creator_name: string;
   creator_photo: string;
   description: string;
   difficulty: string;
+  enabled: boolean;
   ingredients: [
     {
       measurement_units: string;
@@ -33,12 +33,24 @@ type RecipeProps = {
   token_reward: number;
 };
 
-type NavigationProp = {
-  navigate: (screen: string, params?: any) => void;
-  getState: () => { routes: { name: string }[] };
-  reset: (arg0: { index: number; routes: { name: string }[] }) => void;
-  dispatch: (arg0: any) => void;
+type ScreensProps = {
+  navigation: NavigationProp<Record<string, object | undefined>, string, any, any, any>;
+  route: {
+    params: {
+      mealId: string;
+      temporaryImage?: string;
+      recipe: RecipeProps;
+    };
+  };
 };
+
+type NavigationProp = NavigationProp<
+  Record<string, object | undefined>,
+  string,
+  any,
+  any,
+  any
+>;
 
 type NavigationNavigateProp = {
   navigate: (screen: string, params?: any) => void;
@@ -50,7 +62,14 @@ type NavigationResetProp = {
 };
 
 type GroupMealProps = {
+  route?: {
+    params: {
+      mealId: string;
+      temporaryImage: string;
+    };
+  };
   meal?: MealProps;
+  mealId?: string;
   navigation: NavigationNavigateProp<
     Record<string, object | undefined>,
     string,
@@ -67,6 +86,8 @@ type MealProps = {
   ingredients_photos: string[];
   my_meals_id: string;
   recipe_id: number;
+  submitted: boolean;
+  submitted_at: null | timestamp;
   tokens_earned: number;
   user_id: string;
 };

@@ -11,10 +11,8 @@ import {
   isReadyDishState,
   ingredientsImageState,
   dishImageState,
-  recipeItemState,
-  recipeListState,
   mealStatusState,
-  mealIdState
+  myMealsListState
 } from "../atoms/dataAtom";
 
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
@@ -25,8 +23,11 @@ import PreparedDishIcon from "../assets/icons/preparedDishIcon";
 import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import LoadingScreen from "./LoadingScreen";
+import CustomModal from "../components/CustomModal";
 
-const CheckStatus = ({ navigation }: GroupMealProps) => {
+const CheckStatus = ({ navigation, route }: ScreensProps) => {
+  const { mealId } = route.params;
+
   const [user, setUser] = useRecoilState(userState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
@@ -34,26 +35,25 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
+  const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
   const [mealStatus, setMealStatus] = useRecoilState(mealStatusState);
-  const [recipeItem, setRecipeItem] = useRecoilState(recipeItemState);
-  const [recipeList, setRecipeList] = useRecoilState(recipeListState);
 
-  const [mealId, setMealId] = useRecoilState<string>(mealIdState);
   const [textStatus, setTextStatus] = useState<string>("");
   const [meal, setMeal] = useState<MealProps | null>(null);
   const [tokenReward, setTokenReward] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      setIsLoading(true);
-    });
+  // useLayoutEffect(() => {
+  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
+  //     setIsLoading(true);
+  //   });
 
-    return () => {
-      setIsLoading(false);
-      unsubscribe();
-    };
-  }, [navigation]);
+  //   return () => {
+  //     setIsLoading(false);
+  //     unsubscribe();
+  //   };
+  // }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -85,6 +85,31 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
   }, [mealId]);
 
   useEffect(() => {
+    let array: MealProps[] = [];
+    myMealsList.map((myMeal) => {
+      if (myMeal.recipe_id === meal?.recipe_id) {
+        array.push(myMeal as MealProps);
+      }
+    });
+
+    // console.log("array", array);
+    const firebaseTime = firestore.Timestamp.now().seconds;
+    const day = 24 * 60 * 60;
+
+    if (array.length > 0 && meal !== null && meal !== undefined) {
+      array.map((item: MealProps) => {
+        if (
+          firebaseTime < day + item?.submitted_at?.seconds &&
+          meal?.current_state === "INCOMPLETE"
+        ) {
+          console.log("ballz mofo");
+          setIsModalVisible(true);
+        }
+      });
+    }
+  }, [meal]);
+
+  useEffect(() => {
     if (meal) {
       if (meal?.dish_photos[0] === "") {
         setIsReadyDish(false);
@@ -106,32 +131,6 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
     setTextStatus(handleMealStatus());
   }, [meal?.current_state]);
 
-  useEffect(() => {
-    recipeList.map((recipe: RecipeProps) => {
-      if (recipe.recipe_id === meal?.recipe_id) {
-        setTokenReward(recipe.token_reward);
-        setRecipeItem({
-          recipe_name: recipe.recipe_name,
-          token_reward: recipe.token_reward,
-          recipe_images: recipe.recipe_images,
-          recipe_id: recipe.recipe_id,
-          nutritional_information: recipe.nutritional_information,
-          number_of_servings: recipe.number_of_servings,
-          ingredients: recipe.ingredients,
-          difficulty: recipe.difficulty,
-          description: recipe.description,
-          cooking_instructions: recipe.cooking_instructions,
-          cook_time_in_mins: recipe.cook_time_in_mins,
-          cook_count: recipe.cook_count,
-          created_at: recipe.created_at,
-          creator_name: recipe.creator_name,
-          creator_photo: recipe.creator_photo,
-          enabled: recipe.enabled
-        });
-      }
-    });
-  }, [meal] || []);
-
   const handleMealStatus = () => {
     switch (mealStatus) {
       case "COMPLETE":
@@ -149,19 +148,19 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <View className="- h-screen w-full flex-col items-center justify-between">
+    <View className="flex-col items-center justify-between w-full h-screen -">
       <View className="w-full">
-        <View className="pr-8 pt-16"></View>
-        <GoBackButton navigation={navigation} color="white" />
+        <View className="pt-16 pr-8"></View>
+        <GoBackButton mealId={mealId} navigation={navigation} color="white" />
       </View>
 
       {mealStatus === "COMPLETE" ? (
-        <View className=" h-5/6 flex-col items-center justify-between">
+        <View className="flex-col items-center justify-between h-5/6">
           <View className="mt- h-[58%] w-[300px] rounded-xl bg-gray-300">
             {dishImage !== "" && (
               <Image
                 style={{ width: 300, height: "100%", borderRadius: 12 }}
-                source={{ uri: dishImage }}
+                source={{ uri: dishImage, method: "POST" }}
               />
             )}
           </View>
@@ -170,7 +169,7 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
           </Text>
           <View className="flex-col items-center justify-center">
             <Text className="font-[Poppins-500] text-lg text-[#6D6D6D]">You earned</Text>
-            <View className="w-full flex-row items-center">
+            <View className="flex-row items-center w-full">
               <Text className="pr-2 font-[Poppins-700] text-2xl text-[#212B36]">
                 {tokenReward}
               </Text>
@@ -187,7 +186,7 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <View className="h-full w-full flex-col items-center justify-between pb-16">
+        <View className="flex-col items-center justify-between w-full h-full pb-16">
           <Text className=" font-[Poppins-700] text-2xl">Excellent choice!</Text>
           <View>
             <Text className="px-4 text-center font-[Poppins-600] text-sm text-[#6D6D6D]">
@@ -200,7 +199,7 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
               {ingredientsImage !== "" && (
                 <Image
                   style={{ width: 300, height: 160, borderRadius: 12 }}
-                  source={{ uri: ingredientsImage }}
+                  source={{ uri: ingredientsImage, method: "POST" }}
                 />
               )}
             </View>
@@ -237,7 +236,7 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
               {dishImage !== "" && (
                 <Image
                   style={{ width: 300, height: 160, borderRadius: 12 }}
-                  source={{ uri: dishImage }}
+                  source={{ uri: dishImage, method: "POST" }}
                 />
               )}
             </View>
@@ -274,6 +273,19 @@ const CheckStatus = ({ navigation }: GroupMealProps) => {
             </>
           )}
         </View>
+      )}
+
+      {/* submition modal */}
+      {isModalVisible && (
+        <CustomModal
+          navigation={navigation}
+          isVisible={isModalVisible}
+          close={() => setIsModalVisible(false)}
+          title="Recipe submition limitation"
+          desc="You can submit this recipe once every 24 hours. Please try again tomorrow."
+          buttonLogic="limit"
+          height="h-[320px]"
+        />
       )}
     </View>
   );
