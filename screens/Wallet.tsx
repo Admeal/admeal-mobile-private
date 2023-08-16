@@ -8,8 +8,9 @@ import {
 } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from "expo-clipboard";
+import { Motion } from "@legendapp/motion";
+import { MotionLinearGradient } from "@legendapp/motion/linear-gradient-expo";
 
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 
@@ -26,6 +27,8 @@ import DishCoinLogo from "../assets/icons/dishCoinLogo";
 import FileIcon from "../assets/icons/fileIcon";
 import GearIcon from "../assets/icons/gearIcon";
 
+import { AntDesign } from "@expo/vector-icons";
+
 import { useRecoilState } from "recoil";
 import { userCreditsState, userState } from "../atoms/dataAtom";
 import firestore from "@react-native-firebase/firestore";
@@ -40,6 +43,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const [isDeleteAccountModalVisible, setIsDeleteAccountModalVisible] =
     useState<boolean>(false);
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
+  const [isMiniProfile, setIsMiniProfile] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -92,6 +96,9 @@ const Wallet = ({ navigation }: NavigationProp) => {
   }, [userCredits]);
 
   const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
+  useEffect(() => {
+    address && console.log(address);
+  }, [address]);
 
   const trancuateWalletAddress = () => {
     return `${address?.slice(0, 9)}...${address?.slice(-9)}`;
@@ -110,10 +117,19 @@ const Wallet = ({ navigation }: NavigationProp) => {
 
   return (
     <View className="h-full bg-[#E0E0E0]">
-      <LinearGradient
-        colors={["#9F87FF", "#3A13D6"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+      <MotionLinearGradient
+        initial={{ height: !isMiniProfile ? 421 : 195 }}
+        animate={{ height: isMiniProfile ? 195 : 421 }}
+        transition={{
+          type: "spring",
+          damping: 25,
+          stiffness: 400
+        }}
+        animateProps={{
+          colors: ["#9F87FF", "#3A13D6"],
+          start: { x: 0, y: 0 },
+          end: { x: 1, y: 1 }
+        }}
         style={[
           {
             shadowColor: "#000",
@@ -124,10 +140,12 @@ const Wallet = ({ navigation }: NavigationProp) => {
             shadowOpacity: 0.48,
             shadowRadius: 11.95,
 
-            elevation: 18
+            elevation: 18,
+            borderBottomLeftRadius: 24,
+            borderBottomRightRadius: 24
           }
         ]}
-        className="h-[421px] w-full rounded-b-3xl bg-blue-600">
+        className={`w-full rounded-b-3xl `}>
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} color="white" />
           <View className="flex-row flex-1"></View>
@@ -150,65 +168,80 @@ const Wallet = ({ navigation }: NavigationProp) => {
             </Text>
           </View>
         </View>
-        <View className="p-5 space-y-2">
-          <Text className="font-[Poppins-400] text-base font-semibold text-white">
-            {isConnected ? "Wallet Address" : "Wallet not Connected"}
-          </Text>
-          <View className="flex-row items-center">
-            <Text className="pr-2.5 font-[Poppins-400] text-xs font-semibold text-white">
-              {address ? trancuateWalletAddress() : ""}
+        {!isMiniProfile && (
+          <Motion.View
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            // transition={{ duration: 0.5 }}
+            className="p-5 space-y-2">
+            <Text className="font-[Poppins-400] text-base font-semibold text-white">
+              {isConnected ? "Wallet Address" : "Wallet not Connected"}
             </Text>
-            <TouchableOpacity onPress={copyWalletAddress}>
-              {address && <FileIcon />}
-            </TouchableOpacity>
-          </View>
-          <View className="flex-row items-center space-x-2">
-            {/* balance */}
-            <DishCoinLogo size={20} scale={0.85} />
-            <View className="flex-row items-baseline ">
-              <Text className="font-[Poppins-700] text-[32px] font-semibold leading-[48px] text-white">
-                {isConnected ? dishCoins : "0"}
+            <View className="flex-row items-center">
+              <Text className="pr-2.5 font-[Poppins-400] text-xs font-semibold text-white">
+                {address ? trancuateWalletAddress() : ""}
               </Text>
-              <Text className="font-[Poppins-700] text-xl font-semibold text-white">
-                .00
-              </Text>
-            </View>
-          </View>
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center pt-8 space-x-10">
-              {/* Buttons */}
-              <View className="flex-col items-center justify-center">
-                <TouchableOpacity
-                  onPress={handleSend}
-                  className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
-                  <ArrowTopRight />
-                </TouchableOpacity>
-                <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">
-                  Send
-                </Text>
-              </View>
-              <View className="flex-col items-center justify-center">
-                <TouchableOpacity
-                  onPress={handleReceive}
-                  className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
-                  <ArrowBottom className="opacity-30" />
-                </TouchableOpacity>
-                <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">
-                  Receive
-                </Text>
-              </View>
-            </View>
-            <View className="flex-col items-center justify-center pt-8">
-              <TouchableOpacity
-                onPress={() => setIsAccountModalVisible(!isAccountModalVisible)}
-                className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-white/50">
-                <GearIcon />
+              <TouchableOpacity onPress={copyWalletAddress}>
+                {address && <FileIcon />}
               </TouchableOpacity>
-              <Text className="pt-2 font-[Poppins-400] text-xs text-white">Account</Text>
             </View>
-          </View>
-        </View>
-      </LinearGradient>
+            <View className="flex-row items-center space-x-2">
+              {/* balance */}
+              <DishCoinLogo size={20} scale={0.85} />
+              <View className="flex-row items-baseline ">
+                <Text className="font-[Poppins-700] text-[32px] font-semibold leading-[48px] text-white">
+                  {isConnected ? dishCoins : "0"}
+                </Text>
+                <Text className="font-[Poppins-700] text-xl font-semibold text-white">
+                  .00
+                </Text>
+              </View>
+            </View>
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center pt-2 space-x-10">
+                {/* Buttons */}
+                <View className="flex-col items-center justify-center">
+                  <TouchableOpacity
+                    onPress={handleSend}
+                    className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
+                    <ArrowTopRight />
+                  </TouchableOpacity>
+                  <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">
+                    Send
+                  </Text>
+                </View>
+                <View className="flex-col items-center justify-center">
+                  <TouchableOpacity
+                    onPress={handleReceive}
+                    className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-black/30">
+                    <ArrowBottom className="opacity-30" />
+                  </TouchableOpacity>
+                  <Text className="pt-2 font-[Poppins-400] text-xs text-white/30">
+                    Receive
+                  </Text>
+                </View>
+              </View>
+              <View className="flex-col items-center justify-center pt-4">
+                <TouchableOpacity
+                  onPress={() => setIsAccountModalVisible(!isAccountModalVisible)}
+                  className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-white/50">
+                  <GearIcon />
+                </TouchableOpacity>
+                <Text className="pt-2 font-[Poppins-400] text-xs text-white">
+                  Account
+                </Text>
+              </View>
+            </View>
+          </Motion.View>
+        )}
+        <TouchableOpacity
+          onPress={() => setIsMiniProfile(!isMiniProfile)}
+          className={`${
+            isMiniProfile ? "rotate-90" : "-rotate-90"
+          } flex-row items-center justify-center pl-4`}>
+          <AntDesign name="stepforward" size={24} color="#A393EB" />
+        </TouchableOpacity>
+      </MotionLinearGradient>
       <ScrollView>
         <View className="p-5">
           <Text className="pb-3 font-[Poppins-600] text-base font-semibold text-[#212B36]">
