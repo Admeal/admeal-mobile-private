@@ -7,8 +7,8 @@ import {
 } from "@walletconnect/modal-react-native";
 
 import RefreshIcon from "../../assets/icons/refreshIcon";
-
-const projectId = "06d916f645bb5c057ea26a1d1f6fcb60";
+//env
+// const projectId = "06d916f645bb5c057ea26a1d1f6fcb60";
 
 const providerMetadata = {
   name: "admeal-mobile",
@@ -28,13 +28,16 @@ const ReconnectWalletButton = () => {
     <>
       <TouchableOpacity
         onPress={() => open()}
-        className="flex-row items-center pt-12 space-x-2 px-7">
+        className="flex-row items-center space-x-2 px-7 pt-12">
         <Text className={`pr-2 font-[Poppins-400] text-base text-white`}>
           Switch Wallet
         </Text>
         <RefreshIcon />
       </TouchableOpacity>
-      <WalletConnectModal projectId={projectId} providerMetadata={providerMetadata} />
+      <WalletConnectModal
+        projectId={process.env.WALLET_CONNECT_PROJECT_ID as string}
+        providerMetadata={providerMetadata}
+      />
     </>
   );
 };

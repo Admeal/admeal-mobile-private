@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Search from "./Search";
 import BackArrowIcon from "../assets/icons/backArrowIcon";
@@ -40,7 +40,7 @@ const RecipesBar = ({ title }: any) => {
           </TouchableOpacity>
         )}
         <Text className="pb-1 font-[Poppins-700] text-3xl">{title}</Text>
-        {!isSearchVisible && ( //&& title === "Recipes"
+        {!isSearchVisible && (
           <TouchableOpacity onPress={() => setIsSearchVisible(!isSearchVisible)}>
             <FontAwesome name="search" size={16} color="black" className="pr-2" />
           </TouchableOpacity>

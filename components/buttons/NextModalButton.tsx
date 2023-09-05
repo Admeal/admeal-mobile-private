@@ -1,7 +1,5 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { useRecoilState } from "recoil";
-import { userState } from "../../atoms/dataAtom";
 
 type NextModalButtonProps = {
   functionality: string;
@@ -27,7 +25,7 @@ const NextModalButton = ({
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} className="w-6 h-6">
+    <TouchableOpacity onPress={handlePress} className="h-6 w-6">
       <AntDesign name="caretright" size={20} color="red" />
     </TouchableOpacity>
   );

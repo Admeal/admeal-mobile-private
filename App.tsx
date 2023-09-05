@@ -8,7 +8,6 @@ import { RecoilRoot } from "recoil";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import { AuthProvider } from "./hooks/useAuth";
 import Routes from "./routes/Routes";
 
 SplashScreen.preventAutoHideAsync();
@@ -39,9 +38,7 @@ export default function App() {
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <RecoilRoot>
-        <AuthProvider>
-          <Routes />
-        </AuthProvider>
+        <Routes />
       </RecoilRoot>
     </SafeAreaProvider>
   );

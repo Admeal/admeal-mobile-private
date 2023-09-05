@@ -148,12 +148,11 @@ const Wallet = ({ navigation }: NavigationProp) => {
         className={`w-full rounded-b-3xl `}>
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} color="white" />
-          <View className="flex-row flex-1"></View>
-          {/* <ConnectWalletButton /> */}
+          <View className="flex-1 flex-row"></View>
           {isConnected ? <ReconnectWalletButton /> : <ConnectWalletButton />}
         </View>
         {/* // profile */}
-        <View className="justify- h-[76px] w-full flex-row items-center space-x-4 p-5 pt-10">
+        <View className="h-[76px] w-full flex-row items-center space-x-4 p-5 pt-10">
           <Image
             className="rounded-full"
             style={{ width: 50, height: 50 }}
@@ -172,8 +171,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
           <Motion.View
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            // transition={{ duration: 0.5 }}
-            className="p-5 space-y-2">
+            className="space-y-2 p-5">
             <Text className="font-[Poppins-400] text-base font-semibold text-white">
               {isConnected ? "Wallet Address" : "Wallet not Connected"}
             </Text>
@@ -198,7 +196,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
               </View>
             </View>
             <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center pt-2 space-x-10">
+              <View className="flex-row items-center space-x-10 pt-2">
                 {/* Buttons */}
                 <View className="flex-col items-center justify-center">
                   <TouchableOpacity
@@ -271,7 +269,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
           <Text className="px-5 py-3 font-[Poppins-600] text-base text-[#212B36]">
             NFTs
           </Text>
-          <View className="relative flex-row flex-wrap items-center justify-between px-5 space-y-4">
+          <View className="relative flex-row flex-wrap items-center justify-between space-y-4 px-5">
             <NFTcard />
             <NFTcard />
             <NFTcard />

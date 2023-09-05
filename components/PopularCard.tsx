@@ -1,5 +1,4 @@
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
-import { useEffect } from "react";
+import { ImageBackground, Text, TouchableOpacity } from "react-native";
 
 import PriceTag from "./PriceTag";
 

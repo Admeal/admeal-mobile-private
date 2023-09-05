@@ -1,5 +1,5 @@
-import { TouchableOpacity } from "react-native";
-import { View, Text } from "react-native";
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import { useRecoilState } from "recoil";
 import { userState } from "../../atoms/dataAtom";
@@ -24,6 +24,7 @@ const RedModalButton = ({ navigation, functionality }: RedModalButtonProps) => {
 
   const handleDeleteAccount = async () => {
     setIsLoading(true);
+    console.log("delete account functionality not available yet");
     // todo cloud function to delete user data
     // await firestore()
     //   .collection(`user_data}`)
