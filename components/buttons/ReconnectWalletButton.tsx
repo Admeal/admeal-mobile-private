@@ -7,8 +7,8 @@ import {
 } from "@walletconnect/modal-react-native";
 
 import RefreshIcon from "../../assets/icons/refreshIcon";
-//env
-// const projectId = "06d916f645bb5c057ea26a1d1f6fcb60";
+
+const projectId = "06d916f645bb5c057ea26a1d1f6fcb60";
 
 const providerMetadata = {
   name: "admeal-mobile",
@@ -34,10 +34,7 @@ const ReconnectWalletButton = () => {
         </Text>
         <RefreshIcon />
       </TouchableOpacity>
-      <WalletConnectModal
-        projectId={process.env.WALLET_CONNECT_PROJECT_ID as string}
-        providerMetadata={providerMetadata}
-      />
+      <WalletConnectModal projectId={projectId} providerMetadata={providerMetadata} />
     </>
   );
 };
