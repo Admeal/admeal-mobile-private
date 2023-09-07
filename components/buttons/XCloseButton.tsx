@@ -4,13 +4,23 @@ import { Ionicons } from "@expo/vector-icons";
 type XCloseButtonProps = {
   cloceProp: () => void;
   size?: number;
+  color?: string;
+  bgColor?: string;
+  cordinates?: string;
 };
 
-const XCloseButton = ({ cloceProp, size = 20 }: XCloseButtonProps) => {
+const XCloseButton = ({
+  cloceProp,
+  size = 20,
+  color = "red",
+  bgColor = "bg-[#CCCCCC]/20",
+  cordinates = "top-3 right-3"
+}: XCloseButtonProps) => {
   return (
-    <TouchableOpacity onPress={cloceProp} className="absolute top-3 right-3">
-      <View className=" h-7 w-7 flex-col items-center justify-center rounded-full bg-[#CCCCCC]/20">
-        <Ionicons name="close" size={size} color="red" />
+    <TouchableOpacity onPress={cloceProp} className={`absolute ${cordinates}`}>
+      <View
+        className={`h-7 w-7 flex-col items-center justify-center rounded-full ${bgColor}`}>
+        <Ionicons name="close" size={size} color={color} />
       </View>
     </TouchableOpacity>
   );
