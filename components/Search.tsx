@@ -84,7 +84,14 @@ const Search = () => {
           onEndEditing={handleEndEditing}
           value={search}></TextInput>
         <View className="relative -top-[22px]">
-          {search.length > 0 && <XCloseButton cloceProp={resetSubmitValue} size={16} />}
+          {search.length > 0 && (
+            <XCloseButton
+              bgColor="bg-[#CCCCCC]/80"
+              cloceProp={resetSubmitValue}
+              cordinates="top-2 right-2"
+              size={16}
+            />
+          )}
         </View>
       </View>
       <TouchableOpacity className="pt-2 pr-2">
