@@ -34,6 +34,7 @@ import { userCreditsState, userState } from "../atoms/dataAtom";
 import firestore from "@react-native-firebase/firestore";
 
 import useNFTs from "../hooks/useNFTs";
+import NftWalletSection from "../components/NftWalletSection";
 
 const Wallet = ({ navigation }: NavigationProp) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
@@ -47,11 +48,6 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
   const [isMiniProfile, setIsMiniProfile] = useState<boolean>(false);
   const [isfetchNfts, setIsfetchNfts] = useState<boolean>(false);
-  const [personalHarvestCollection, setPersonalHarvestCollection] = useState<any>(null);
-  const [personalNoodlesCollection, setPersonalNoodlesCollection] = useState<any>(null);
-  const [personalRamensCollection, setPersonalRamensCollection] = useState<any>(null);
-
-  const contractLoadingData = { _h: 0, _i: 0, _j: null, _k: null };
 
   useFocusEffect(
     useCallback(() => {
@@ -111,87 +107,6 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const trancuateWalletAddress = () => {
     return `${address?.slice(0, 9)}...${address?.slice(-9)}`;
   };
-  const { getAllNFTs, getHarvestNFTs, getNoodleNFTs, getRamenNFTs } = useNFTs();
-
-  const harvestCollection = getHarvestNFTs();
-  const noodleCollection = getNoodleNFTs();
-  const ramenCollection = getRamenNFTs();
-
-  useEffect(() => {
-    harvestCollection.then((res) => {
-      personalHarvestCollection === null && setPersonalHarvestCollection(res);
-      console.log("res", res);
-      return res;
-    });
-  }, [harvestCollection]);
-
-  useEffect(() => {
-    noodleCollection.then((res) => {
-      personalNoodlesCollection === null && setPersonalNoodlesCollection(res);
-      console.log("res", res);
-      return res;
-    });
-  }, [noodleCollection]);
-
-  useEffect(() => {
-    ramenCollection.then((res) => {
-      personalRamensCollection === null && setPersonalRamensCollection(res);
-      console.log("res", res);
-      return res;
-    });
-  }, [ramenCollection]);
-
-  // console.log("harvest", harvestCollection);
-  // console.log("noodle", noodleCollection);
-  // console.log("ramen", ramenCollection);
-
-  // useEffect(() => {
-  //   if (harvestCollection !== undefined && personalHarvestCollection?.length === 0) {
-  //     harvestCollection &&
-  //       harvestCollection?.ownedNfts?.length &&
-  //       setPersonalHarvestCollection(harvestCollection?.ownedNfts);
-  //   }
-  //   console.log("harvest", harvestCollection);
-  // }, [harvestCollection]);
-
-  // useEffect(() => {
-  //   if (noodleCollection !== undefined && personalNoodlesCollection?.length === 0) {
-  //     noodleCollection &&
-  //       noodleCollection?.ownedNfts?.length &&
-  //       setPersonalNoodlesCollection(noodleCollection?.ownedNfts);
-  //   }
-  //   console.log("noodle", noodleCollection);
-  // }, [noodleCollection]);
-
-  // useEffect(() => {
-  //   if (ramenCollection !== undefined && personalRamensCollection?.length === 0) {
-  //     ramenCollection &&
-  //       ramenCollection?.ownedNfts?.length &&
-  //       setPersonalRamensCollection(ramenCollection?.ownedNfts);
-  //   }
-  //   console.log("ramen", ramenCollection);
-  // }, [ramenCollection]);
-
-  // harvestCollection?.then((res) => {
-  //   if (res.ownedNfts?.length && !personalHarvestCollection?.ownedNfts.length) {
-  //     setPersonalHarvestCollection(res.ownedNfts);
-  //     console.log("harvest", res);
-  //   }
-  // });
-
-  // noodleCollection?.then((res) => {
-  //   if (res.ownedNfts?.length && !personalNoodlesCollection?.ownedNfts.length) {
-  //     setPersonalNoodlesCollection(res.ownedNfts);
-  //     console.log("noodle", res);
-  //   }
-  // });
-
-  // ramenCollection?.then((res) => {
-  //   if (res.ownedNfts?.length && !personalRamensCollection?.ownedNfts.length) {
-  //     setPersonalRamensCollection(res.ownedNfts);
-  //     console.log("ramen", res);
-  //   }
-  // });
 
   const copyWalletAddress = async () => {
     await Clipboard.setStringAsync(address?.toString()!);
@@ -354,32 +269,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
           </View>
         </View>
 
-        <View className="relative">
-          <Text className="px-5 py-3 font-[Poppins-600] text-base text-[#212B36]">
-            NFTs
-          </Text>
-          <View className="relative flex-row flex-wrap items-center justify-between space-y-4 px-5">
-            <Text>{personalNoodlesCollection?.ownedNfts?.length} Noodles</Text>
-            {personalNoodlesCollection?.ownedNfts?.map((item: any, index: number) => (
-              <NFTcard key={index} description={item.description} nft_name={item.name} />
-            ))}
-
-            <Text>{personalRamensCollection?.ownedNfts?.length} Ramens</Text>
-
-            {personalRamensCollection?.ownedNfts?.map((item: any, index: number) => (
-              <NFTcard key={index} description={item.description} nft_name={item.name} />
-            ))}
-
-            <Text>{personalHarvestCollection?.ownedNfts?.length} Harvest</Text>
-            {personalHarvestCollection?.ownedNfts?.map((item: any, index: number) => (
-              <NFTcard key={index} description={item.description} nft_name={item.name} />
-            ))}
-
-            <NFTcard />
-            <NFTcard />
-            <NFTcard />
-          </View>
-        </View>
+        <NftWalletSection />
       </ScrollView>
 
       {/* account modal */}

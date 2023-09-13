@@ -1,70 +1,86 @@
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import PriceTag from "./PriceTag";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-function NFTcard({ description = "lorem ipsum", nft_name = "test", token_reward = 40 }) {
+function NFTcard({
+  description = "lorem ipsum",
+  nft_name = "test",
+  token_reward = 40,
+  item = {}
+}) {
   const video = useRef(null);
-  const [status, setStatus] = useState({});
 
   const handleItemPress = () => {};
 
-  const getMedia = () => {
-    switch (nft_name) {
-      case "test":
-        return (
-          <ImageBackground
-            style={[
-              {
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 5
-                },
-                shadowOpacity: 0.36,
-                shadowRadius: 5.68,
+  const stringContains = (substring: string) => {
+    return nft_name.indexOf(substring) > -1;
+  };
 
-                elevation: 11
-              }
-            ]}
-            className=" h-[42vw] w-[42vw] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
-            borderRadius={16}
-            source={{
-              uri: "https://picsum.photos/200/300",
-              method: "POST"
-            }}>
-            <PriceTag tokenName="ADMEAL" price={token_reward} />
-          </ImageBackground>
-        );
-      case "Noodle NFT":
-        return (
-          <Video
-            ref={video}
-            source={{
-              uri: "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Fnoodle_nft.mp4?alt=media&token=35c08850-1a2b-42cd-bccb-44dc371d1b5f"
-            }}
-            className=" h-[42vw] w-[42vw] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
-            usePoster={true}
-            resizeMode={ResizeMode.COVER}
-            isLooping
-          />
-        );
-      case "ARNFT":
-        return "https://picsum.photos/200/300";
-      case "Admeal Romanesco":
-        return "https://picsum.photos/200/300";
-      default:
-        return "https://picsum.photos/200/300";
+  const getNftMediaUri = () => {
+    if (stringContains("Noodle NFT")) {
+      return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Fnoodle_nft.mp4?alt=media&token=35c08850-1a2b-42cd-bccb-44dc371d1b5f";
+    }
+
+    if (stringContains("ARNFT")) {
+      return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Framen_nft_2160px_1.mp4?alt=media&token=66f3d122-cbbd-4ae3-a005-c8f41e33de3f";
+    }
+
+    if (stringContains("Romanesco")) {
+      return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Fharvest_romanesco_725.png?alt=media&token=8eb64d39-79b5-417e-9f08-62a34754dfb6";
+    }
+
+    return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Fnoodle_nft.mp4?alt=media&token=35c08850-1a2b-42cd-bccb-44dc371d1b5f";
+  };
+
+  const getTypeOfMedia = () => {
+    if (stringContains("Noodle NFT") || stringContains("ARNFT")) {
+      return (
+        <Video
+          ref={video}
+          source={{
+            uri: getNftMediaUri()
+          }}
+          className=" h-[42vw] w-[42vw] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
+          resizeMode={ResizeMode.COVER}
+          isLooping={true}
+          shouldPlay={true}
+        />
+      );
+    }
+
+    if (stringContains("Romanesco")) {
+      return (
+        <ImageBackground
+          style={[
+            {
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 5
+              },
+              shadowOpacity: 0.36,
+              shadowRadius: 5.68,
+
+              elevation: 11
+            }
+          ]}
+          className=" h-[42vw] w-[42vw] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
+          borderRadius={16}
+          source={{
+            uri: getNftMediaUri(),
+            method: "POST"
+          }}></ImageBackground>
+      );
     }
   };
 
   return (
     <TouchableOpacity className="mr-2 rounded-2xl shadow-2xl" onPress={handleItemPress}>
-      <View className="pt-2 pb-3">
-        <Text className="font-[Poppins-600] text-sm text-[#212B36]">{nft_name}</Text>
-        <Text className="truncate font-[Poppins-400] text-xs text-[#212B36]">
-          {description}
-        </Text>
+      <View className="py-3 ">
+        {getTypeOfMedia()}
+
+        <Text className="pt-1 font-[Poppins-600] text-sm text-[#212B36]">{nft_name}</Text>
       </View>
     </TouchableOpacity>
   );
