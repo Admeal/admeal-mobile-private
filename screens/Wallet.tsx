@@ -17,8 +17,8 @@ import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 import ConnectWalletButton from "../components/buttons/ConnectWalletButton";
 import GoBackButton from "../components/buttons/GoBackButton";
 import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
-import NFTcard from "../components/NFTcard";
 import CustomModal from "../components/CustomModal";
+import NftWalletSection from "../components/NftWalletSection";
 
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import ArrowBottom from "../assets/icons/arrowBottom";
@@ -33,9 +33,6 @@ import { useRecoilState } from "recoil";
 import { userCreditsState, userState } from "../atoms/dataAtom";
 import firestore from "@react-native-firebase/firestore";
 
-import useNFTs from "../hooks/useNFTs";
-import NftWalletSection from "../components/NftWalletSection";
-
 const Wallet = ({ navigation }: NavigationProp) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
   const [userItem, setUserItem] = useRecoilState(userState);
@@ -47,7 +44,6 @@ const Wallet = ({ navigation }: NavigationProp) => {
     useState<boolean>(false);
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
   const [isMiniProfile, setIsMiniProfile] = useState<boolean>(false);
-  const [isfetchNfts, setIsfetchNfts] = useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {

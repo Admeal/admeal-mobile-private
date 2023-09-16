@@ -8,6 +8,7 @@ const useNFTs = () => {
   const HARVEST_CONTRACT_ADDRESS = "0x2468472705be500fb9c184aa3284cc6b6e10f0cb";
 
   const getNFTs = async (contractAddresses: string[]) => {
+    console.log("getNFTs triggered");
     if (!address) return;
     const contractQuery =
       contractAddresses.length === 0
@@ -26,14 +27,6 @@ const useNFTs = () => {
     }
   };
 
-  const getAllNFTs = async () => {
-    return await getNFTs([
-      NOODLE_CONTRACT_ADDRESS,
-      RAMEN_CONTRACT_ADDRESS,
-      HARVEST_CONTRACT_ADDRESS
-    ]);
-  };
-
   const getNoodleNFTs = async () => {
     return await getNFTs([NOODLE_CONTRACT_ADDRESS]);
   };
@@ -47,7 +40,6 @@ const useNFTs = () => {
   };
 
   return {
-    getAllNFTs,
     getNoodleNFTs,
     getRamenNFTs,
     getHarvestNFTs

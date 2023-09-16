@@ -7,7 +7,8 @@ const NftWalletSection = () => {
   const [personalHarvestCollection, setPersonalHarvestCollection] = useState<any>(null);
   const [personalNoodlesCollection, setPersonalNoodlesCollection] = useState<any>(null);
   const [personalRamensCollection, setPersonalRamensCollection] = useState<any>(null);
-  const { getAllNFTs, getHarvestNFTs, getNoodleNFTs, getRamenNFTs } = useNFTs();
+
+  const { getHarvestNFTs, getNoodleNFTs, getRamenNFTs } = useNFTs();
 
   const harvestCollection = getHarvestNFTs();
   const noodleCollection = getNoodleNFTs();
@@ -18,7 +19,9 @@ const NftWalletSection = () => {
     setTimeout(() => {
       personalHarvestCollection === null &&
         harvestCollection.then((res) => {
-          res !== undefined && setPersonalHarvestCollection(res);
+          res !== undefined &&
+            res !== personalHarvestCollection &&
+            setPersonalHarvestCollection(res);
           console.log("res", res);
           return res;
         });
@@ -30,7 +33,9 @@ const NftWalletSection = () => {
     setTimeout(() => {
       personalNoodlesCollection === null &&
         noodleCollection.then((res) => {
-          res !== undefined && setPersonalNoodlesCollection(res);
+          res !== undefined &&
+            res !== personalNoodlesCollection &&
+            setPersonalNoodlesCollection(res);
           console.log("res", res);
           return res;
         });
@@ -42,7 +47,9 @@ const NftWalletSection = () => {
     setTimeout(() => {
       personalRamensCollection === null &&
         ramenCollection.then((res) => {
-          res !== undefined && setPersonalRamensCollection(res);
+          res !== undefined &&
+            res !== personalRamensCollection &&
+            setPersonalRamensCollection(res);
           console.log("res", res);
           return res;
         });
