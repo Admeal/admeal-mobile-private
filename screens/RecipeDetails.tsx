@@ -24,6 +24,7 @@ import { useRecoilState } from "recoil";
 import firestore from "@react-native-firebase/firestore";
 
 import LoadingScreen from "./LoadingScreen";
+import DishCoinLogo from "../assets/icons/dishCoinLogo";
 
 const RecipeDetails = ({ navigation, route }: ScreensProps) => {
   const { recipe } = route.params;
@@ -110,9 +111,10 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
           </Text>
           <View className="flex-row items-center space-x-2">
             <Text className="mt-1 font-[Poppins-400] text-xs">Total:</Text>
-            <Text className="font-[Poppins-700] text-2xl">{recipe.token_reward}</Text>
-            {/* this needs to change to svg */}
-            <Image source={require("../assets/png/coin1.png")} />
+            <Text className="pr-2 font-[Poppins-700] text-2xl">
+              {recipe.token_reward}
+            </Text>
+            <DishCoinLogo size={18} scale={0.7} />
           </View>
         </View>
         <ScrollView className="flex-1 pt-3 pb-5">
