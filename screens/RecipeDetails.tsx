@@ -95,7 +95,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
     <LoadingScreen />
   ) : (
     <ImageBackground
-      className="relative flex-col justify-between flex-1 bg-gray-500"
+      className="relative flex-1 flex-col justify-between bg-gray-500"
       source={{
         uri: recipe.recipe_images[0],
         method: "POST"
@@ -126,7 +126,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
               flexDirection: "row",
               flexGrow: 1
             }}
-            className="pt-4 space-x-2 ">
+            className="space-x-2 pt-4 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
@@ -226,7 +226,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
             ) : (
               <View className="pt-2">
                 <Text className="font-[Poppins-400] text-xs leading-6  text-[#637381]">
-                  {recipe.cook_time_in_mins}
+                  {recipe.cooking_instructions}
                 </Text>
               </View>
             )}
