@@ -20,10 +20,12 @@ import CheckboxIcon from "../assets/icons/checkboxIcon";
 import EyeIcon from "../assets/icons/eyeIcon";
 import FoodIngredientsIcon from "../assets/icons/foodIngredientsIcon";
 import PreparedDishIcon from "../assets/icons/preparedDishIcon";
+
 import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import LoadingScreen from "./LoadingScreen";
 import CustomModal from "../components/CustomModal";
+import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const { mealId } = route.params;
@@ -55,16 +57,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   //   };
   // }, [navigation]);
 
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
+  blockHardBackPress();
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -149,6 +142,19 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
     <LoadingScreen />
   ) : (
     <View className="h-screen w-full flex-col items-center justify-between">
+      {/* submition modal */}
+      {isModalVisible && (
+        <CustomModal
+          navigation={navigation}
+          isVisible={isModalVisible}
+          close={() => setIsModalVisible(false)}
+          title="Recipe submition limitation"
+          desc="You can submit this recipe once every 24 hours. Please try again tomorrow."
+          buttonLogic="limit"
+          height="h-[320px]"
+        />
+      )}
+
       <View className="w-full">
         <View className="pt-16 pr-8"></View>
         <GoBackButton mealId={mealId} navigation={navigation} color="white" />
@@ -273,19 +279,6 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
             </>
           )}
         </View>
-      )}
-
-      {/* submition modal */}
-      {isModalVisible && (
-        <CustomModal
-          navigation={navigation}
-          isVisible={isModalVisible}
-          close={() => setIsModalVisible(false)}
-          title="Recipe submition limitation"
-          desc="You can submit this recipe once every 24 hours. Please try again tomorrow."
-          buttonLogic="limit"
-          height="h-[320px]"
-        />
       )}
     </View>
   );

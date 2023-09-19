@@ -1,13 +1,5 @@
-import {
-  BackHandler,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
 import * as Clipboard from "expo-clipboard";
 import { Motion } from "@legendapp/motion";
 import { MotionLinearGradient } from "@legendapp/motion/linear-gradient-expo";
@@ -32,6 +24,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useRecoilState } from "recoil";
 import { userCreditsState, userState } from "../atoms/dataAtom";
 import firestore from "@react-native-firebase/firestore";
+import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const Wallet = ({ navigation }: NavigationProp) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
@@ -45,16 +38,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
   const [isMiniProfile, setIsMiniProfile] = useState<boolean>(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
+  blockHardBackPress();
 
   const createUser = async () => {
     const userRef = firestore()
@@ -159,10 +143,10 @@ const Wallet = ({ navigation }: NavigationProp) => {
             source={{ uri: userItem?.additionalUserInfo.profile.picture, method: "POST" }}
           />
           <View className="h-[50px]">
-            <Text className="font-[Poppins-600] text-base font-semibold text-white">
+            <Text className="font-[Poppins-600] text-base text-white">
               Hello, {userItem?.additionalUserInfo.profile.given_name}
             </Text>
-            <Text className="pt-2 font-[Poppins-400] text-xs font-semibold text-white">
+            <Text className="pt-2 font-[Poppins-400] text-xs text-white">
               {userItem?.additionalUserInfo.profile.email}
             </Text>
           </View>
@@ -172,11 +156,11 @@ const Wallet = ({ navigation }: NavigationProp) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-2 p-5">
-            <Text className="font-[Poppins-400] text-base font-semibold text-white">
+            <Text className="font-[Poppins-400] text-base text-white">
               {isConnected ? "Wallet Address" : "Wallet not Connected"}
             </Text>
             <View className="flex-row items-center">
-              <Text className="pr-2.5 font-[Poppins-400] text-xs font-semibold text-white">
+              <Text className="pr-2.5 font-[Poppins-400] text-xs text-white">
                 {address ? trancuateWalletAddress() : ""}
               </Text>
               <TouchableOpacity onPress={copyWalletAddress}>
@@ -187,12 +171,10 @@ const Wallet = ({ navigation }: NavigationProp) => {
               {/* balance */}
               <DishCoinLogo size={20} scale={0.85} />
               <View className="flex-row items-baseline ">
-                <Text className="font-[Poppins-700] text-[32px] font-semibold leading-[48px] text-white">
+                <Text className="font-[Poppins-700] text-[32px] leading-[48px] text-white">
                   {isConnected ? dishCoins : "0"}
                 </Text>
-                <Text className="font-[Poppins-700] text-xl font-semibold text-white">
-                  .00
-                </Text>
+                <Text className="font-[Poppins-700] text-xl text-white">.00</Text>
               </View>
             </View>
             <View className="flex-row items-center justify-between">
@@ -242,24 +224,22 @@ const Wallet = ({ navigation }: NavigationProp) => {
       </MotionLinearGradient>
       <ScrollView>
         <View className="p-5">
-          <Text className="pb-3 font-[Poppins-600] text-base font-semibold text-[#212B36]">
-            Tokens
-          </Text>
+          <Text className="pb-3 font-[Poppins-600] text-base text-[#212B36]">Tokens</Text>
           <View className="h-[56px] flex-row items-center justify-between rounded-xl bg-white px-4">
             <DishCoinLogo size={24} scale={1} />
-            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm text-[#212B36]">
               DISH
             </Text>
-            <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="font-[Poppins-600] text-sm text-[#212B36]">
               {dishCoins}.00
             </Text>
           </View>
           <View className="mt-2 h-[56px] flex-row items-center justify-between rounded-xl bg-white px-4">
             <AdmealCoinLogo size={24} scale={1} />
-            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm text-[#212B36]">
               ADM
             </Text>
-            <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="font-[Poppins-600] text-sm text-[#212B36]">
               {admealCoins}.00
             </Text>
           </View>

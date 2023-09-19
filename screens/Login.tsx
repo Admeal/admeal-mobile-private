@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import AdmealLogoBig from "../assets/icons/admealLogoBig";
 import AppleLogo from "../assets/icons/appleLogo";
@@ -8,7 +8,6 @@ import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/dataAtom";
-import LoadingScreen from "./LoadingScreen";
 
 const Login = () => {
   const [userItem, setUserItem] = useRecoilState(userState);
@@ -40,10 +39,8 @@ const Login = () => {
       });
   };
 
-  return userItem ? (
-    <LoadingScreen />
-  ) : (
-    <View className="items-center h-screen space-y-4 bg-white">
+  return (
+    <View className="h-screen items-center space-y-4 bg-white">
       <AdmealLogoBig className="my-28" />
       <TouchableOpacity
         onPress={() =>

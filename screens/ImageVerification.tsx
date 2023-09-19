@@ -1,54 +1,21 @@
-import { BackHandler, Image, Text, TouchableOpacity, View } from "react-native";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
-import {
-  dishImageState,
-  ingredientsImageState,
-  isIngredientsSumbittedState,
-  isReadyDishState
-} from "../atoms/dataAtom";
+import { ingredientsImageState, isIngredientsSumbittedState } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
-import { useFocusEffect } from "@react-navigation/native";
-import LoadingScreen from "./LoadingScreen";
+
+import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const ImageVerification = ({ navigation, route }: ScreensProps) => {
   const { mealId, temporaryImage } = route.params;
-  console.log("image verification mealId", mealId);
-  const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
     isIngredientsSumbittedState
   );
-  const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  blockHardBackPress();
 
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
-  //     setIsLoading(true);
-  //   });
-
-  //   return () => {
-  //     setIsLoading(false);
-  //     unsubscribe();
-  //   };
-  // }, [navigation]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
-
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
-    <View className="flex-col items-center justify-between flex-1">
+  return (
+    <View className="flex-1 flex-col items-center justify-between">
       <View className="pt-[80px]"></View>
       {!isIngredientsSumbitted && ingredientsImage !== "" ? (
         <Image

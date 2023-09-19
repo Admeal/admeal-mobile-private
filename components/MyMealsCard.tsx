@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 import { useRecoilState } from "recoil";
@@ -9,7 +8,6 @@ import {
   isReadyDishState,
   mealIdState,
   mealStatusState,
-  recipeItemState,
   recipeListState
 } from "../atoms/dataAtom";
 

@@ -1,13 +1,10 @@
-import { BackHandler, Image, Text, TouchableOpacity, View } from "react-native";
-import { useCallback, useEffect, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
 
 import { useRecoilState } from "recoil";
 import {
   defaultMyMealsListState,
   defaultRecipeListState,
-  myMealsListState,
-  recipeListState,
   userCreditsState,
   userState
 } from "../atoms/dataAtom";
@@ -33,17 +30,6 @@ const HomeTopBar = ({ navigation }: GroupMealProps) => {
       setDishCoins(userCredits.dish_token);
     }
   }, [userCredits]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
 
   return (
     <View className="z-1 w-full flex-row items-center justify-between bg-white px-5 pb-6 pt-[33px]">

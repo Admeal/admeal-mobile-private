@@ -1,5 +1,5 @@
-import { BackHandler, Text, TouchableOpacity, View } from "react-native";
-import { useEffect, useState, useCallback, useLayoutEffect } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   dishImageState,
@@ -32,27 +32,7 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
   const [flashMode, setFlashMode] = useState<boolean>(false);
   const [flashText, setFlashText] = useState<string>(FlashMode.off);
 
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
-  //     setIsLoading(true);
-  //   });
-
-  //   return () => {
-  //     setIsLoading(false);
-  //     unsubscribe();
-  //   };
-  // }, [navigation]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
+  blockHardBackPress();
 
   useEffect(() => {
     (async () => {

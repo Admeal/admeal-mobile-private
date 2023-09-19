@@ -1,12 +1,5 @@
-import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
-import { useLayoutEffect, useState } from "react";
+import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
 import ClockIcon from "../assets/icons/clockIcon";
 import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
@@ -17,7 +10,6 @@ import {
   mealIdState,
   mealStatusState,
   myMealsListState,
-  recipeItemState,
   userState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
@@ -25,6 +17,7 @@ import firestore from "@react-native-firebase/firestore";
 
 import LoadingScreen from "./LoadingScreen";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
+import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const RecipeDetails = ({ navigation, route }: ScreensProps) => {
   const { recipe } = route.params;
@@ -40,16 +33,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState(false);
 
-  useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      setIsLoading(true);
-    });
-
-    return () => {
-      setIsLoading(false);
-      unsubscribe();
-    };
-  }, [navigation]);
+  blockHardBackPress();
 
   const handleCookButton = async () => {
     console.log("create new meal");
@@ -92,9 +76,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
     });
   };
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <ImageBackground
       className="relative flex-1 flex-col justify-between bg-gray-500"
       source={{
