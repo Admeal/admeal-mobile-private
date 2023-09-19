@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'host.exp.exponent'
+    namespace 'xyz.admeal'
     defaultConfig {
-        applicationId 'host.exp.exponent'
+        applicationId 'xyz.admeal'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

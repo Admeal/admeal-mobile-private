@@ -29,7 +29,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="admeal-modile"/>
-        <data android:scheme="host.exp.exponent"/>
+        <data android:scheme="xyz.admeal"/>
         <data android:scheme="exp+admeal-mobile"/>
       </intent-filter>
     </activity>
