@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>830854626619-mtvvvmboi9jlcapq41kinrtuu8s5vuu9.apps.googleusercontent.com</string>
+	<string>830854626619-ar2ad8jku75nmgr9k5q66tb2vve4leoe.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.830854626619-mtvvvmboi9jlcapq41kinrtuu8s5vuu9</string>
+	<string>com.googleusercontent.apps.830854626619-ar2ad8jku75nmgr9k5q66tb2vve4leoe</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>830854626619-jnvmeuk23g17ls7ifn16aachglelo9np.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>host.exp.exponent</string>
+	<string>xyz.admeal</string>
 	<key>PROJECT_ID</key>
 	<string>admeal-firebase</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:830854626619:ios:52e9699d44d54a3a7f0b1e</string>
+	<string>1:830854626619:ios:291a7d630207ebc37f0b1e</string>
 	<key>DATABASE_URL</key>
 	<string>https://admeal-firebase-default-rtdb.firebaseio.com</string>
 </dict>
