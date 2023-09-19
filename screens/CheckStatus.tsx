@@ -1,6 +1,5 @@
-import { useEffect, useLayoutEffect, useState, useCallback } from "react";
-import { View, Text, TouchableOpacity, BackHandler, Image } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import firestore from "@react-native-firebase/firestore";
 import { useRecoilState } from "recoil";
@@ -23,8 +22,9 @@ import PreparedDishIcon from "../assets/icons/preparedDishIcon";
 
 import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
-import LoadingScreen from "./LoadingScreen";
+
 import CustomModal from "../components/CustomModal";
+import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const CheckStatus = ({ navigation, route }: ScreensProps) => {
@@ -43,19 +43,11 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const [textStatus, setTextStatus] = useState<string>("");
   const [meal, setMeal] = useState<MealProps | null>(null);
   const [tokenReward, setTokenReward] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
-  //     setIsLoading(true);
-  //   });
-
-  //   return () => {
-  //     setIsLoading(false);
-  //     unsubscribe();
-  //   };
-  // }, [navigation]);
+  const { address } = useWalletConnectModal();
+  console.log("address", address);
 
   blockHardBackPress();
 
@@ -97,12 +89,15 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
         ) {
           console.log("sumbition unavailable");
           setIsModalVisible(true);
+        } else {
+          !isModalVisible &&
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 1000);
         }
       });
     }
-  }, [meal]);
 
-  useEffect(() => {
     if (meal) {
       if (meal?.dish_photos[0] === "") {
         setIsReadyDish(false);
@@ -138,9 +133,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
     }
   };
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <View className="h-screen w-full flex-col items-center justify-between">
       {/* submition modal */}
       {isModalVisible && (
@@ -234,7 +227,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
               <Text className="font-[Poppins-600] text-sm text-[#919EAB]">Submitted</Text>
             </View>
           ) : (
-            <RecipeStatusButton navigation={navigation} />
+            <RecipeStatusButton disabled={isLoading} navigation={navigation} />
           )}
 
           {isReadyDish ? (
@@ -259,7 +252,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
           {!isReadyDish && (
             <RecipeStatusButton
               navigation={navigation}
-              disabled={!isIngredientsSumbitted}
+              disabled={!isIngredientsSumbitted || isLoading}
             />
           )}
 

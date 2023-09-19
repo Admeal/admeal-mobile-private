@@ -15,8 +15,8 @@ import {
 import { useRecoilState } from "recoil";
 import firestore from "@react-native-firebase/firestore";
 
-import LoadingScreen from "./LoadingScreen";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
+import Spinner from "../components/animations/spinner";
 import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const RecipeDetails = ({ navigation, route }: ScreensProps) => {
@@ -30,12 +30,13 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
   const [userItem, setUserItem] = useRecoilState(userState);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
   const [toggle, setToggle] = useState(false);
 
   blockHardBackPress();
 
   const handleCookButton = async () => {
+    setIsLoadingButton(true);
     console.log("create new meal");
     const docRef = await firestore()
       .collection(`user_data`)
@@ -74,6 +75,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
       recipe,
       mealId: docRef.id
     });
+    setIsLoadingButton(false);
   };
 
   return (
@@ -217,9 +219,14 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
           </ScrollView>
         </ScrollView>
         <TouchableOpacity
+          disabled={isLoadingButton}
           onPress={() => handleCookButton()}
           className="absolute bottom-8 left-[9%] z-10 h-[60px] w-full flex-col items-center justify-center rounded-full bg-[#FF1E00] shadow-xl shadow-[#FF1E00]">
-          <Text className="font-[Poppins-700] text-base text-white">LET'S COOK IT</Text>
+          {!isLoadingButton ? (
+            <Text className="font-[Poppins-700] text-base text-white">LET'S COOK IT</Text>
+          ) : (
+            <Spinner />
+          )}
         </TouchableOpacity>
       </View>
     </ImageBackground>
