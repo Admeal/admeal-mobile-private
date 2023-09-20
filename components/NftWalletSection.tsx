@@ -3,58 +3,51 @@ import { useEffect, useState } from "react";
 import useNFTs from "../hooks/useNFTs";
 import NFTcard from "./NFTcard";
 
-const NftWalletSection = () => {
+const NftWalletSection = ({ address }: any) => {
   const [personalHarvestCollection, setPersonalHarvestCollection] = useState<any>(null);
   const [personalNoodlesCollection, setPersonalNoodlesCollection] = useState<any>(null);
   const [personalRamensCollection, setPersonalRamensCollection] = useState<any>(null);
 
   const { getHarvestNFTs, getNoodleNFTs, getRamenNFTs } = useNFTs();
 
-  const harvestCollection = getHarvestNFTs();
-  const noodleCollection = getNoodleNFTs();
-  const ramenCollection = getRamenNFTs();
-
   useEffect(() => {
-    console.log("harvestCollection triggered");
-    setTimeout(() => {
-      personalHarvestCollection === null &&
-        harvestCollection.then((res) => {
+    address &&
+      setTimeout(() => {
+        console.log("harvestCollection triggered");
+        getHarvestNFTs().then((res) => {
           res !== undefined &&
             res !== personalHarvestCollection &&
             setPersonalHarvestCollection(res);
           console.log("res", res);
-          return res;
         });
-    }, 20000);
-  }, [harvestCollection]);
+      }, 2000);
+  }, [address]);
 
   useEffect(() => {
-    console.log("noodleCollection triggered");
-    setTimeout(() => {
-      personalNoodlesCollection === null &&
-        noodleCollection.then((res) => {
+    address &&
+      setTimeout(() => {
+        console.log("noodleCollection triggered");
+        getNoodleNFTs().then((res) => {
           res !== undefined &&
             res !== personalNoodlesCollection &&
             setPersonalNoodlesCollection(res);
           console.log("res", res);
-          return res;
         });
-    }, 20000);
-  }, [noodleCollection]);
+      }, 2000);
+  }, [address]);
 
   useEffect(() => {
-    console.log("ramenCollection triggered");
-    setTimeout(() => {
-      personalRamensCollection === null &&
-        ramenCollection.then((res) => {
+    address &&
+      setTimeout(() => {
+        console.log("ramenCollection triggered");
+        getRamenNFTs().then((res) => {
           res !== undefined &&
             res !== personalRamensCollection &&
             setPersonalRamensCollection(res);
           console.log("res", res);
-          return res;
         });
-    }, 20000);
-  }, [ramenCollection]);
+      }, 2000);
+  }, [address]);
 
   return (
     <>
@@ -62,6 +55,21 @@ const NftWalletSection = () => {
         <Text className="px-5 py-3 font-[Poppins-600] text-base text-[#212B36]">
           NFTs
         </Text>
+
+        {!address && (
+          <Text className="px-5 py-3 font-[Poppins-600] text-2xl text-[#212B36]">
+            Please login to your wallet
+          </Text>
+        )}
+
+        {address &&
+          personalHarvestCollection?.ownedNfts?.length === 0 &&
+          personalNoodlesCollection?.ownedNfts?.length === 0 &&
+          personalRamensCollection?.ownedNfts?.length === 0 && (
+            <Text className="px-5 py-3 font-[Poppins-600] text-2xl text-[#212B36]">
+              You don't have any NFTs yet
+            </Text>
+          )}
 
         {personalNoodlesCollection?.ownedNfts?.length && (
           <>
@@ -80,15 +88,17 @@ const NftWalletSection = () => {
                 flexDirection: "row",
                 flexGrow: 1
               }}
-              className="relative space-y-4 px-5">
-              {personalNoodlesCollection?.ownedNfts?.map((item: any, index: number) => (
-                <NFTcard
-                  description={item.description}
-                  key={index}
-                  nft_name={item.name}
-                  item={item}
-                />
-              ))}
+              className="relative mx-5 space-y-4 pr-4">
+              {personalNoodlesCollection?.ownedNfts?.map(
+                (item: NftItemProps, index: number) => (
+                  <NFTcard
+                    description={item.description}
+                    key={index}
+                    nft_name={item.name}
+                    item={item}
+                  />
+                )
+              )}
             </ScrollView>
           </>
         )}
@@ -110,15 +120,17 @@ const NftWalletSection = () => {
                 flexDirection: "row",
                 flexGrow: 1
               }}
-              className="relative space-y-4 px-5">
-              {personalRamensCollection?.ownedNfts?.map((item: any, index: number) => (
-                <NFTcard
-                  item={item}
-                  key={index}
-                  description={item.description}
-                  nft_name={item.name}
-                />
-              ))}
+              className="relative mx-5 space-y-4 pr-4">
+              {personalRamensCollection?.ownedNfts?.map(
+                (item: NftItemProps, index: number) => (
+                  <NFTcard
+                    item={item}
+                    key={index}
+                    description={item.description}
+                    nft_name={item.name}
+                  />
+                )
+              )}
             </ScrollView>
           </>
         )}
@@ -140,15 +152,17 @@ const NftWalletSection = () => {
                 flexDirection: "row",
                 flexGrow: 1
               }}
-              className="relative space-y-4 px-5">
-              {personalHarvestCollection?.ownedNfts?.map((item: any, index: number) => (
-                <NFTcard
-                  item={item}
-                  key={index}
-                  description={item.description}
-                  nft_name={item.name}
-                />
-              ))}
+              className="relative mx-5 space-y-4 pr-4">
+              {personalHarvestCollection?.ownedNfts?.map(
+                (item: NftItemProps, index: number) => (
+                  <NFTcard
+                    item={item}
+                    key={index}
+                    description={item.description}
+                    nft_name={item.name}
+                  />
+                )
+              )}
             </ScrollView>
           </>
         )}
