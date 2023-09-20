@@ -206,7 +206,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
             rotate: isMiniProfile ? "90deg" : "270deg"
           }}
           transition={transition("spring", 25, 400)}
-          className={`absolute right-[50%] bottom-4`} //flex-row items-center justify-center pl-4
+          className={`absolute right-[48%] bottom-4 `} //flex-row items-center justify-center pl-4
         >
           <TouchableOpacity onPress={() => setIsMiniProfile(!isMiniProfile)}>
             <AntDesign name="stepforward" size={24} color="#A393EB" />
