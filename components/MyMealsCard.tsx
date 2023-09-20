@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 
 import { useRecoilState } from "recoil";
@@ -9,12 +8,13 @@ import {
   isReadyDishState,
   mealIdState,
   mealStatusState,
-  recipeItemState,
   recipeListState
 } from "../atoms/dataAtom";
 
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
+
+import shadows from "../hooks/shadows";
 
 const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
@@ -29,16 +29,12 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
 
   const handleStatusButtonUI = () => {
     switch (meal?.current_state) {
-      case "Finished":
       case "COMPLETE":
-      case "COMPLETED":
         return "bg-[#229A16] text-white ";
       case "AWAITING_VALIDATION":
         return "bg-[#919EAB]/25 text-[#919EAB] ";
       case "INVALID":
         return "bg-white text-[#919EAB] ";
-      case "IN_PROGRESS_DISH":
-      case "IN_PROGRESS_INGREDIENTS":
       case "INCOMPLETE":
         return " bg-[#FF1E00] text-white ";
       default:
@@ -48,14 +44,8 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
 
   const handleStatusText = () => {
     switch (meal?.current_state) {
-      case "Finished":
       case "COMPLETE":
-      case "COMPLETED":
         return "Complete";
-      case "IN_PROGRESS_DISH":
-        return "Take a photo of the dish";
-      case "IN_PROGRESS_INGREDIENTS":
-        return "Take a photo of ingredients";
       case "INVALID":
         return "Invalid";
       case "AWAITING_VALIDATION":
@@ -88,7 +78,7 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
     } else {
       setIsIngredientsSumbitted(true);
     }
-    setMealStatus(meal?.current_state as string);
+    setMealStatus(meal?.current_state as MealStatusProps);
 
     navigation.navigate("CheckStatus", {
       mealId: meal?.my_meals_id
@@ -97,21 +87,9 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
 
   return (
     <TouchableOpacity
-      style={[
-        {
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 1,
-            height: 5
-          },
-          shadowOpacity: 0.26,
-          shadowRadius: 3.18,
-
-          elevation: 4
-        }
-      ]}
+      style={shadows.mealCardShadow}
       onPress={handleItemPress}
-      className="my-1 w-[100%] flex-row space-x-4 rounded-2xl bg-white shadow-2xl">
+      className="-px-2 my-2 w-[100%] flex-row space-x-4 rounded-2xl bg-white shadow-2xl">
       <ImageBackground
         className="h-[121px] w-[84px] flex-col justify-between "
         borderBottomLeftRadius={16}

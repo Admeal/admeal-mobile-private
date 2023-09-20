@@ -10,7 +10,7 @@ type GoBackButtonProps = {
 
 const GoBackButton = ({ navigation, color, mealId }: GoBackButtonProps) => {
   const press = () => {
-    navigation.getState().routes.find((route: any) => {
+    navigation.getState().routes.find((route: RouteProps) => {
       switch (route.name) {
         case "CameraUpload":
           console.log("camera upload");

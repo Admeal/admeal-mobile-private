@@ -1,6 +1,5 @@
-import { useEffect, useLayoutEffect, useState, useCallback } from "react";
-import { View, Text, TouchableOpacity, BackHandler, Image } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import firestore from "@react-native-firebase/firestore";
 import { useRecoilState } from "recoil";
@@ -20,10 +19,16 @@ import CheckboxIcon from "../assets/icons/checkboxIcon";
 import EyeIcon from "../assets/icons/eyeIcon";
 import FoodIngredientsIcon from "../assets/icons/foodIngredientsIcon";
 import PreparedDishIcon from "../assets/icons/preparedDishIcon";
+
 import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
-import LoadingScreen from "./LoadingScreen";
+
 import CustomModal from "../components/CustomModal";
+
+import { useWalletConnectModal } from "@walletconnect/modal-react-native";
+
+import blockHardBackPress from "../hooks/blockHardBackPress";
+import handleMealStatus from "../hooks/handleMealStatus";
 
 const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const { mealId } = route.params;
@@ -41,30 +46,19 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const [textStatus, setTextStatus] = useState<string>("");
   const [meal, setMeal] = useState<MealProps | null>(null);
   const [tokenReward, setTokenReward] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
-  //     setIsLoading(true);
-  //   });
+  const { address } = useWalletConnectModal();
+  console.log("address", address);
 
-  //   return () => {
-  //     setIsLoading(false);
-  //     unsubscribe();
-  //   };
-  // }, [navigation]);
+  blockHardBackPress();
 
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
+  useEffect(() => {
+    address !== "" && address !== undefined && address !== null
+      ? setIsLoading(false)
+      : null;
+  }, [address]);
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -104,12 +98,15 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
         ) {
           console.log("sumbition unavailable");
           setIsModalVisible(true);
+        } else {
+          !isModalVisible &&
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 1000);
         }
       });
     }
-  }, [meal]);
 
-  useEffect(() => {
     if (meal) {
       if (meal?.dish_photos[0] === "") {
         setIsReadyDish(false);
@@ -128,27 +125,24 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   }, [meal]);
 
   useEffect(() => {
-    setTextStatus(handleMealStatus());
+    setTextStatus(handleMealStatus(mealStatus, meal as MealProps));
   }, [meal?.current_state]);
 
-  const handleMealStatus = () => {
-    switch (mealStatus) {
-      case "COMPLETE":
-        return `you have earned ${meal?.tokens_earned} tokens!`;
-      case "INVALID":
-        return "Your photos weren’t approved.  Probably your uploaded wrong photos.";
-      case "AWAITING_VALIDATION":
-      case "INCOMPLETE":
-        return "We’re checking your photos. You’ll receive your reward soon!";
-      default:
-        return "";
-    }
-  };
-
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <View className="h-screen w-full flex-col items-center justify-between">
+      {/* submition modal */}
+      {isModalVisible && (
+        <CustomModal
+          navigation={navigation}
+          isVisible={isModalVisible}
+          close={() => setIsModalVisible(false)}
+          title="Recipe submition limitation"
+          desc="You can submit this recipe once every 24 hours. Please try again tomorrow."
+          buttonLogic="limit"
+          height="h-[320px]"
+        />
+      )}
+
       <View className="w-full">
         <View className="pt-16 pr-8"></View>
         <GoBackButton mealId={mealId} navigation={navigation} color="white" />
@@ -207,19 +201,20 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
             <FoodIngredientsIcon />
           )}
 
-          {!isIngredientsSumbitted ? (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("RecipeDetails")}
-              className="flex-row items-center space-x-2">
-              <EyeIcon />
-              <Text className="font-[Poppins-400] text-sm text-[#FF1E00]">
-                View recipe
+          {!isIngredientsSumbitted && (
+            <>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("RecipeDetails")}
+                className="flex-row items-center space-x-2">
+                <EyeIcon />
+                <Text className="font-[Poppins-400] text-sm text-[#FF1E00]">
+                  View recipe
+                </Text>
+              </TouchableOpacity>
+              <Text className="font-[Poppins-600] text-lg">
+                Take a photo of ingredients
               </Text>
-            </TouchableOpacity>
-          ) : (
-            <Text className="font-[Poppins-600] text-lg">
-              Take a photo of ingredients
-            </Text>
+            </>
           )}
 
           {isIngredientsSumbitted ? (
@@ -228,7 +223,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
               <Text className="font-[Poppins-600] text-sm text-[#919EAB]">Submitted</Text>
             </View>
           ) : (
-            <RecipeStatusButton navigation={navigation} />
+            <RecipeStatusButton disabled={isLoading} navigation={navigation} />
           )}
 
           {isReadyDish ? (
@@ -253,7 +248,7 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
           {!isReadyDish && (
             <RecipeStatusButton
               navigation={navigation}
-              disabled={!isIngredientsSumbitted}
+              disabled={!isIngredientsSumbitted || isLoading}
             />
           )}
 
@@ -273,19 +268,6 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
             </>
           )}
         </View>
-      )}
-
-      {/* submition modal */}
-      {isModalVisible && (
-        <CustomModal
-          navigation={navigation}
-          isVisible={isModalVisible}
-          close={() => setIsModalVisible(false)}
-          title="Recipe submition limitation"
-          desc="You can submit this recipe once every 24 hours. Please try again tomorrow."
-          buttonLogic="limit"
-          height="h-[320px]"
-        />
       )}
     </View>
   );

@@ -15,7 +15,7 @@ import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
 import { AntDesign } from "@expo/vector-icons";
 import getBlobFromUri from "../../hooks/getBlobFromUri";
-// import Animated from "react-native-reanimated";
+import Spinner from "../animations/spinner";
 
 type RecipeStatusButtonProps = {
   disabled?: boolean;
@@ -147,8 +147,8 @@ RecipeStatusButtonProps) => {
         disabled ? "bg-[#919EAB]/20 shadow-[#919EAB]/20" : "bg-[#FF1E00] shadow-[#FF1E00]"
       }`}>
       {isLoading ? (
-        <View className="flex-row items-center justify-center animate-spin">
-          <AntDesign name="reload1" size={24} color="white" />
+        <View className="flex-row items-center justify-center">
+          <Spinner />
         </View>
       ) : (
         <Text

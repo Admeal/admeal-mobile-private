@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2f5ada1-8780-4421-8501-e9f5973766e5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/components/RecipesBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/RecipesBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Search.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/buttons/ConnectWalletButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/buttons/ConnectWalletButton.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/buttons/ReconnectWalletButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/buttons/ReconnectWalletButton.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/Wallet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Wallet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

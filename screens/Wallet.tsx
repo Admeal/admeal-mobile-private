@@ -1,13 +1,5 @@
-import {
-  BackHandler,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
-import { useCallback, useEffect, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
 import * as Clipboard from "expo-clipboard";
 import { Motion } from "@legendapp/motion";
 import { MotionLinearGradient } from "@legendapp/motion/linear-gradient-expo";
@@ -17,8 +9,8 @@ import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 import ConnectWalletButton from "../components/buttons/ConnectWalletButton";
 import GoBackButton from "../components/buttons/GoBackButton";
 import ReconnectWalletButton from "../components/buttons/ReconnectWalletButton";
-import NFTcard from "../components/NFTcard";
 import CustomModal from "../components/CustomModal";
+import NftWalletSection from "../components/NftWalletSection";
 
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import ArrowBottom from "../assets/icons/arrowBottom";
@@ -31,7 +23,12 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { useRecoilState } from "recoil";
 import { userCreditsState, userState } from "../atoms/dataAtom";
+
 import firestore from "@react-native-firebase/firestore";
+
+import blockHardBackPress from "../hooks/blockHardBackPress";
+import shadows from "../hooks/shadows";
+import transition from "../hooks/transitionAnimation";
 
 const Wallet = ({ navigation }: NavigationProp) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
@@ -45,16 +42,9 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
   const [isMiniProfile, setIsMiniProfile] = useState<boolean>(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+  const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
 
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
+  blockHardBackPress();
 
   const createUser = async () => {
     const userRef = firestore()
@@ -65,7 +55,8 @@ const Wallet = ({ navigation }: NavigationProp) => {
     await userRef.doc("credits").set(
       {
         admeal_token: 0,
-        dish_token: 0
+        dish_token: 0,
+        wallet: address?.toString()!
       },
       { merge: false }
     );
@@ -87,18 +78,12 @@ const Wallet = ({ navigation }: NavigationProp) => {
 
   useEffect(() => {
     if (userCredits?.admeal_token === null || userCredits?.admeal_token === undefined) {
-      console.log("user", userCredits);
       createUser();
     } else {
       setAdmealCoins(userCredits?.admeal_token);
       setDishCoins(userCredits?.dish_token);
     }
   }, [userCredits]);
-
-  const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
-  useEffect(() => {
-    address && console.log(address);
-  }, [address]);
 
   const trancuateWalletAddress = () => {
     return `${address?.slice(0, 9)}...${address?.slice(-9)}`;
@@ -120,32 +105,14 @@ const Wallet = ({ navigation }: NavigationProp) => {
       <MotionLinearGradient
         initial={{ height: !isMiniProfile ? 421 : 195 }}
         animate={{ height: isMiniProfile ? 195 : 421 }}
-        transition={{
-          type: "spring",
-          damping: 25,
-          stiffness: 400
-        }}
+        transition={transition("spring", 25, 400)}
         animateProps={{
           colors: ["#9F87FF", "#3A13D6"],
           start: { x: 0, y: 0 },
           end: { x: 1, y: 1 }
         }}
-        style={[
-          {
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 9
-            },
-            shadowOpacity: 0.48,
-            shadowRadius: 11.95,
-
-            elevation: 18,
-            borderBottomLeftRadius: 24,
-            borderBottomRightRadius: 24
-          }
-        ]}
-        className={`w-full rounded-b-3xl `}>
+        style={[shadows.walletProfileShadow]}
+        className={`relative w-full rounded-b-3xl`}>
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} color="white" />
           <View className="flex-1 flex-row"></View>
@@ -159,10 +126,10 @@ const Wallet = ({ navigation }: NavigationProp) => {
             source={{ uri: userItem?.additionalUserInfo.profile.picture, method: "POST" }}
           />
           <View className="h-[50px]">
-            <Text className="font-[Poppins-600] text-base font-semibold text-white">
+            <Text className="font-[Poppins-600] text-base text-white">
               Hello, {userItem?.additionalUserInfo.profile.given_name}
             </Text>
-            <Text className="pt-2 font-[Poppins-400] text-xs font-semibold text-white">
+            <Text className="pt-2 font-[Poppins-400] text-xs text-white">
               {userItem?.additionalUserInfo.profile.email}
             </Text>
           </View>
@@ -172,11 +139,11 @@ const Wallet = ({ navigation }: NavigationProp) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-2 p-5">
-            <Text className="font-[Poppins-400] text-base font-semibold text-white">
+            <Text className="font-[Poppins-400] text-base text-white">
               {isConnected ? "Wallet Address" : "Wallet not Connected"}
             </Text>
             <View className="flex-row items-center">
-              <Text className="pr-2.5 font-[Poppins-400] text-xs font-semibold text-white">
+              <Text className="pr-2.5 font-[Poppins-400] text-xs text-white">
                 {address ? trancuateWalletAddress() : ""}
               </Text>
               <TouchableOpacity onPress={copyWalletAddress}>
@@ -187,12 +154,10 @@ const Wallet = ({ navigation }: NavigationProp) => {
               {/* balance */}
               <DishCoinLogo size={20} scale={0.85} />
               <View className="flex-row items-baseline ">
-                <Text className="font-[Poppins-700] text-[32px] font-semibold leading-[48px] text-white">
+                <Text className="font-[Poppins-700] text-[32px] leading-[48px] text-white">
                   {isConnected ? dishCoins : "0"}
                 </Text>
-                <Text className="font-[Poppins-700] text-xl font-semibold text-white">
-                  .00
-                </Text>
+                <Text className="font-[Poppins-700] text-xl text-white">.00</Text>
               </View>
             </View>
             <View className="flex-row items-center justify-between">
@@ -232,51 +197,47 @@ const Wallet = ({ navigation }: NavigationProp) => {
             </View>
           </Motion.View>
         )}
-        <TouchableOpacity
-          onPress={() => setIsMiniProfile(!isMiniProfile)}
-          className={`${
-            isMiniProfile ? "rotate-90" : "-rotate-90"
-          } flex-row items-center justify-center pl-4`}>
-          <AntDesign name="stepforward" size={24} color="#A393EB" />
-        </TouchableOpacity>
+
+        <Motion.View
+          initial={{
+            rotate: isMiniProfile ? "90deg" : "270deg"
+          }}
+          animate={{
+            rotate: isMiniProfile ? "90deg" : "270deg"
+          }}
+          transition={transition("spring", 25, 400)}
+          className={`absolute right-[48%] bottom-4 `} //flex-row items-center justify-center pl-4
+        >
+          <TouchableOpacity onPress={() => setIsMiniProfile(!isMiniProfile)}>
+            <AntDesign name="stepforward" size={24} color="#A393EB" />
+          </TouchableOpacity>
+        </Motion.View>
       </MotionLinearGradient>
-      <ScrollView>
+      <Motion.ScrollView>
         <View className="p-5">
-          <Text className="pb-3 font-[Poppins-600] text-base font-semibold text-[#212B36]">
-            Tokens
-          </Text>
+          <Text className="pb-3 font-[Poppins-600] text-base text-[#212B36]">Tokens</Text>
           <View className="h-[56px] flex-row items-center justify-between rounded-xl bg-white px-4">
             <DishCoinLogo size={24} scale={1} />
-            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm text-[#212B36]">
               DISH
             </Text>
-            <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="font-[Poppins-600] text-sm text-[#212B36]">
               {dishCoins}.00
             </Text>
           </View>
           <View className="mt-2 h-[56px] flex-row items-center justify-between rounded-xl bg-white px-4">
             <AdmealCoinLogo size={24} scale={1} />
-            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="flex-1 pl-4 font-[Poppins-600] text-sm text-[#212B36]">
               ADM
             </Text>
-            <Text className="font-[Poppins-600] text-sm font-semibold text-[#212B36]">
+            <Text className="font-[Poppins-600] text-sm text-[#212B36]">
               {admealCoins}.00
             </Text>
           </View>
         </View>
 
-        <View className="relative">
-          <Text className="px-5 py-3 font-[Poppins-600] text-base text-[#212B36]">
-            NFTs
-          </Text>
-          <View className="relative flex-row flex-wrap items-center justify-between space-y-4 px-5">
-            <NFTcard />
-            <NFTcard />
-            <NFTcard />
-            <NFTcard />
-          </View>
-        </View>
-      </ScrollView>
+        <NftWalletSection address={address} />
+      </Motion.ScrollView>
 
       {/* account modal */}
       <CustomModal

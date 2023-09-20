@@ -1,12 +1,5 @@
-import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
-import { useLayoutEffect, useState } from "react";
+import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
 import ClockIcon from "../assets/icons/clockIcon";
 import ServingsIcon from "../assets/icons/servingsIcon";
 import IngredientsItem from "../components/IngredientsItem";
@@ -17,13 +10,14 @@ import {
   mealIdState,
   mealStatusState,
   myMealsListState,
-  recipeItemState,
   userState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
 import firestore from "@react-native-firebase/firestore";
 
-import LoadingScreen from "./LoadingScreen";
+import DishCoinLogo from "../assets/icons/dishCoinLogo";
+import Spinner from "../components/animations/spinner";
+import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const RecipeDetails = ({ navigation, route }: ScreensProps) => {
   const { recipe } = route.params;
@@ -36,21 +30,13 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
   const [myMealsList, setMyMealsList] = useRecoilState(myMealsListState);
   const [userItem, setUserItem] = useRecoilState(userState);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingButton, setIsLoadingButton] = useState<boolean>(false);
   const [toggle, setToggle] = useState(false);
 
-  useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", () => {
-      setIsLoading(true);
-    });
-
-    return () => {
-      setIsLoading(false);
-      unsubscribe();
-    };
-  }, [navigation]);
+  blockHardBackPress();
 
   const handleCookButton = async () => {
+    setIsLoadingButton(true);
     console.log("create new meal");
     const docRef = await firestore()
       .collection(`user_data`)
@@ -78,7 +64,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
         my_meals_id: docRef.id
       });
 
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
     setMealId(docRef.id);
 
     setIsIngredientsSumbitted(false);
@@ -89,13 +75,12 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
       recipe,
       mealId: docRef.id
     });
+    setIsLoadingButton(false);
   };
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <ImageBackground
-      className="relative flex-col justify-between flex-1 bg-gray-500"
+      className="relative flex-1 flex-col justify-between bg-gray-500"
       source={{
         uri: recipe.recipe_images[0],
         method: "POST"
@@ -110,9 +95,10 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
           </Text>
           <View className="flex-row items-center space-x-2">
             <Text className="mt-1 font-[Poppins-400] text-xs">Total:</Text>
-            <Text className="font-[Poppins-700] text-2xl">{recipe.token_reward}</Text>
-            {/* this needs to change to svg */}
-            <Image source={require("../assets/png/coin1.png")} />
+            <Text className="pr-2 font-[Poppins-700] text-2xl">
+              {recipe.token_reward}
+            </Text>
+            <DishCoinLogo size={18} scale={0.7} />
           </View>
         </View>
         <ScrollView className="flex-1 pt-3 pb-5">
@@ -126,7 +112,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
               flexDirection: "row",
               flexGrow: 1
             }}
-            className="pt-4 space-x-2 ">
+            className="space-x-2 pt-4 ">
             <View className="h-[114px] w-[122px] space-y-2 rounded-xl bg-white px-4 pt-3 ">
               <Text className="font-[Poppins-400] text-xs text-[#6D6D6D]">About:</Text>
               <View className="flex-row items-center space-x-2 ">
@@ -226,16 +212,21 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
             ) : (
               <View className="pt-2">
                 <Text className="font-[Poppins-400] text-xs leading-6  text-[#637381]">
-                  {recipe.cook_time_in_mins}
+                  {recipe.cooking_instructions}
                 </Text>
               </View>
             )}
           </ScrollView>
         </ScrollView>
         <TouchableOpacity
+          disabled={isLoadingButton}
           onPress={() => handleCookButton()}
           className="absolute bottom-8 left-[9%] z-10 h-[60px] w-full flex-col items-center justify-center rounded-full bg-[#FF1E00] shadow-xl shadow-[#FF1E00]">
-          <Text className="font-[Poppins-700] text-base text-white">LET'S COOK IT</Text>
+          {!isLoadingButton ? (
+            <Text className="font-[Poppins-700] text-base text-white">LET'S COOK IT</Text>
+          ) : (
+            <Spinner />
+          )}
         </TouchableOpacity>
       </View>
     </ImageBackground>

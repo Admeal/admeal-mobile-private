@@ -1,5 +1,5 @@
-import { BackHandler, Text, TouchableOpacity, View } from "react-native";
-import { useEffect, useState, useCallback, useLayoutEffect } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   dishImageState,
@@ -8,17 +8,19 @@ import {
 } from "../atoms/dataAtom";
 
 import { Camera, CameraProps, CameraType, ConstantsType, FlashMode } from "expo-camera";
-import { useFocusEffect } from "@react-navigation/native";
+
+import { Motion } from "@legendapp/motion";
 
 import GoBackButton from "../components/buttons/GoBackButton";
+import Spinner from "../components/animations/spinner";
+
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
-import LoadingScreen from "./LoadingScreen";
+import blockHardBackPress from "../hooks/blockHardBackPress";
 
 const CameraUpload = ({ navigation, route }: ScreensProps) => {
   const { mealId } = route.params;
-  console.log("camera mealId", mealId);
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -32,27 +34,7 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
   const [flashMode, setFlashMode] = useState<boolean>(false);
   const [flashText, setFlashText] = useState<string>(FlashMode.off);
 
-  // useLayoutEffect(() => {
-  //   const unsubscribe = navigation.addListener("beforeRemove", () => {
-  //     setIsLoading(true);
-  //   });
-
-  //   return () => {
-  //     setIsLoading(false);
-  //     unsubscribe();
-  //   };
-  // }, [navigation]);
-
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        return true;
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-
-      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-    }, [])
-  );
+  blockHardBackPress();
 
   useEffect(() => {
     (async () => {
@@ -66,6 +48,7 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
   }, []);
 
   const takePicture = async () => {
+    setIsLoading(true);
     if (camera) {
       const data = await camera.takePictureAsync({
         quality: 0.3
@@ -79,17 +62,16 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
       }
       navigation.navigate("ImageVerification", { mealId, temporaryImage: data.uri });
     }
+    setIsLoading(false);
   };
 
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
 
-  return isLoading ? (
-    <LoadingScreen />
-  ) : (
+  return (
     <Camera
-      className="flex-col items-center justify-center flex-1"
+      className="flex-1 flex-col items-center justify-center"
       flashMode={flashText as FlashMode}
       ratio="16:9"
       type={type}
@@ -97,7 +79,7 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
         setCamera(ref);
       }}>
       <GoBackButton mealId={mealId} navigation={navigation} color="white" />
-      <View className="flex-row items-center self-start justify-end w-full">
+      <View className="w-full flex-row items-center justify-end self-start">
         {/* flash button */}
         <TouchableOpacity
           className="mr-8 mt-10 h-[40px] w-[40px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
@@ -112,12 +94,19 @@ const CameraUpload = ({ navigation, route }: ScreensProps) => {
           )}
         </TouchableOpacity>
       </View>
-      <View className="flex-row flex-1 bg-transparent">
+      <View className="flex-1 flex-row bg-transparent">
         <TouchableOpacity
+          disabled={isLoading}
           className="mb-8 h-[60px] w-[60px] flex-col items-center justify-center self-end rounded-full bg-[#919EAB]/50"
           style={{}}
           onPress={takePicture}>
-          <AntDesign name="camerao" size={24} color="white" />
+          <Motion.View whileTap={{ scale: 0.5 }}>
+            {!isLoading ? (
+              <AntDesign name="camerao" size={24} color="white" />
+            ) : (
+              <Spinner />
+            )}
+          </Motion.View>
         </TouchableOpacity>
       </View>
     </Camera>

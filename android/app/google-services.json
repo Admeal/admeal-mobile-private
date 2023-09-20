@@ -85,6 +85,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830854626619:android:a7fa7fd46ede2fba7f0b1e",
+        "android_client_info": {
+          "package_name": "xyz.admeal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830854626619-abahvf95ravv8fcovu4adtvs7pc4fr32.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1fuHSgCF8WXpnz1b23Cvf66WsjEL5iFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830854626619-8tpal2893jtodq4daugsmm6rmsj3lrsb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "830854626619-4npptv6og31a7to3inp8l5uuhnqf9gej.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.adminpanel"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

@@ -2,21 +2,19 @@ import { Text, View } from "react-native";
 import { Motion } from "@legendapp/motion";
 import { FontAwesome } from "@expo/vector-icons";
 
-const spinner = () => {
+const Spinner = () => {
   return (
     <Motion.View
-      animate={{
-        rotate: 360
+      initial={{
+        rotate: "0deg"
       }}
-      transition={{
-        // duration: 1,
-        loop: Infinity,
-        stiffness: 100,
-        type: "spring"
-      }}>
-      <FontAwesome name="spinner" size={24} color="black" />
+      animate={{
+        rotate: "360deg"
+      }}
+      transition={{ easing: "linear", loop: 99, duration: 1000 }}>
+      <FontAwesome name="spinner" size={28} color="white" />
     </Motion.View>
   );
 };
 
-export default spinner;
+export default Spinner;

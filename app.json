@@ -9,9 +9,7 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ],
-      [
-        "@react-native-google-signin/google-signin"
-      ]
+      ["@react-native-google-signin/google-signin"]
     ],
     "name": "admeal-mobile",
     "slug": "admeal-mobile",
@@ -27,13 +25,11 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
-      "bundleIdentifier": "host.exp.exponent"
+      "bundleIdentifier": "xyz.admeal"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -41,11 +37,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "host.exp.exponent",
-      "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
-      ]
+      "package": "xyz.admeal",
+      "permissions": ["android.permission.CAMERA", "android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
