@@ -52,6 +52,10 @@ type NavigationProp = NavigationProp<
   any
 >;
 
+type RouteProps = {
+  name: "CameraUpload" | "CheckStatus" | "ImageVerification" | "RecipeDetails" | "Wallet";
+};
+
 type NavigationNavigateProp = {
   navigate: (screen: string, params?: any) => void;
   reset: (arg0: { index: number; routes: { name: string }[] }) => void;
@@ -94,6 +98,13 @@ type MealProps = {
   user_id: string;
 };
 
+type NftItemProps = {
+  name: string;
+  description: string;
+  image: string;
+  external_url: string;
+};
+
 type timestamp = {
   nanoseconds: number;
   seconds: number;
@@ -111,6 +122,7 @@ type AuthProps = {
 type CreditsProps = {
   admeal_token: number;
   dish_token: number;
+  wallet: string;
 };
 
 type UserDbProps = {
