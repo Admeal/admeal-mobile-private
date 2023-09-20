@@ -67,7 +67,7 @@ function NFTcard({ description, nft_name, token_reward, item }: NFTcardProps) {
   };
 
   return (
-    <TouchableOpacity className="mr-2 " onPress={handleItemPress}>
+    <TouchableOpacity className="mr-2" onPress={handleItemPress}>
       <View className="py-3 ">
         {getTypeOfMedia()}
 

@@ -64,7 +64,7 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
         my_meals_id: docRef.id
       });
 
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
     setMealId(docRef.id);
 
     setIsIngredientsSumbitted(false);

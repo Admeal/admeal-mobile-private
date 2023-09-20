@@ -39,6 +39,11 @@ const Login = () => {
       });
   };
 
+  const onAppleButtonPress = async () => {
+    // Sign-in the user with the credential
+    console.log("apple login to be fixed");
+  };
+
   return (
     <View className="h-screen items-center space-y-4 bg-white">
       <AdmealLogoBig className="my-28" />
@@ -46,12 +51,13 @@ const Login = () => {
         onPress={() =>
           onGoogleButtonPress().then(() => console.log("Await google auth!"))
         }
-        // disabled={!request}
         className="h-[44px] w-[300px] flex-row items-center justify-between rounded-full border border-[#DBE2E9] px-5">
         <GoogleLogo />
         <Text className="font-[Poppins-600] text-base">Sign in with Google</Text>
       </TouchableOpacity>
-      <TouchableOpacity className="h-[44px] w-[300px] flex-row items-center justify-between rounded-full border border-[#DBE2E9] px-5">
+      <TouchableOpacity
+        onPress={() => onAppleButtonPress}
+        className="h-[44px] w-[300px] flex-row items-center justify-between rounded-full border border-[#DBE2E9] px-5">
         <AppleLogo />
         <Text className="font-[Poppins-600] text-base">Sign in with Apple</Text>
       </TouchableOpacity>

@@ -81,6 +81,7 @@ const RedModalButton = ({ navigation, functionality }: RedModalButtonProps) => {
         break;
     }
   };
+  
   return (
     <TouchableOpacity
       className="mb-4 h-12 w-[70%] flex-col items-center justify-center rounded-full bg-[#FF1E00]"
