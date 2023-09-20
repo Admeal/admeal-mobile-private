@@ -23,8 +23,12 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { useRecoilState } from "recoil";
 import { userCreditsState, userState } from "../atoms/dataAtom";
+
 import firestore from "@react-native-firebase/firestore";
+
 import blockHardBackPress from "../hooks/blockHardBackPress";
+import shadows from "../hooks/shadows";
+import transition from "../hooks/transitionAnimation";
 
 const Wallet = ({ navigation }: NavigationProp) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
@@ -38,6 +42,8 @@ const Wallet = ({ navigation }: NavigationProp) => {
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState<boolean>(false);
   const [isMiniProfile, setIsMiniProfile] = useState<boolean>(false);
 
+  const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
+
   blockHardBackPress();
 
   const createUser = async () => {
@@ -49,7 +55,8 @@ const Wallet = ({ navigation }: NavigationProp) => {
     await userRef.doc("credits").set(
       {
         admeal_token: 0,
-        dish_token: 0
+        dish_token: 0,
+        wallet: address?.toString()!
       },
       { merge: false }
     );
@@ -71,18 +78,12 @@ const Wallet = ({ navigation }: NavigationProp) => {
 
   useEffect(() => {
     if (userCredits?.admeal_token === null || userCredits?.admeal_token === undefined) {
-      console.log("user", userCredits);
       createUser();
     } else {
       setAdmealCoins(userCredits?.admeal_token);
       setDishCoins(userCredits?.dish_token);
     }
   }, [userCredits]);
-
-  const { isOpen, open, close, provider, isConnected, address } = useWalletConnectModal();
-  useEffect(() => {
-    address && console.log(address);
-  }, [address]);
 
   const trancuateWalletAddress = () => {
     return `${address?.slice(0, 9)}...${address?.slice(-9)}`;
@@ -104,32 +105,14 @@ const Wallet = ({ navigation }: NavigationProp) => {
       <MotionLinearGradient
         initial={{ height: !isMiniProfile ? 421 : 195 }}
         animate={{ height: isMiniProfile ? 195 : 421 }}
-        transition={{
-          type: "spring",
-          damping: 25,
-          stiffness: 400
-        }}
+        transition={transition("spring", 25, 400)}
         animateProps={{
           colors: ["#9F87FF", "#3A13D6"],
           start: { x: 0, y: 0 },
           end: { x: 1, y: 1 }
         }}
-        style={[
-          {
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 9
-            },
-            shadowOpacity: 0.48,
-            shadowRadius: 11.95,
-
-            elevation: 18,
-            borderBottomLeftRadius: 24,
-            borderBottomRightRadius: 24
-          }
-        ]}
-        className={`w-full rounded-b-3xl `}>
+        style={[shadows.walletProfileShadow]}
+        className={`relative w-full rounded-b-3xl`}>
         <View className="flex-row items-center justify-between">
           <GoBackButton navigation={navigation} color="white" />
           <View className="flex-1 flex-row"></View>
@@ -214,15 +197,23 @@ const Wallet = ({ navigation }: NavigationProp) => {
             </View>
           </Motion.View>
         )}
-        <TouchableOpacity
-          onPress={() => setIsMiniProfile(!isMiniProfile)}
-          className={`${
-            isMiniProfile ? "rotate-90" : "-rotate-90"
-          } flex-row items-center justify-center pl-4`}>
-          <AntDesign name="stepforward" size={24} color="#A393EB" />
-        </TouchableOpacity>
+
+        <Motion.View
+          initial={{
+            rotate: isMiniProfile ? "90deg" : "270deg"
+          }}
+          animate={{
+            rotate: isMiniProfile ? "90deg" : "270deg"
+          }}
+          transition={transition("spring", 25, 400)}
+          className={`absolute right-[50%] bottom-4`} //flex-row items-center justify-center pl-4
+        >
+          <TouchableOpacity onPress={() => setIsMiniProfile(!isMiniProfile)}>
+            <AntDesign name="stepforward" size={24} color="#A393EB" />
+          </TouchableOpacity>
+        </Motion.View>
       </MotionLinearGradient>
-      <ScrollView>
+      <Motion.ScrollView>
         <View className="p-5">
           <Text className="pb-3 font-[Poppins-600] text-base text-[#212B36]">Tokens</Text>
           <View className="h-[56px] flex-row items-center justify-between rounded-xl bg-white px-4">
@@ -245,8 +236,8 @@ const Wallet = ({ navigation }: NavigationProp) => {
           </View>
         </View>
 
-        <NftWalletSection />
-      </ScrollView>
+        <NftWalletSection address={address} />
+      </Motion.ScrollView>
 
       {/* account modal */}
       <CustomModal
