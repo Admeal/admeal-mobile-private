@@ -18,20 +18,20 @@ type CustomModalProps = {
 };
 
 const CustomModal = ({
-  close,
-  isVisible,
-  navigation,
-  title,
-  desc,
   buttonLogic,
+  close,
+  desc,
   height,
   isAccountProfileModal,
+  isVisible,
+  navigation,
+  setIsDeleteAccountModalVisible,
   setIsLogoutModalVisible,
-  setIsDeleteAccountModalVisible
+  title
 }: CustomModalProps) => {
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
-      <View className="flex-col items-center justify-center h-full bg-black/30">
+      <View className="h-full flex-col items-center justify-center bg-black/30">
         <View
           className={`${height} relative w-[90%] flex-col items-center justify-around rounded-2xl bg-white px-7`}>
           {buttonLogic !== "limit" && <XCloseButton cloceProp={() => close()} />}
@@ -49,8 +49,8 @@ const CustomModal = ({
               <RedModalButton navigation={navigation} functionality={buttonLogic!} />
             </>
           ) : (
-            <View className="flex-col items-center justify-center w-full -mt-48 space-y-5">
-              <View className="flex-row items-center justify-between w-full">
+            <View className="-mt-48 w-full flex-col items-center justify-center space-y-5">
+              <View className="w-full flex-row items-center justify-between">
                 <Text className="font-[Poppins-600] text-base font-semibold text-[#212B36]">
                   Sign out
                 </Text>
@@ -59,7 +59,7 @@ const CustomModal = ({
                   setIsLogoutModalVisible={setIsLogoutModalVisible}
                 />
               </View>
-              <View className="flex-row items-center justify-between w-full">
+              <View className="w-full flex-row items-center justify-between">
                 <Text className="font-[Poppins-600] text-base font-semibold text-[#212B36]">
                   Delete account
                 </Text>
