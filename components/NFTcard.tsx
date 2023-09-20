@@ -3,30 +3,32 @@ import { Video, ResizeMode } from "expo-av";
 import PriceTag from "./PriceTag";
 import { useRef } from "react";
 
-function NFTcard({
-  description = "lorem ipsum",
-  nft_name = "test",
-  token_reward = 40,
-  item = {}
-}) {
+import stringContains from "../hooks/stringContains";
+import shadows from "../hooks/shadows";
+
+type NFTcardProps = {
+  description: string;
+  nft_name: string;
+  token_reward?: number;
+  item: NftItemProps;
+};
+function NFTcard({ description, nft_name, token_reward, item }: NFTcardProps) {
   const video = useRef(null);
 
-  const handleItemPress = () => {};
-
-  const stringContains = (substring: string) => {
-    return nft_name.indexOf(substring) > -1;
+  const handleItemPress = () => {
+    console.log("navigate to nft screen");
   };
 
   const getNftMediaUri = () => {
-    if (stringContains("Noodle NFT")) {
+    if (stringContains(nft_name, "Noodle NFT")) {
       return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Fnoodle_nft.mp4?alt=media&token=35c08850-1a2b-42cd-bccb-44dc371d1b5f";
     }
 
-    if (stringContains("ARNFT")) {
+    if (stringContains(nft_name, "ARNFT")) {
       return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Framen_nft_2160px_1.mp4?alt=media&token=66f3d122-cbbd-4ae3-a005-c8f41e33de3f";
     }
 
-    if (stringContains("Romanesco")) {
+    if (stringContains(nft_name, "Romanesco")) {
       return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Fharvest_romanesco_725.png?alt=media&token=8eb64d39-79b5-417e-9f08-62a34754dfb6";
     }
 
@@ -34,10 +36,11 @@ function NFTcard({
   };
 
   const getTypeOfMedia = () => {
-    if (stringContains("Noodle NFT") || stringContains("ARNFT")) {
+    if (stringContains(nft_name, "Noodle NFT") || stringContains(nft_name, "ARNFT")) {
       return (
         <Video
           ref={video}
+          style={[shadows.nftShadow]}
           source={{
             uri: getNftMediaUri()
           }}
@@ -49,22 +52,10 @@ function NFTcard({
       );
     }
 
-    if (stringContains("Romanesco")) {
+    if (stringContains(nft_name, "Romanesco")) {
       return (
         <ImageBackground
-          style={[
-            {
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 5
-              },
-              shadowOpacity: 0.36,
-              shadowRadius: 5.68,
-
-              elevation: 11
-            }
-          ]}
+          style={[shadows.nftShadow]}
           className=" h-[42vw] w-[42vw] flex-col justify-between rounded-2xl border border-[#919EAB] bg-black shadow-2xl"
           borderRadius={16}
           source={{
@@ -76,7 +67,7 @@ function NFTcard({
   };
 
   return (
-    <TouchableOpacity className="mr-2 rounded-2xl shadow-2xl" onPress={handleItemPress}>
+    <TouchableOpacity className="mr-2 " onPress={handleItemPress}>
       <View className="py-3 ">
         {getTypeOfMedia()}
 
