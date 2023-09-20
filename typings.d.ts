@@ -79,9 +79,11 @@ type GroupMealProps = {
   >;
 };
 
+type MealStatusProps = "COMPLETE" | "INVALID" | "AWAITING_VALIDATION" | "INCOMPLETE" | "";
+
 type MealProps = {
   created_at: timestamp;
-  current_state: string;
+  current_state: MealStatusProps;
   dish_photos: string[];
   ingredients_photos: string[];
   my_meals_id: string;
