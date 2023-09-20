@@ -27,16 +27,12 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
 
   const handleStatusButtonUI = () => {
     switch (meal?.current_state) {
-      case "Finished":
       case "COMPLETE":
-      case "COMPLETED":
         return "bg-[#229A16] text-white ";
       case "AWAITING_VALIDATION":
         return "bg-[#919EAB]/25 text-[#919EAB] ";
       case "INVALID":
         return "bg-white text-[#919EAB] ";
-      case "IN_PROGRESS_DISH":
-      case "IN_PROGRESS_INGREDIENTS":
       case "INCOMPLETE":
         return " bg-[#FF1E00] text-white ";
       default:
@@ -46,14 +42,8 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
 
   const handleStatusText = () => {
     switch (meal?.current_state) {
-      case "Finished":
       case "COMPLETE":
-      case "COMPLETED":
         return "Complete";
-      case "IN_PROGRESS_DISH":
-        return "Take a photo of the dish";
-      case "IN_PROGRESS_INGREDIENTS":
-        return "Take a photo of ingredients";
       case "INVALID":
         return "Invalid";
       case "AWAITING_VALIDATION":
@@ -86,7 +76,7 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
     } else {
       setIsIngredientsSumbitted(true);
     }
-    setMealStatus(meal?.current_state as string);
+    setMealStatus(meal?.current_state as MealStatusProps);
 
     navigation.navigate("CheckStatus", {
       mealId: meal?.my_meals_id

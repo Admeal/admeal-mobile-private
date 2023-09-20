@@ -42,7 +42,7 @@ export const myMealsListState = atom({
 
 export const mealStatusState = atom({
   key: "mealStatusState",
-  default: "" as string
+  default: "" as MealStatusProps
 });
 
 export const recipeItemState = atom<RecipeProps>({
