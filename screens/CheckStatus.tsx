@@ -24,7 +24,9 @@ import GoBackButton from "../components/buttons/GoBackButton";
 import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 
 import CustomModal from "../components/CustomModal";
+
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
+
 import blockHardBackPress from "../hooks/blockHardBackPress";
 import handleMealStatus from "../hooks/handleMealStatus";
 
@@ -199,19 +201,20 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
             <FoodIngredientsIcon />
           )}
 
-          {!isIngredientsSumbitted ? (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("RecipeDetails")}
-              className="flex-row items-center space-x-2">
-              <EyeIcon />
-              <Text className="font-[Poppins-400] text-sm text-[#FF1E00]">
-                View recipe
+          {!isIngredientsSumbitted && (
+            <>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("RecipeDetails")}
+                className="flex-row items-center space-x-2">
+                <EyeIcon />
+                <Text className="font-[Poppins-400] text-sm text-[#FF1E00]">
+                  View recipe
+                </Text>
+              </TouchableOpacity>
+              <Text className="font-[Poppins-600] text-lg">
+                Take a photo of ingredients
               </Text>
-            </TouchableOpacity>
-          ) : (
-            <Text className="font-[Poppins-600] text-lg">
-              Take a photo of ingredients
-            </Text>
+            </>
           )}
 
           {isIngredientsSumbitted ? (
