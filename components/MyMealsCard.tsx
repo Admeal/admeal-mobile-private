@@ -14,6 +14,8 @@ import {
 import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 
+import shadows from "../hooks/shadows";
+
 const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
@@ -85,21 +87,9 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
 
   return (
     <TouchableOpacity
-      style={[
-        {
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 1,
-            height: 5
-          },
-          shadowOpacity: 0.26,
-          shadowRadius: 3.18,
-
-          elevation: 4
-        }
-      ]}
+      style={shadows.mealCardShadow}
       onPress={handleItemPress}
-      className="my-1 w-[100%] flex-row space-x-4 rounded-2xl bg-white shadow-2xl">
+      className="-px-2 my-2 w-[100%] flex-row space-x-4 rounded-2xl bg-white shadow-2xl">
       <ImageBackground
         className="h-[121px] w-[84px] flex-col justify-between "
         borderBottomLeftRadius={16}
