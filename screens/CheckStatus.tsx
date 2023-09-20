@@ -26,6 +26,7 @@ import RecipeStatusButton from "../components/buttons/RecipeStatusButton";
 import CustomModal from "../components/CustomModal";
 import { useWalletConnectModal } from "@walletconnect/modal-react-native";
 import blockHardBackPress from "../hooks/blockHardBackPress";
+import handleMealStatus from "../hooks/handleMealStatus";
 
 const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const { mealId } = route.params;
@@ -50,6 +51,12 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   console.log("address", address);
 
   blockHardBackPress();
+
+  useEffect(() => {
+    address !== "" && address !== undefined && address !== null
+      ? setIsLoading(false)
+      : null;
+  }, [address]);
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -116,22 +123,8 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   }, [meal]);
 
   useEffect(() => {
-    setTextStatus(handleMealStatus());
+    setTextStatus(handleMealStatus(mealStatus, meal as MealProps));
   }, [meal?.current_state]);
-
-  const handleMealStatus = () => {
-    switch (mealStatus) {
-      case "COMPLETE":
-        return `you have earned ${meal?.tokens_earned} tokens!`;
-      case "INVALID":
-        return "Your photos weren’t approved.  Probably your uploaded wrong photos.";
-      case "AWAITING_VALIDATION":
-      case "INCOMPLETE":
-        return "We’re checking your photos. You’ll receive your reward soon!";
-      default:
-        return "";
-    }
-  };
 
   return (
     <View className="h-screen w-full flex-col items-center justify-between">
