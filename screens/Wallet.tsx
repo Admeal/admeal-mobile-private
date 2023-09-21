@@ -29,6 +29,7 @@ import firestore from "@react-native-firebase/firestore";
 import blockHardBackPress from "../hooks/blockHardBackPress";
 import shadows from "../hooks/shadows";
 import transition from "../hooks/transitionAnimation";
+import MinMaxButton from "../components/buttons/MinMaxButton";
 
 const Wallet = ({ navigation }: NavigationProp) => {
   const [userCredits, setUserCredits] = useRecoilState(userCreditsState);
@@ -197,20 +198,12 @@ const Wallet = ({ navigation }: NavigationProp) => {
           </Motion.View>
         )}
 
-        <Motion.View
-          initial={{
-            rotate: isMiniProfile ? "90deg" : "270deg"
-          }}
-          animate={{
-            rotate: isMiniProfile ? "90deg" : "270deg"
-          }}
-          transition={transition("spring", 25, 400)}
-          className={`absolute right-[48%] bottom-4 `} //flex-row items-center justify-center pl-4
-        >
-          <TouchableOpacity onPress={() => setIsMiniProfile(!isMiniProfile)}>
-            <AntDesign name="stepforward" size={24} color="#A393EB" />
-          </TouchableOpacity>
-        </Motion.View>
+        <MinMaxButton
+          horizontalPosition="right-[46%]"
+          isMini={isMiniProfile}
+          setIsMini={setIsMiniProfile}
+          verticalPosition="bottom-1"
+        />
       </MotionLinearGradient>
       <Motion.ScrollView>
         <View className="p-5">
