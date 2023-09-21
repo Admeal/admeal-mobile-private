@@ -118,10 +118,10 @@ const RecipeStack = () => {
         console.log("credits sub");
         setUserCredits({
           admeal_token: data?.admeal_token,
-          dish_token: data?.dish_token
+          dish_token: data?.dish_token,
+          wallet: data?.wallet
         });
       });
-    // console.log("aaaa", userCredits);
 
     return () => {
       unsubscribe();
@@ -132,7 +132,6 @@ const RecipeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerBackground: () => null,
         headerTransparent: true,
         headerShown: false,
         headerStyle: {
@@ -141,7 +140,7 @@ const RecipeStack = () => {
       }}>
       <Stack.Group>
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="My Meals" component={Meals} />
+        {/* <Stack.Screen name="My Meals" component={Meals} /> */}
         <Stack.Screen name="RecipeDetails" component={RecipeDetails} />
         <Stack.Screen name="CheckStatus" component={CheckStatus} />
         <Stack.Screen name="CameraUpload" component={CameraUpload} />

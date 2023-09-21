@@ -29,7 +29,6 @@ const Login = () => {
     const user_sign_in = auth().signInWithCredential(googleCredential);
     user_sign_in
       .then((user) => {
-        console.log(user, "delay 1 second");
         setTimeout(() => {
           setUserItem(user as any);
         }, 1000);

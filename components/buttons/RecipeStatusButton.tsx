@@ -1,5 +1,5 @@
-import { Animated, Text, TouchableOpacity, View } from "react-native";
-import { useState, useRef, useEffect } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   dishImageState,
@@ -13,7 +13,6 @@ import {
 
 import firestore from "@react-native-firebase/firestore";
 import storage from "@react-native-firebase/storage";
-import { AntDesign } from "@expo/vector-icons";
 import getBlobFromUri from "../../hooks/getBlobFromUri";
 import Spinner from "../animations/spinner";
 
@@ -41,13 +40,9 @@ RecipeStatusButtonProps) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {}, []);
-
-  const handlePress = async () => {
+  const handleButtonPress = async () => {
     isLoading || disabled ? null : console.log(label);
     if (!disabled) {
-      console.log("upload id", mealId, typeof mealId);
-
       if (mealStatus === "COMPLETE" && ingredientsImage !== "" && dishImage !== "") {
         navigation.reset({
           index: 0,
@@ -57,32 +52,21 @@ RecipeStatusButtonProps) => {
       }
 
       if (ingredientsImage === "" && !isIngredientsSumbitted) {
-        console.log("upload 1id", mealId);
         navigation.navigate("CameraUpload", { mealId: mealId });
       }
 
       if (ingredientsImage !== "" && isIngredientsSumbitted && dishImage === "") {
-        console.log("upload 2id", mealId);
         navigation.navigate("CameraUpload", { mealId: mealId });
       }
 
       if (ingredientsImage !== "" && !isIngredientsSumbitted && mealId) {
         setIsLoading(true);
-        const docRef = await firestore()
-          .collection("user_data")
-          .doc(user?.user.uid)
-          .collection("meals")
-          .doc(mealId)
-          .get();
 
-        docRef.exists && console.log("Document data:", docRef.data());
         const imageRef = storage().ref(
           `user_photos/${user?.user.uid}/meals/${mealId}/ingredientsImage.jpg`
         );
-        console.log("upload 1id", mealId);
         const imageBlob = await getBlobFromUri(ingredientsImage);
         await imageRef.put(imageBlob as Blob).then(async () => {
-          console.log("upload 2id", mealId);
           const downLoadUrl = await imageRef.getDownloadURL();
           await firestore()
             .collection("user_data")
@@ -103,22 +87,13 @@ RecipeStatusButtonProps) => {
 
     if (dishImage !== "" && ingredientsImage !== "" && isIngredientsSumbitted) {
       setIsLoading(true);
-      const docRef = await firestore()
-        .collection("user_data")
-        .doc(user?.user.uid)
-        .collection("meals")
-        .doc(mealId)
-        .get();
-
-      docRef.exists && console.log("Document data:", docRef.data());
 
       const imageRef = storage().ref(
         `user_photos/${user?.user.uid}/meals/${mealId}/dishImage.jpg`
       );
-      console.log("upload 1id", mealId);
+
       const imageBlob = await getBlobFromUri(dishImage);
       await imageRef.put(imageBlob as Blob).then(async () => {
-        console.log("upload 2id", mealId);
         const downLoadUrl = await imageRef.getDownloadURL();
         await firestore()
           .collection("user_data")
@@ -142,7 +117,7 @@ RecipeStatusButtonProps) => {
   return (
     <TouchableOpacity
       disabled={disabled}
-      onPress={handlePress}
+      onPress={handleButtonPress}
       className={`mb-[48px] h-12 w-[40%] flex-col items-center justify-center rounded-full px-3 pt-1 text-center shadow-xl ${
         disabled ? "bg-[#919EAB]/20 shadow-[#919EAB]/20" : "bg-[#FF1E00] shadow-[#FF1E00]"
       }`}>
