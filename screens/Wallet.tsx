@@ -90,8 +90,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
   };
 
   const copyWalletAddress = async () => {
-    await Clipboard.setStringAsync(address?.toString()!);
-    await Clipboard.getStringAsync().then((res) => {
+    await Clipboard.setStringAsync(address?.toString()!).then((res) => {
       console.log(res);
     });
   };

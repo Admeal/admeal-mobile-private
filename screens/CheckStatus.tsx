@@ -50,7 +50,6 @@ const CheckStatus = ({ navigation, route }: ScreensProps) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const { address } = useWalletConnectModal();
-  console.log("address", address);
 
   blockHardBackPress();
 

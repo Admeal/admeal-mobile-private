@@ -6,7 +6,7 @@ import RecipeTabs from "../components/RecipeTabs";
 import blockHardBackPress from "../hooks/blockHardBackPress";
 
 export default function Home({ navigation }: ScreensProps) {
-  blockHardBackPress()
+  blockHardBackPress();
   return (
     <View className="relative">
       <HomeTopBar navigation={navigation} />
