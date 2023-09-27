@@ -48,6 +48,7 @@
         "projectId": "ff8b2652-df6c-4548-8ff1-74e323bd9d11"
       },
       "plugins": [
+        "@react-native-firebase/app",
         [
           "expo-build-properties",
           {
