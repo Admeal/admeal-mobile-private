@@ -3,9 +3,7 @@ type GroupRecipesProps = {
   navigation?: NavigationProp<Record<string, object | undefined>, string, any, any, any>;
 };
 
-type TimeTagProps = {
-  time: number;
-};
+type TimeTagProps = number;
 
 type RecipeProps = {
   cook_count: number;
