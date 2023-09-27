@@ -9,10 +9,22 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ],
+      ["@react-native-google-signin/google-signin"],
+      ["@react-native-firebase/app"],
       [
-        "@react-native-google-signin/google-signin"
-      ],
-      "expo-build-properties"
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 33,
+            "targetSdkVersion": 33,
+            "buildToolsVersion": "33.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.4",
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     "name": "admeal-mobile",
     "slug": "admeal-mobile",
@@ -28,9 +40,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
@@ -43,10 +53,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "xyz.admeal",
-      "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
-      ]
+      "permissions": ["android.permission.CAMERA", "android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -54,24 +61,7 @@
     "extra": {
       "eas": {
         "projectId": "ff8b2652-df6c-4548-8ff1-74e323bd9d11"
-      },
-      "plugins": [
-        "@react-native-firebase/app",
-        [
-          "expo-build-properties",
-          {
-            "android": {
-              "compileSdkVersion": 33,
-              "targetSdkVersion": 33,
-              "buildToolsVersion": "33.0.0"
-            },
-            "ios": {
-              "deploymentTarget": "13.4",
-              "useFrameworks": "static"
-            }
-          }
-        ]
-      ]
+      }
     }
   }
 }
