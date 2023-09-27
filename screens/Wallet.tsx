@@ -105,7 +105,13 @@ const Wallet = ({ navigation }: NavigationProp) => {
       <MotionLinearGradient
         initial={{ height: !isMiniProfile ? 421 : 195 }}
         animate={{ height: isMiniProfile ? 195 : 421 }}
-        transition={transition("spring", 25, 400)}
+        transition={{
+          // ...transition("spring", 300, 7)
+          // duration: 0.5,
+          type: "spring",
+          stiffness: 350,
+          damping: 13
+        }}
         animateProps={{
           colors: ["#9F87FF", "#3A13D6"],
           start: { x: 0, y: 0 },
@@ -160,8 +166,12 @@ const Wallet = ({ navigation }: NavigationProp) => {
                 <Text className="font-[Poppins-700] text-xl text-white">.00</Text>
               </View>
             </View>
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center space-x-10 pt-2">
+            <Motion.View
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 12 }}
+              className="flex-row items-center justify-between">
+              <View className="flex-row items-center space-x-10 pt-4">
                 {/* Buttons */}
                 <View className="flex-col items-center justify-center">
                   <TouchableOpacity
@@ -190,11 +200,11 @@ const Wallet = ({ navigation }: NavigationProp) => {
                   className=" h-[56px] w-[56px] flex-row items-center justify-center rounded-full bg-white/50">
                   <GearIcon />
                 </TouchableOpacity>
-                <Text className="pt-2 font-[Poppins-400] text-xs text-white">
+                <Text className="pt-2 font-[Poppins-400] text-xs text-white/70">
                   Account
                 </Text>
               </View>
-            </View>
+            </Motion.View>
           </Motion.View>
         )}
 
@@ -203,6 +213,7 @@ const Wallet = ({ navigation }: NavigationProp) => {
           isMini={isMiniProfile}
           setIsMini={setIsMiniProfile}
           verticalPosition="bottom-1"
+          // color="#1f6fd0"
         />
       </MotionLinearGradient>
       <Motion.ScrollView>
