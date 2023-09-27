@@ -15,11 +15,14 @@ import {
 import { useRecoilState } from "recoil";
 import firestore from "@react-native-firebase/firestore";
 
-import DishCoinLogo from "../assets/icons/dishCoinLogo";
-import Spinner from "../components/animations/spinner";
-import blockHardBackPress from "../hooks/blockHardBackPress";
-import MinMaxButton from "../components/buttons/MinMaxButton";
 import { Motion } from "@legendapp/motion";
+
+import MinMaxButton from "../components/buttons/MinMaxButton";
+import Spinner from "../components/animations/spinner";
+
+import DishCoinLogo from "../assets/icons/dishCoinLogo";
+
+import blockHardBackPress from "../hooks/blockHardBackPress";
 import transition from "../hooks/transitionAnimation";
 
 const RecipeDetails = ({ navigation, route }: ScreensProps) => {
@@ -94,7 +97,11 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
       <Motion.View
         initial={{ height: isMiniImage ? 90 : 480 }}
         animate={{ height: isMiniImage ? 90 : 480 }}
-        transition={transition("spring", 25, 400)}
+        transition={{
+          type: "spring",
+          damping: 20,
+          stiffness: 400
+        }}
         className="absolute bottom-0 h-2/3 ">
         <View className="relative h-full flex-col justify-between rounded-t-3xl bg-slate-50 bg-gradient-to-b from-white to-[#F6F6F6] px-7 pt-7">
           <MinMaxButton
@@ -102,8 +109,8 @@ const RecipeDetails = ({ navigation, route }: ScreensProps) => {
             isMini={isMiniImage}
             setIsMini={setIsMiniImage}
             verticalPosition="top-0"
-            rotateFrom="270deg"
-            rotateTo="90deg"
+            rotateFrom={270}
+            rotateTo={90}
           />
           <View className="flex-row items-end justify-between">
             <Text className="w-[50%] font-[Poppins-700] text-2xl">
