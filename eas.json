@@ -3,6 +3,10 @@
     "preview": {
       "android": {
         "buildType": "apk"
+      },
+      "ios": {
+        "developmentClient": false,
+        "distribution": "internal"
       }
     },
     "production": {},
