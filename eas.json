@@ -5,6 +5,7 @@
         "buildType": "apk"
       },
       "ios": {
+        "distribution": "internal",
         "developmentClient": false
       }
     },
