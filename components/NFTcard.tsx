@@ -1,7 +1,7 @@
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import PriceTag from "./PriceTag";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 
 import stringContains from "../hooks/stringContains";
 import shadows from "../hooks/shadows";
@@ -12,7 +12,12 @@ type NFTcardProps = {
   token_reward?: number;
   item: NftItemProps;
 };
-function NFTcard({ description, nft_name, token_reward, item }: NFTcardProps) {
+const NFTcard = memo(function NFTcard({
+  description,
+  nft_name,
+  token_reward,
+  item
+}: NFTcardProps) {
   const video = useRef(null);
 
   const handleItemPress = () => {
@@ -75,6 +80,6 @@ function NFTcard({ description, nft_name, token_reward, item }: NFTcardProps) {
       </View>
     </TouchableOpacity>
   );
-}
+});
 
 export default NFTcard;
