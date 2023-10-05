@@ -106,8 +106,6 @@ const Wallet = ({ navigation }: NavigationProp) => {
         initial={{ height: !isMiniProfile ? 421 : 195 }}
         animate={{ height: isMiniProfile ? 195 : 421 }}
         transition={{
-          // ...transition("spring", 300, 7)
-          // duration: 0.5,
           type: "spring",
           stiffness: 350,
           damping: 13

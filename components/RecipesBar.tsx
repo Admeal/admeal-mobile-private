@@ -6,6 +6,7 @@ import BackArrowIcon from "../assets/icons/backArrowIcon";
 
 import { useRecoilState } from "recoil";
 import { defaultMyMealsListState, defaultRecipeListState } from "../atoms/dataAtom";
+import { Motion } from "@legendapp/motion";
 
 const RecipesBar = ({ title }: any) => {
   const [defaultMyMealsList, setDefaultMyMealsList] = useRecoilState(
@@ -29,21 +30,40 @@ const RecipesBar = ({ title }: any) => {
           isSearchVisible ? "justify-start" : "justify-between"
         } px-5 pt-4`}>
         {isSearchVisible && (
-          <TouchableOpacity
-            onPress={() => {
-              setIsSearchVisible(!isSearchVisible);
-              setDefaultRecipeList([]);
-              setDefaultMyMealsList([]);
-            }}
-            className="w-6 h-6 mb-2 mr-3 rounded-full">
+          <Motion.View
+          initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{
+            type: "spring",
+            stiffness: 350,
+            damping: 22
+          }}
+          onTouchStart={
+            () => {
+            setIsSearchVisible(!isSearchVisible);
+            setDefaultRecipeList([]);
+            setDefaultMyMealsList([]);
+            }
+          }
+          className="w-6 h-6 mb-2 mr-3 rounded-full">
             <BackArrowIcon />
-          </TouchableOpacity>
+          </Motion.View>
         )}
         <Text className="pb-1 font-[Poppins-700] text-3xl">{title}</Text>
         {!isSearchVisible && (
-          <TouchableOpacity onPress={() => setIsSearchVisible(!isSearchVisible)}>
+          <Motion.View
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{
+              type: "spring",
+              stiffness: 350,
+              damping: 22
+            }}
+          className="w-6 h-6 flex-col items-center justify-center " onTouchStart={() => setIsSearchVisible(!isSearchVisible)}>
             <FontAwesome name="search" size={16} color="black" className="pr-2" />
-          </TouchableOpacity>
+          </Motion.View>
         )}
       </View>
       {isSearchVisible && <Search />}
