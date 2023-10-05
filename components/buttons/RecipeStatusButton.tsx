@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useRecoilState } from "recoil";
 import {
   dishImageState,
@@ -22,12 +22,12 @@ type RecipeStatusButtonProps = {
   navigation: NavigationProp;
 };
 
-const RecipeStatusButton = ({
+const RecipeStatusButton = memo(function RecipeStatusButton({
   disabled,
   label = "TAKE A PHOTO",
   navigation
 }: // mealId
-RecipeStatusButtonProps) => {
+RecipeStatusButtonProps) {
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isReadyDish, setIsReadyDish] = useRecoilState(isReadyDishState);
@@ -135,6 +135,6 @@ RecipeStatusButtonProps) => {
       )}
     </TouchableOpacity>
   );
-};
+});
 
 export default RecipeStatusButton;
