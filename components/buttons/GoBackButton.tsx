@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { TouchableOpacity } from "react-native";
 
 import BackIcon from "../../assets/icons/backIcon";
@@ -8,7 +9,11 @@ type GoBackButtonProps = {
   mealId?: string;
 };
 
-const GoBackButton = ({ navigation, color, mealId }: GoBackButtonProps) => {
+const GoBackButton = memo(function GoBackButton({
+  navigation,
+  color,
+  mealId
+}: GoBackButtonProps) {
   const press = () => {
     navigation.getState().routes.find((route: RouteProps) => {
       switch (route.name) {
@@ -36,6 +41,6 @@ const GoBackButton = ({ navigation, color, mealId }: GoBackButtonProps) => {
       <BackIcon fill={color} />
     </TouchableOpacity>
   );
-};
+});
 
 export default GoBackButton;
