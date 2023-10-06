@@ -2,6 +2,7 @@ import { ScrollView, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import useNFTs from "../hooks/useNFTs";
 import NFTcard from "./NFTcard";
+import Spinner from "./animations/spinner";
 
 const NftWalletSection = ({ address }: any) => {
   const [personalHarvestCollection, setPersonalHarvestCollection] = useState<any>(null);
@@ -56,20 +57,31 @@ const NftWalletSection = ({ address }: any) => {
           NFTs
         </Text>
 
-        {!address && (
-          <Text className="px-5 py-3 font-[Poppins-600] text-2xl text-[#212B36]">
-            Please login to your wallet
-          </Text>
-        )}
-
-        {address &&
-          personalHarvestCollection?.ownedNfts?.length === 0 &&
-          personalNoodlesCollection?.ownedNfts?.length === 0 &&
-          personalRamensCollection?.ownedNfts?.length === 0 && (
-            <Text className="px-5 py-3 font-[Poppins-600] text-2xl text-[#212B36]">
-              You don't have any NFTs yet
+        <View className="flex-col items-center justify-center">
+          {!address && (
+            <Text className="px-5 py-3 font-[Poppins-600] text-xl text-[#212B36]">
+              Please login to your wallet
             </Text>
           )}
+
+          {address &&
+            !personalHarvestCollection &&
+            !personalNoodlesCollection &&
+            !personalRamensCollection && (
+              <View className="flex-row items-center justify-center">
+                <Spinner />
+              </View>
+            )}
+
+          {address &&
+            personalHarvestCollection?.ownedNfts?.length === 0 &&
+            personalNoodlesCollection?.ownedNfts?.length === 0 &&
+            personalRamensCollection?.ownedNfts?.length === 0 && (
+              <Text className="px-5 py-3 font-[Poppins-600] text-2xl text-[#212B36]">
+                You don't have any NFTs yet
+              </Text>
+            )}
+        </View>
 
         {personalNoodlesCollection?.ownedNfts?.length && (
           <>

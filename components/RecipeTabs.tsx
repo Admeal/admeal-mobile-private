@@ -11,14 +11,14 @@ import {
   defaultMyMealsListState
 } from "../atoms/dataAtom";
 import { useRecoilState } from "recoil";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 type RecipeTabsProps = {
   navigation: NavigationProp;
   routeName: string;
 };
 
-const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
+const RecipeTabs = memo(function RecipeTabs({ navigation, routeName }: RecipeTabsProps) {
   const [defaultMyMealsList, setDefaultMyMealsList] = useRecoilState(
     defaultMyMealsListState
   );
@@ -124,6 +124,6 @@ const RecipeTabs = ({ navigation, routeName }: RecipeTabsProps) => {
       </View>
     </View>
   );
-};
+});
 
 export default RecipeTabs;

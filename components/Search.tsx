@@ -13,6 +13,7 @@ import {
   myMealsListState,
   recipeListState
 } from "../atoms/dataAtom";
+import { Motion } from "@legendapp/motion";
 
 const Search = () => {
   const [defaultMyMealsList, setDefaultMyMealsList] = useRecoilState(
@@ -72,7 +73,24 @@ const Search = () => {
   };
 
   return (
-    <View className="relative flex-row items-center px-4">
+    <Motion.View
+      animate={{ opacity: 1, y: 0 }}
+      className="relative flex-row items-center px-4"
+      key='A'
+      exit={{ opacity: 0, y: -100 }}
+      initial={{ opacity: 0, y: -100 }}
+      transition={{
+        default: {
+          type: "spring",
+          stiffness: 350,
+          damping: 22
+        },
+        opacity:{
+          type: 'timing',
+          duration: 1
+        }
+      }}
+    >
       <View className="mt-2 mr-4 h-9 flex-1 flex-row items-center justify-between rounded-xl bg-[#919EAB]/10">
         <TouchableOpacity className="px-2" onPress={handleEndEditing}>
           <FontAwesome name="search" size={16} color="grey" />
@@ -80,8 +98,8 @@ const Search = () => {
         <TextInput
           className="flex-1 bg-transparent pr-10 pt-1 text-left font-[Poppins-400] text-sm"
           onChange={(e) => setSearch(e.nativeEvent.text)}
-          placeholder="Search"
           onEndEditing={handleEndEditing}
+          placeholder="Search"
           value={search}></TextInput>
         <View className="relative -top-[22px]">
           {search.length > 0 && (
@@ -97,7 +115,7 @@ const Search = () => {
       <TouchableOpacity className="pt-2 pr-2">
         <OptionsIcon />
       </TouchableOpacity>
-    </View>
+    </Motion.View>
   );
 };
 

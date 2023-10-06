@@ -1,4 +1,4 @@
-type Shadow = {
+type ShadowProps = {
   shadowColor: string;
   shadowOffset: {
     width: number;
@@ -11,7 +11,7 @@ type Shadow = {
   borderBottomRightRadius?: number;
 };
 
-const walletProfileShadow = {
+const walletProfileShadow: ShadowProps = {
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
@@ -25,7 +25,7 @@ const walletProfileShadow = {
   borderBottomRightRadius: 24
 };
 
-const nftShadow = {
+const nftShadow: ShadowProps = {
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
@@ -37,7 +37,7 @@ const nftShadow = {
   elevation: 11
 };
 
-const mealCardShadow = {
+const mealCardShadow: ShadowProps = {
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
@@ -49,7 +49,7 @@ const mealCardShadow = {
   elevation: 4
 };
 
-const shadow4 = {
+const shadow4: ShadowProps = {
   shadowColor: "#000",
   shadowOffset: {
     width: 0,

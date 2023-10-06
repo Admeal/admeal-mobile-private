@@ -27,16 +27,22 @@ const MinMaxButton = ({
   return (
     <Motion.View
       initial={{
-        rotate: isMini ? `${rotateFrom}deg` : `${rotateFrom}deg`
+        rotate: isMini ? `${rotateFrom}deg` : `${rotateTo}deg`
       }}
       animate={{
-        rotate: isMini ? `${rotateFrom}deg` : `${rotateFrom}deg`
+        rotate: isMini ? `${rotateFrom}deg` : `${rotateTo}deg`
       }}
-      transition={transition("spring", 25, 400)}
-      className={`absolute ${horizontalPosition} ${verticalPosition} `} //flex-row items-center justify-center pl-4
+      transition={{
+        // ...transition("spring", 300, 7)
+        // duration: 0.5,
+        type: "spring",
+        stiffness: 300,
+        damping: 7
+      }}
+      className={`absolute z-10 ${horizontalPosition} ${verticalPosition} `} //flex-row items-center justify-center pl-4
     >
       <TouchableOpacity
-        className="flex-row items-center justify-center w-10 h-10 rounded-full"
+        className="h-10 w-10 flex-row items-center justify-center rounded-full"
         onPress={() => setIsMini(!isMini)}>
         <AntDesign name="stepforward" size={24} color={color} />
       </TouchableOpacity>

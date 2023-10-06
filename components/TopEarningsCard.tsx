@@ -3,8 +3,12 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import PriceTag from "./PriceTag";
 import TimeTag from "./TimeTag";
 import CookCountIcon from "../assets/icons/cookCountIcon";
+import { memo } from "react";
 
-const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
+const TopEarningsCard = memo(function TopEarningsCard({
+  recipe,
+  navigation
+}: GroupRecipesProps) {
   return (
     <TouchableOpacity
       style={[
@@ -47,6 +51,6 @@ const TopEarningsCard = ({ recipe, navigation }: GroupRecipesProps) => {
       </View>
     </TouchableOpacity>
   );
-};
+});
 
 export default TopEarningsCard;

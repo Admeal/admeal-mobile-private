@@ -1,8 +1,9 @@
+import { memo } from "react";
 import { ImageBackground, Text, TouchableOpacity } from "react-native";
 
 import PriceTag from "./PriceTag";
 
-const PopularCard = ({ recipe, navigation }: GroupRecipesProps) => {
+const PopularCard = memo(function PopularCard({ recipe, navigation }: GroupRecipesProps) {
   return (
     <TouchableOpacity
       className="mr-2 rounded-2xl"
@@ -21,6 +22,6 @@ const PopularCard = ({ recipe, navigation }: GroupRecipesProps) => {
       </ImageBackground>
     </TouchableOpacity>
   );
-};
+});
 
 export default PopularCard;

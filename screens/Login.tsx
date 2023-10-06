@@ -6,6 +6,8 @@ import GoogleLogo from "../assets/icons/googleLogo";
 
 import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { appleAuth } from "@invertase/react-native-apple-authentication";
+
 import { useRecoilState } from "recoil";
 import { userState } from "../atoms/dataAtom";
 
@@ -39,8 +41,26 @@ const Login = () => {
   };
 
   const onAppleButtonPress = async () => {
-    // Sign-in the user with the credential
-    console.log("apple login to be fixed");
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME]
+    });
+    const { identityToken, nonce } = appleAuthRequestResponse;
+    if (identityToken) {
+      // Create a Firebase credential from the response
+      const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+      // Sign the user in with the credential
+      const user_sign_in = auth().signInWithCredential(appleCredential);
+      user_sign_in
+        .then((user) => {
+          setTimeout(() => {
+            setUserItem(user as any);
+          }, 1000);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (

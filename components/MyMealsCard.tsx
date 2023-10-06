@@ -15,8 +15,9 @@ import AdmealCoinLogo from "../assets/icons/admealCoinLogo";
 import DishCoinLogo from "../assets/icons/dishCoinLogo";
 
 import shadows from "../hooks/shadows";
+import { memo } from "react";
 
-const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
+const MyMealsCard = memo(function MyMealsCard({ meal, navigation }: GroupMealProps) {
   const [dishImage, setDishImage] = useRecoilState(dishImageState);
   const [ingredientsImage, setIngredientsImage] = useRecoilState(ingredientsImageState);
   const [isIngredientsSumbitted, setIsIngredientsSumbitted] = useRecoilState(
@@ -141,6 +142,6 @@ const MyMealsCard = ({ meal, navigation }: GroupMealProps) => {
       </View>
     </TouchableOpacity>
   );
-};
+});
 
 export default MyMealsCard;

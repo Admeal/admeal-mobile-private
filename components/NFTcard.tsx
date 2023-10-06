@@ -1,7 +1,7 @@
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 import PriceTag from "./PriceTag";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 
 import stringContains from "../hooks/stringContains";
 import shadows from "../hooks/shadows";
@@ -12,7 +12,12 @@ type NFTcardProps = {
   token_reward?: number;
   item: NftItemProps;
 };
-function NFTcard({ description, nft_name, token_reward, item }: NFTcardProps) {
+const NFTcard = memo(function NFTcard({
+  description,
+  nft_name,
+  token_reward,
+  item
+}: NFTcardProps) {
   const video = useRef(null);
 
   const handleItemPress = () => {
@@ -25,7 +30,7 @@ function NFTcard({ description, nft_name, token_reward, item }: NFTcardProps) {
     }
 
     if (stringContains(nft_name, "ARNFT")) {
-      return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Framen_nft_2160px_1.mp4?alt=media&token=66f3d122-cbbd-4ae3-a005-c8f41e33de3f";
+      return "https://firebasestorage.googleapis.com/v0/b/admeal-firebase.appspot.com/o/nft_media%2Framen_nft_small.mp4?alt=media&token=8ff2a943-15b9-485d-b57e-2578cd8943b4";
     }
 
     if (stringContains(nft_name, "Romanesco")) {
@@ -75,6 +80,6 @@ function NFTcard({ description, nft_name, token_reward, item }: NFTcardProps) {
       </View>
     </TouchableOpacity>
   );
-}
+});
 
 export default NFTcard;

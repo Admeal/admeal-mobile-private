@@ -1,5 +1,6 @@
 import { TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { memo } from "react";
 
 type XCloseButtonProps = {
   cloceProp: () => void;
@@ -9,13 +10,13 @@ type XCloseButtonProps = {
   cordinates?: string;
 };
 
-const XCloseButton = ({
+const XCloseButton = memo(function XCloseButton({
   cloceProp,
   size = 20,
   color = "red",
   bgColor = "bg-[#CCCCCC]/20",
   cordinates = "top-3 right-3"
-}: XCloseButtonProps) => {
+}: XCloseButtonProps) {
   return (
     <TouchableOpacity onPress={cloceProp} className={`absolute ${cordinates}`}>
       <View
@@ -24,6 +25,6 @@ const XCloseButton = ({
       </View>
     </TouchableOpacity>
   );
-};
+});
 
 export default XCloseButton;
